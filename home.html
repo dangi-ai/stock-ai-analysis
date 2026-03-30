@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stock Analysis Dashboard</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#F7F7F5;--surface:#FFFFFF;--surface2:#F1F0EC;--border:rgba(0,0,0,0.08);
+  --text:#1A1A18;--text2:#6B6B67;--text3:#9B9B97;
+  --g-fill:#EAF3DE;--g-text:#27500A;--g-border:#C0DD97;--g-accent:#639922;
+  --a-fill:#FAEEDA;--a-text:#854F0B;--a-border:#FAC775;--a-accent:#EF9F27;
+  --r-fill:#FCEBEB;--r-text:#A32D2D;--r-border:#F7C1C1;--r-accent:#E24B4A;
+  --b-fill:#E6F1FB;--b-text:#185FA5;--b-border:#B5D4F4;--b-accent:#378ADD;
+  --shadow:0 1px 3px rgba(0,0,0,0.07),0 4px 12px rgba(0,0,0,0.04);
+  --radius:14px;--radius-sm:8px
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#141413;--surface:#1E1E1C;--surface2:#2A2A28;--border:rgba(255,255,255,0.08);
+  --text:#E8E8E4;--text2:#A0A09A;--text3:#65655F;
+  --g-fill:#173404;--g-text:#C0DD97;--g-border:#3B6D11;--g-accent:#97C459;
+  --a-fill:#412402;--a-text:#FAC775;--a-border:#854F0B;--a-accent:#EF9F27;
+  --r-fill:#501313;--r-text:#F09595;--r-border:#A32D2D;--r-accent:#E24B4A;
+  --b-fill:#042C53;--b-text:#85B7EB;--b-border:#185FA5;--b-accent:#378ADD;
+  --shadow:0 1px 3px rgba(0,0,0,0.3),0 4px 12px rgba(0,0,0,0.2)
+}}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5;min-height:100vh}
+
+/* ── HEADER ── */
+.header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;position:sticky;top:0;z-index:100;box-shadow:0 1px 0 var(--border)}
+.header-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:16px;height:64px;flex-wrap:wrap}
+.logo-area{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.logo-icon{width:34px;height:34px;background:linear-gradient(135deg,#378ADD,#185FA5);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;color:#fff;font-weight:700;flex-shrink:0}
+.logo-text{font-size:16px;font-weight:600;color:var(--text)}
+.logo-sub{font-size:11px;color:var(--text3);margin-top:-2px}
+.header-spacer{flex:1}
+.stat-pill{background:var(--surface2);border:1px solid var(--border);border-radius:100px;padding:5px 13px;font-size:12px;color:var(--text2);white-space:nowrap}
+.stat-pill strong{color:var(--text);font-weight:600}
+
+/* ── MAIN ── */
+.main{max-width:1100px;margin:0 auto;padding:28px 24px}
+
+/* ── CONTROLS BAR ── */
+.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:24px}
+.search-wrap{position:relative;flex:1;min-width:200px}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--text3);font-size:15px;pointer-events:none}
+.search-input{width:100%;padding:9px 12px 9px 36px;border:1px solid var(--border);border-radius:100px;background:var(--surface);color:var(--text);font-size:13px;outline:none;transition:border-color 0.15s;font-family:inherit}
+.search-input:focus{border-color:var(--b-accent)}
+.search-input::placeholder{color:var(--text3)}
+.filter-row{display:flex;gap:6px;flex-wrap:wrap}
+.filter-btn{padding:7px 15px;border-radius:100px;border:1px solid var(--border);background:var(--surface);color:var(--text2);font-size:12px;cursor:pointer;font-family:inherit;transition:all 0.15s;font-weight:500}
+.filter-btn:hover{border-color:var(--text2);color:var(--text)}
+.filter-btn.active{background:var(--text);color:var(--bg);border-color:var(--text)}
+.filter-btn.f-strong.active{background:var(--g-fill);color:var(--g-text);border-color:var(--g-border)}
+.filter-btn.f-moderate.active{background:var(--a-fill);color:var(--a-text);border-color:var(--a-border)}
+.filter-btn.f-weak.active{background:var(--r-fill);color:var(--r-text);border-color:var(--r-border)}
+.sort-select{padding:7px 12px;border:1px solid var(--border);border-radius:100px;background:var(--surface);color:var(--text2);font-size:12px;cursor:pointer;font-family:inherit;outline:none}
+
+/* ── SECTION LABEL ── */
+.section-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:var(--text3);margin-bottom:14px}
+
+/* ── CARDS GRID ── */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:14px;margin-bottom:32px}
+
+/* ── STOCK CARD ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;cursor:pointer;transition:box-shadow 0.18s,transform 0.18s,border-color 0.18s;box-shadow:var(--shadow);text-decoration:none;display:block;color:inherit;position:relative;overflow:hidden}
+.card:hover{box-shadow:0 4px 20px rgba(0,0,0,0.1),0 1px 4px rgba(0,0,0,0.06);transform:translateY(-2px);border-color:rgba(0,0,0,0.13)}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--radius) var(--radius) 0 0}
+.card.strong::before{background:var(--g-accent)}
+.card.moderate::before{background:var(--a-accent)}
+.card.weak::before{background:var(--r-accent)}
+
+.card-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px}
+.ticker-block{}
+.ticker{font-size:18px;font-weight:700;color:var(--text);letter-spacing:-0.3px}
+.company-name{font-size:11px;color:var(--text3);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px}
+.rating-badge{padding:4px 10px;border-radius:100px;font-size:11px;font-weight:600;flex-shrink:0}
+.rating-badge.strong{background:var(--g-fill);color:var(--g-text)}
+.rating-badge.moderate{background:var(--a-fill);color:var(--a-text)}
+.rating-badge.weak{background:var(--r-fill);color:var(--r-text)}
+
+.sector-tag{display:inline-block;background:var(--surface2);border:1px solid var(--border);border-radius:100px;padding:3px 9px;font-size:11px;color:var(--text2);margin-bottom:12px}
+
+.metrics-row{display:flex;gap:0;margin-bottom:12px;border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden}
+.metric{flex:1;padding:9px 10px;text-align:center;border-right:1px solid var(--border)}
+.metric:last-child{border-right:none}
+.metric-label{font-size:9px;text-transform:uppercase;letter-spacing:0.7px;color:var(--text3);font-weight:500;margin-bottom:3px}
+.metric-val{font-size:14px;font-weight:600;color:var(--text)}
+.metric-val.na{color:var(--text3);font-size:12px;font-weight:400}
+
+.tags-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.tag{padding:3px 8px;border-radius:6px;font-size:10px;font-weight:500}
+.tag.val-under{background:var(--g-fill);color:var(--g-text)}
+.tag.val-fair{background:var(--b-fill);color:var(--b-text)}
+.tag.val-over{background:var(--r-fill);color:var(--r-text)}
+.tag.val-mixed{background:var(--a-fill);color:var(--a-text)}
+.tag.growth-acc{background:var(--g-fill);color:var(--g-text)}
+.tag.growth-steady{background:var(--b-fill);color:var(--b-text)}
+.tag.growth-slow{background:var(--a-fill);color:var(--a-text)}
+.tag.growth-dec{background:var(--r-fill);color:var(--r-text)}
+
+.card-footer{display:flex;justify-content:space-between;align-items:center;padding-top:11px;border-top:1px solid var(--border)}
+.horizon-info{font-size:11px;color:var(--text3);display:flex;align-items:center;gap:4px}
+.updated-info{font-size:10px;color:var(--text3)}
+.open-icon{font-size:11px;color:var(--text3);transition:color 0.15s}
+.card:hover .open-icon{color:var(--b-accent)}
+
+/* ── CMP BLOCK ── */
+.cmp-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}
+.cmp-val{font-size:17px;font-weight:600;color:var(--text)}
+.market-cap{font-size:11px;color:var(--text3)}
+
+/* ── EMPTY STATE ── */
+.empty{text-align:center;padding:80px 32px;color:var(--text3)}
+.empty-icon{font-size:48px;margin-bottom:16px;opacity:0.4}
+.empty-title{font-size:16px;font-weight:600;color:var(--text2);margin-bottom:8px}
+.empty-sub{font-size:13px;line-height:1.6;max-width:360px;margin:0 auto}
+
+/* ── NO RESULTS ── */
+.no-results{text-align:center;padding:48px 32px;color:var(--text3)}
+.no-results-title{font-size:14px;font-weight:500;color:var(--text2);margin-bottom:6px}
+
+/* ── FOOTER ── */
+.footer{border-top:1px solid var(--border);padding:20px 24px;text-align:center;font-size:11px;color:var(--text3);line-height:1.7;background:var(--surface)}
+.footer a{color:var(--b-accent);text-decoration:none}
+.footer a:hover{text-decoration:underline}
+
+/* ── RESPONSIVE ── */
+@media(max-width:600px){
+  .header-inner{height:auto;padding:12px 0;gap:10px}
+  .main{padding:20px 16px}
+  .grid{grid-template-columns:1fr}
+  .controls{gap:8px}
+  .stat-pill{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<div class="header">
+  <div class="header-inner">
+    <div class="logo-area">
+      <div class="logo-icon">📊</div>
+      <div>
+        <div class="logo-text">Stock Analysis</div>
+        <div class="logo-sub">Fundamental Research Dashboard</div>
+      </div>
+    </div>
+    <div class="header-spacer"></div>
+    <div class="stat-pill" id="statTotal">0 stocks tracked</div>
+    <div class="stat-pill" id="statStrong" style="display:none"></div>
+  </div>
+</div>
+
+<!-- ═══ MAIN ═══ -->
+<div class="main">
+
+  <!-- Controls -->
+  <div class="controls">
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input class="search-input" id="searchInput" type="text" placeholder="Search by ticker, company or sector…" oninput="renderCards()">
+    </div>
+    <div class="filter-row">
+      <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">All</button>
+      <button class="filter-btn f-strong" data-filter="strong" onclick="setFilter('strong')">● Strong</button>
+      <button class="filter-btn f-moderate" data-filter="moderate" onclick="setFilter('moderate')">● Moderate</button>
+      <button class="filter-btn f-weak" data-filter="weak" onclick="setFilter('weak')">● Weak</button>
+    </div>
+    <select class="sort-select" id="sortSelect" onchange="renderCards()">
+      <option value="newest">Newest first</option>
+      <option value="oldest">Oldest first</option>
+      <option value="ticker">A → Z (Ticker)</option>
+      <option value="rating">Rating (Best first)</option>
+    </select>
+  </div>
+
+  <div class="section-label" id="sectionLabel">All stocks</div>
+  <div class="grid" id="cardGrid"></div>
+
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<div class="footer">
+  This dashboard is for educational and research purposes only. Data sourced from NSE, BSE, Screener.in, Moneycontrol, and public financial databases.<br>
+  This is <strong>NOT</strong> investment advice or a buy/sell recommendation. Verify all data independently before investing. Consult a SEBI-registered financial advisor.
+</div>
+
+
+<!-- ════════════════════════════════════════════════════════════════
+     STOCK DATA — THIS SECTION IS AUTO-UPDATED WHEN NEW STOCKS ARE ANALYZED
+     Each entry: ticker, name, sector, cmp, marketCap, pe, roe, horizon,
+                 rating (STRONG/MODERATE/WEAK), valuation, growth, updated, file
+════════════════════════════════════════════════════════════════ -->
+<script>
+const STOCKS = [
+  // ── ENTRIES BELOW ARE ADDED/UPDATED AUTOMATICALLY ──
+  {
+    ticker: "IIFL",
+    name: "IIFL Finance Limited",
+    sector: "NBFC / Financial Services",
+    cmp: "491",
+    marketCap: "₹20,054 Cr",
+    pe: "15.9",
+    roe: "11.3",
+    rating: "MODERATE",
+    valuation: "UNDERVALUED",
+    growth: "ACCELERATING",
+    horizon: "5 Years",
+    updated: "30 Mar 2026",
+    file: "IIFL.html"
+  }
+];
+// ── END OF STOCK DATA ──
+</script>
+
+
+<!-- ═══ RENDER LOGIC ═══ -->
+<script>
+let activeFilter = 'all';
+
+function setFilter(f) {
+  activeFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.filter === f);
+  });
+  renderCards();
+}
+
+function valClass(v) {
+  if (!v) return '';
+  const map = { 'UNDERVALUED': 'val-under', 'FAIRLY VALUED': 'val-fair', 'OVERVALUED': 'val-over', 'MIXED': 'val-mixed' };
+  return map[v.toUpperCase()] || 'val-fair';
+}
+
+function growthClass(g) {
+  if (!g) return '';
+  const map = { 'ACCELERATING': 'growth-acc', 'STEADY': 'growth-steady', 'SLOWING': 'growth-slow', 'DECLINING': 'growth-dec' };
+  return map[g.toUpperCase()] || 'growth-steady';
+}
+
+function ratingClass(r) {
+  if (!r) return '';
+  const map = { 'STRONG': 'strong', 'MODERATE': 'moderate', 'WEAK': 'weak' };
+  return map[r.toUpperCase()] || 'moderate';
+}
+
+function ratingOrder(r) {
+  const map = { 'STRONG': 0, 'MODERATE': 1, 'WEAK': 2 };
+  return map[(r || '').toUpperCase()] ?? 3;
+}
+
+function renderCards() {
+  const grid = document.getElementById('cardGrid');
+  const query = (document.getElementById('searchInput').value || '').toLowerCase().trim();
+  const sort = document.getElementById('sortSelect').value;
+
+  let filtered = STOCKS.filter(s => {
+    const matchFilter = activeFilter === 'all' || (s.rating || '').toLowerCase() === activeFilter;
+    const matchSearch = !query ||
+      (s.ticker || '').toLowerCase().includes(query) ||
+      (s.name || '').toLowerCase().includes(query) ||
+      (s.sector || '').toLowerCase().includes(query);
+    return matchFilter && matchSearch;
+  });
+
+  // Sort
+  filtered = [...filtered].sort((a, b) => {
+    if (sort === 'ticker') return (a.ticker || '').localeCompare(b.ticker || '');
+    if (sort === 'rating') return ratingOrder(a.rating) - ratingOrder(b.rating);
+    if (sort === 'oldest') return parseDate(a.updated) - parseDate(b.updated);
+    return parseDate(b.updated) - parseDate(a.updated); // newest first (default)
+  });
+
+  // Update stats
+  const total = STOCKS.length;
+  const strong = STOCKS.filter(s => (s.rating || '').toUpperCase() === 'STRONG').length;
+  document.getElementById('statTotal').innerHTML = `<strong>${total}</strong> stock${total !== 1 ? 's' : ''} tracked`;
+  const sPill = document.getElementById('statStrong');
+  if (strong > 0) {
+    sPill.style.display = '';
+    sPill.innerHTML = `<strong style="color:var(--g-accent)">${strong}</strong> strong`;
+  } else {
+    sPill.style.display = 'none';
+  }
+
+  // Section label
+  const labelEl = document.getElementById('sectionLabel');
+  if (activeFilter === 'all' && !query) {
+    labelEl.textContent = `All stocks (${total})`;
+  } else {
+    labelEl.textContent = `Showing ${filtered.length} result${filtered.length !== 1 ? 's' : ''}`;
+  }
+
+  // Empty states
+  if (STOCKS.length === 0) {
+    grid.innerHTML = `
+      <div style="grid-column:1/-1">
+        <div class="empty">
+          <div class="empty-icon">📈</div>
+          <div class="empty-title">No stocks analyzed yet</div>
+          <div class="empty-sub">Ask me to analyze any NSE/BSE stock and it will appear here as a card. Each card links to the full fundamental report.</div>
+        </div>
+      </div>`;
+    return;
+  }
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `
+      <div style="grid-column:1/-1">
+        <div class="no-results">
+          <div class="no-results-title">No stocks match your filter</div>
+          <div style="font-size:12px">Try a different search term or remove the filter.</div>
+        </div>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = filtered.map(s => {
+    const rc = ratingClass(s.rating);
+    const ratingLabel = (s.rating || '—').charAt(0) + (s.rating || '').slice(1).toLowerCase() + ' fundamentals';
+    const peVal = s.pe ? s.pe + 'x' : '<span class="na">—</span>';
+    const roeVal = s.roe ? s.roe + '%' : '<span class="na">—</span>';
+    const cmpDisplay = s.cmp ? '₹' + s.cmp : '<span style="font-size:12px;color:var(--text3)">—</span>';
+    const capDisplay = s.marketCap ? s.marketCap : '—';
+
+    return `
+    <a class="card ${rc}" href="${s.file || '#'}" target="_blank" title="Open ${s.ticker} analysis in new tab">
+
+      <div class="card-top">
+        <div class="ticker-block">
+          <div class="ticker">${s.ticker || '—'}</div>
+          <div class="company-name">${s.name || '—'}</div>
+        </div>
+        <span class="rating-badge ${rc}">${s.rating || '—'}</span>
+      </div>
+
+      <div>
+        <span class="sector-tag">${s.sector || 'Sector N/A'}</span>
+      </div>
+
+      <div class="cmp-row">
+        <div class="cmp-val">${cmpDisplay}</div>
+        <div class="market-cap">Mkt Cap: ${capDisplay}</div>
+      </div>
+
+      <div class="metrics-row">
+        <div class="metric">
+          <div class="metric-label">P/E</div>
+          <div class="metric-val">${peVal}</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">ROE</div>
+          <div class="metric-val">${roeVal}</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Horizon</div>
+          <div class="metric-val" style="font-size:12px">${s.horizon || '—'}</div>
+        </div>
+      </div>
+
+      <div class="tags-row">
+        ${s.valuation ? `<span class="tag ${valClass(s.valuation)}">${s.valuation}</span>` : ''}
+        ${s.growth ? `<span class="tag ${growthClass(s.growth)}">${s.growth}</span>` : ''}
+      </div>
+
+      <div class="card-footer">
+        <div class="horizon-info">📅 Updated ${s.updated || '—'}</div>
+        <div style="display:flex;align-items:center;gap:4px">
+          <span class="updated-info">Open report</span>
+          <span class="open-icon">↗</span>
+        </div>
+      </div>
+
+    </a>`;
+  }).join('');
+}
+
+// Parse "30 Mar 2026" → timestamp
+function parseDate(str) {
+  if (!str) return 0;
+  try { return new Date(str).getTime() || 0; } catch(e) { return 0; }
+}
+
+// Initial render
+renderCards();
+</script>
+
+</body>
+</html>

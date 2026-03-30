@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IIFL Finance — Fundamental Analysis</title>
+</head>
+<body>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --g-fill:#EAF3DE;--g-text:#27500A;--g-border:#C0DD97;--g-accent:#639922;
+  --a-fill:#FAEEDA;--a-text:#854F0B;--a-border:#FAC775;--a-accent:#EF9F27;
+  --r-fill:#FCEBEB;--r-text:#A32D2D;--r-border:#F7C1C1;--r-accent:#E24B4A;
+  --b-fill:#E6F1FB;--b-text:#185FA5;--b-border:#B5D4F4;--b-accent:#378ADD;
+  --n-fill:#F1EFE8;--n-text:#444441;--n-border:#D3D1C7;
+  --bg:#F7F7F5;--surface:#FFFFFF;--surface2:#F1F0EC;
+  --text:#1A1A18;--text2:#6B6B67;--text3:#9B9B97;
+  --border:rgba(0,0,0,0.09);--shadow:0 1px 3px rgba(0,0,0,0.07),0 4px 12px rgba(0,0,0,0.04)
+}
+@media(prefers-color-scheme:dark){:root{
+  --g-fill:#173404;--g-text:#C0DD97;--g-border:#3B6D11;--g-accent:#97C459;
+  --a-fill:#412402;--a-text:#FAC775;--a-border:#854F0B;--a-accent:#EF9F27;
+  --r-fill:#501313;--r-text:#F09595;--r-border:#A32D2D;--r-accent:#E24B4A;
+  --b-fill:#042C53;--b-text:#85B7EB;--b-border:#185FA5;--b-accent:#378ADD;
+  --n-fill:#2C2C2A;--n-text:#D3D1C7;--n-border:#5F5E5A;
+  --bg:#141413;--surface:#1E1E1C;--surface2:#2A2A28;
+  --text:#E8E8E4;--text2:#A0A09A;--text3:#65655F;
+  --border:rgba(255,255,255,0.08);--shadow:0 1px 3px rgba(0,0,0,0.3),0 4px 12px rgba(0,0,0,0.2)
+}}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;font-size:13px;line-height:1.6;color:var(--text);background:var(--bg);padding:20px 16px 40px}
+.wrap{max-width:860px;margin:0 auto;padding:0 0 32px}
+
+/* top bar */
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border:1px solid var(--border);border-radius:100px;background:var(--surface);color:var(--text2);font-size:12px;text-decoration:none;transition:all 0.15s}
+.back-btn:hover{border-color:var(--b-accent);color:var(--b-accent)}
+.page-title{font-size:20px;font-weight:700;color:var(--text);letter-spacing:-0.3px}
+.page-sub{font-size:12px;color:var(--text3);margin-top:2px}
+
+.conf{padding:10px 16px;border-radius:8px;margin-bottom:14px;font-size:12px}
+.conf.high{background:var(--g-fill);color:var(--g-text)}
+.conf.moderate{background:var(--a-fill);color:var(--a-text)}
+.conf.low{background:var(--r-fill);color:var(--r-text)}
+
+.tab-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.tab-btn{padding:7px 18px;border-radius:100px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:13px;font-weight:400;cursor:pointer;font-family:inherit;transition:border-color 0.15s,color 0.15s}
+.tab-btn:hover{border-color:var(--border);color:var(--text)}
+.tab-btn.active{border:1.5px solid var(--text);color:var(--text);font-weight:500}
+.panel{display:none}.panel.on{display:block}
+
+.card{background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:12px;box-shadow:var(--shadow)}
+.card.green{background:var(--g-fill);border-color:var(--g-border)}
+.card.amber{background:var(--a-fill);border-color:var(--a-border)}
+.card.red{background:var(--r-fill);border-color:var(--r-border)}
+.card.blue{background:var(--b-fill);border-color:var(--b-border)}
+.card.grey{background:var(--n-fill);border-color:var(--n-border)}
+
+.view-label{font-size:18px;font-weight:500;margin-bottom:6px}
+.view-label.amber{color:var(--a-text)}.view-label.green{color:var(--g-text)}.view-label.red{color:var(--r-text)}
+.view-reason{font-size:13px;margin-bottom:16px;color:var(--text)}
+
+.sec-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin:14px 0 8px}
+.bullet-row{display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:0.5px solid var(--border);font-size:13px}
+.bullet-row:last-child{border-bottom:none}
+.bicon{font-size:14px;min-width:18px;margin-top:1px}
+
+table{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0}
+th{text-align:left;padding:7px 10px;font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:0.7px;color:var(--text2);border-bottom:0.5px solid var(--border)}
+td{padding:9px 10px;color:var(--text);border-bottom:0.5px solid var(--border)}
+tr:last-child td{border-bottom:none}
+.pos{color:var(--g-accent);font-weight:500}.neg{color:var(--r-accent);font-weight:500}.neu{color:var(--text2)}
+
+.badge{display:inline-block;padding:2px 9px;border-radius:100px;font-size:11px;font-weight:500}
+.badge.ok{background:var(--g-fill);color:var(--g-text)}
+.badge.warn{background:var(--a-fill);color:var(--a-text)}
+.badge.bad{background:var(--r-fill);color:var(--r-text)}
+.badge.info{background:var(--b-fill);color:var(--b-text)}
+.badge.neu{background:var(--n-fill);color:var(--n-text)}
+
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:12px 0}
+.mc{background:var(--surface2);border-radius:8px;padding:12px 14px;border:0.5px solid var(--border)}
+.mc .ml{font-size:10px;text-transform:uppercase;letter-spacing:0.8px;color:var(--text2);margin-bottom:4px}
+.mc .mv{font-size:18px;font-weight:600;color:var(--text)}
+.mc .ms{font-size:11px;color:var(--text3);margin-top:2px}
+
+.info-row{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;border-bottom:0.5px solid var(--border);gap:16px}
+.info-row:last-child{border-bottom:none}
+.il{font-size:12px;color:var(--text2)}
+.iv{font-size:12px;color:var(--text);font-weight:500;text-align:right;max-width:480px}
+
+.flag-card{border-left:3px solid var(--a-accent);background:var(--a-fill);border-radius:0 8px 8px 0;padding:10px 14px;margin-bottom:8px}
+.flag-title{font-size:13px;font-weight:500;color:var(--a-text);margin-bottom:3px}
+.flag-note{font-size:12px;color:var(--a-text)}
+
+.score-box{background:var(--surface2);border-radius:8px;padding:14px 16px;margin-top:14px;font-size:12px;color:var(--text2);border:0.5px solid var(--border)}
+
+.eps-row{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.eps-chip{background:var(--surface2);border-radius:8px;padding:10px 14px;text-align:center;min-width:85px;border:0.5px solid var(--border)}
+.eps-q{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px}
+.eps-v{font-size:15px;font-weight:600;color:var(--text);margin:3px 0}
+.eps-y{font-size:11px}
+
+.peer-you{background:var(--surface2)}
+
+.disc{font-size:11px;color:var(--text3);border-top:0.5px solid var(--border);padding-top:14px;margin-top:24px;line-height:1.6}
+
+details summary{font-size:12px;color:var(--text2);cursor:pointer;padding:8px 0}
+details p{font-size:12px;color:var(--text2);padding:4px 0;border-bottom:0.5px solid var(--border)}
+details p:last-child{border-bottom:none}
+details strong{color:var(--text);font-weight:500}
+
+.rbi-banner{background:var(--r-fill);border:1px solid var(--r-border);border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--r-text)}
+</style>
+
+<div class="wrap">
+
+<!-- Back button -->
+<div class="topbar">
+  <a class="back-btn" href="home.html">← Back to Dashboard</a>
+  <div>
+    <div class="page-title">IIFL Finance Ltd</div>
+    <div class="page-sub">NSE: IIFL &nbsp;·&nbsp; 5-Year Horizon Analysis &nbsp;·&nbsp; Updated 30 Mar 2026</div>
+  </div>
+</div>
+
+<!-- CONFIDENCE BAR -->
+<div class="conf high">
+  <strong>Data confidence: HIGH</strong><br>
+  Live metrics retrieved: 10 of 12 key sections &nbsp;|&nbsp; Sources: NSE India, Screener.in, Moneycontrol, Equitymaster, BSE, Tickertape, PR Newswire (Q3 FY26 results), Business Standard, MarketsMojo
+</div>
+
+<!-- TAB ROW -->
+<div class="tab-row">
+  <button class="tab-btn" onclick="show(0)">Snapshot</button>
+  <button class="tab-btn" onclick="show(1)">Valuation</button>
+  <button class="tab-btn" onclick="show(2)">Growth</button>
+  <button class="tab-btn" onclick="show(3)">Health</button>
+  <button class="tab-btn" onclick="show(4)">Returns</button>
+  <button class="tab-btn" onclick="show(5)">Peers</button>
+  <button class="tab-btn" onclick="show(6)">Ownership</button>
+  <button class="tab-btn active" onclick="show(7)">View</button>
+</div>
+
+<!-- ═══ TAB 0: SNAPSHOT ═══ -->
+<div class="panel" id="p0">
+
+  <div class="rbi-banner">
+    ⚠️ <strong>Context:</strong> RBI imposed a gold loan ban on IIFL Finance from 4 Mar 2024 to 19 Sep 2024. This severely disrupted FY25 financials. All FY25 metrics are depressed and not representative of normalised operations. FY26 reflects full recovery.
+  </div>
+
+  <div class="card">
+    <div class="info-row"><span class="il">Company</span><span class="iv">IIFL Finance Limited</span></div>
+    <div class="info-row"><span class="il">Ticker</span><span class="iv">NSE: IIFL &nbsp;|&nbsp; BSE: 532636</span></div>
+    <div class="info-row"><span class="il">Sector</span><span class="iv">Financial Services</span></div>
+    <div class="info-row"><span class="il">Industry</span><span class="iv">NBFC (Non-Banking Financial Company)</span></div>
+    <div class="info-row"><span class="il">What it does</span><span class="iv">Diversified NBFC offering gold loans, home loans, MSME loans, microfinance, and capital market finance. Earns through net interest spread on its lending book of ₹98,336 Cr AUM.</span></div>
+    <div class="info-row"><span class="il">What makes it different</span><span class="iv">One of India's largest gold loan franchises with deep rural reach; pivot to secured, asset-backed lending post-regulatory reset.</span></div>
+  </div>
+
+  <div class="mgrid">
+    <div class="mc"><div class="ml">CMP</div><div class="mv">₹491</div><div class="ms">Mar 2026 · NSE</div></div>
+    <div class="mc"><div class="ml">52W High</div><div class="mv">₹675</div><div class="ms">NSE</div></div>
+    <div class="mc"><div class="ml">52W Low</div><div class="mv">₹279.80</div><div class="ms">NSE</div></div>
+    <div class="mc"><div class="ml">Market Cap</div><div class="mv">₹20,054 Cr</div><div class="ms">BSE · 27 Mar 2026</div></div>
+    <div class="mc"><div class="ml">Face Value</div><div class="mv">₹2</div><div class="ms">NSE</div></div>
+    <div class="mc"><div class="ml">vs 52W High</div><div class="mv" style="color:var(--r-accent)">−27%</div><div class="ms">From peak</div></div>
+  </div>
+
+  <div class="flag-card">
+    <div class="flag-title">⚠ RBI REGULATORY ACTION HISTORY</div>
+    <div class="flag-note">RBI banned IIFL Finance's gold loan disbursements for 6.5 months in FY25, citing compliance deficiencies in gold assaying and LTV practices. Ban lifted Sep 2024. This shows regulatory risk is real — any repeat action could be severely disruptive to operations.</div>
+  </div>
+
+  <div class="flag-card">
+    <div class="flag-title">⚠ LOW PROMOTER HOLDING (~25%)</div>
+    <div class="flag-note">Promoter stake has declined to ~24.9%, which is low for an NBFC. Low promoter skin-in-the-game can be a governance watch point. The stock has ~38% held by public/retail, creating sensitivity to sentiment shifts.</div>
+  </div>
+
+  <div class="flag-card">
+    <div class="flag-title">⚠ INCOME TAX SPECIAL AUDIT (Jan 2026)</div>
+    <div class="flag-note">Income Tax Department ordered a special audit for IIFL Finance for a specific block period. Company states it is "procedural in nature." However, this creates near-term uncertainty around potential tax liability. Outcome not yet known.</div>
+  </div>
+
+</div>
+
+<!-- ═══ TAB 1: VALUATION ═══ -->
+<div class="panel" id="p1">
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">Is this stock cheap, fair, or expensive right now?</div>
+    <table>
+      <thead><tr><th>Metric</th><th>Current</th><th>Sector avg (NBFC)</th><th>Stock 5Y avg</th><th>Signal</th><th>Plain English</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>P/E</td><td>15.9x</td><td>~19–20x</td><td>~22–25x</td>
+          <td><span class="badge ok">CHEAP</span></td>
+          <td style="color:var(--text2);font-size:12px">You pay ₹15.9 per ₹1 of profit — 20% below sector peers</td>
+        </tr>
+        <tr>
+          <td>P/B</td><td>1.51x</td><td>~2.0x</td><td>~3.5x</td>
+          <td><span class="badge ok">CHEAP</span></td>
+          <td style="color:var(--text2);font-size:12px">Priced at 1.5x book — deeply below its own history of 3.5x+</td>
+        </tr>
+        <tr>
+          <td>EV/EBITDA</td><td>2.13x</td><td>~3.5x (NBFC)</td><td>~3.5x (3Y avg)</td>
+          <td><span class="badge ok">CHEAP</span></td>
+          <td style="color:var(--text2);font-size:12px">Full business value check confirms discount across the board</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="score-box">
+    Overall valuation: <strong>UNDERVALUED</strong><br>
+    <span style="margin-top:4px;display:block">IIFL Finance is trading at a meaningful discount to both its NBFC sector peers and its own 5-year valuation history across all three key metrics — partly reflecting the lingering overhang from FY25 earnings disruption, regulatory risk premium, and tax audit uncertainty.</span>
+  </div>
+
+  <div class="card grey" style="margin-top:12px">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--n-text);margin-bottom:8px">Why is it cheap — and is the discount justified?</div>
+    <div style="font-size:12px;color:var(--n-text);line-height:1.8">
+      The discount reflects: (1) Depressed FY25 earnings due to the RBI gold loan ban, pulling P/E up on trailing basis; (2) Regulatory risk premium — market is pricing in possibility of future regulatory action; (3) Samasta MFI subsidiary drag; (4) Tax audit overhang. <br><br>
+      <strong style="color:var(--text)">Counter-argument:</strong> With gold loan AUM back above pre-ban levels (+189% YoY in Q3 FY26), earnings are recovering sharply. On FY26 forward earnings, P/E compresses further. If regulatory risk normalises, the valuation gap could close toward sector averages.
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ TAB 2: GROWTH ═══ -->
+<div class="panel" id="p2">
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">Is this company growing its revenue and profits? (Note: FY25 was disrupted by RBI ban — treat as anomaly year)</div>
+    <table>
+      <thead><tr><th>Metric</th><th>3Y CAGR (FY22–FY25)</th><th>5Y CAGR (FY20–FY24)</th><th>Trend</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr><td>Revenue (NII)</td><td>~8%</td><td>20.9%</td><td>📉</td><td style="color:var(--text2);font-size:11px">Equitymaster / IIFL Annual Reports</td></tr>
+        <tr><td>Net profit</td><td>~−25% (FY25 anomaly)</td><td>40.7% (to FY24)</td><td>📉</td><td style="color:var(--text2);font-size:11px">Equitymaster Annual Report Analysis</td></tr>
+        <tr><td>EPS</td><td>~−25% (FY25 anomaly)</td><td>~35% (to FY24)</td><td>📉</td><td style="color:var(--text2);font-size:11px">BSE / Analyst reports</td></tr>
+        <tr><td>NIM (EBITDA proxy)</td><td>FY25: 9.9% vs FY22: ~11%</td><td>Range: 10–11.5%</td><td>📉</td><td style="color:var(--text2);font-size:11px">Equitymaster Annual Report FY25</td></tr>
+        <tr><td>Net profit margin</td><td>FY25: 3.7% vs FY22: ~16%</td><td>Range: 14–17.2%</td><td>📉</td><td style="color:var(--text2);font-size:11px">Equitymaster Annual Report FY25</td></tr>
+      </tbody>
+    </table>
+    <div style="font-size:11px;color:var(--a-text);background:var(--a-fill);border-radius:6px;padding:8px 10px;margin-top:8px">3Y CAGR figures are distorted by the exceptional FY25. Pre-ban trajectory (5Y CAGR) is a better indicator of underlying growth capability.</div>
+  </div>
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">EPS — last 8 quarters (consolidated, approximate — NCI-adjusted)</div>
+    <div class="eps-row">
+      <div class="eps-chip">
+        <div class="eps-q">Q4 FY24</div>
+        <div class="eps-v">₹12.2</div>
+        <div class="eps-y neu">Pre-ban</div>
+      </div>
+      <div class="eps-chip">
+        <div class="eps-q">Q1 FY25</div>
+        <div class="eps-v">₹3.2</div>
+        <div class="eps-y neg">Ban begins</div>
+      </div>
+      <div class="eps-chip">
+        <div class="eps-q">Q2 FY25</div>
+        <div class="eps-v">₹2.0</div>
+        <div class="eps-y neg">Deepest hit</div>
+      </div>
+      <div class="eps-chip">
+        <div class="eps-q">Q3 FY25</div>
+        <div class="eps-v">₹1.0</div>
+        <div class="eps-y neg">Ban lifted Sep</div>
+      </div>
+      <div class="eps-chip">
+        <div class="eps-q">Q4 FY25</div>
+        <div class="eps-v">₹6.1</div>
+        <div class="eps-y pos">Recovery</div>
+      </div>
+      <div class="eps-chip">
+        <div class="eps-q">Q1 FY26</div>
+        <div class="eps-v">₹6.7</div>
+        <div class="eps-y pos">+109% YoY</div>
+      </div>
+      <div class="eps-chip">
+        <div class="eps-q">Q2 FY26</div>
+        <div class="eps-v">₹10.2</div>
+        <div class="eps-y pos">+410% YoY</div>
+      </div>
+      <div class="eps-chip">
+        <div class="eps-q">Q3 FY26</div>
+        <div class="eps-v">₹11.4</div>
+        <div class="eps-y pos">+1041% YoY</div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--text2);margin-top:6px">Q3 FY26 EPS derived from ₹464.3 Cr consolidated PAT ÷ ~40.8 Cr shares. Q1–Q3 FY26 figures are estimates based on 9M PAT of ₹1,193.5 Cr. Source: PR Newswire / BSE filings.</div>
+  </div>
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">FY26 recovery momentum — key operating metrics (Q3 FY26)</div>
+    <table>
+      <thead><tr><th>Metric</th><th>Q3 FY26</th><th>Change</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr><td>Consolidated AUM</td><td>₹98,336 Cr</td><td class="pos">+38% YoY · +9.1% QoQ</td><td style="color:var(--text2);font-size:11px">PR Newswire / BSE</td></tr>
+        <tr><td>Gold Loan AUM</td><td>₹43,432 Cr</td><td class="pos">+189% YoY · +26% QoQ</td><td style="color:var(--text2);font-size:11px">PR Newswire / BSE</td></tr>
+        <tr><td>MSME Loan AUM</td><td>₹10,081 Cr</td><td class="pos">+17% YoY · +4% QoQ</td><td style="color:var(--text2);font-size:11px">PR Newswire / BSE</td></tr>
+        <tr><td>GNPA</td><td>1.6%</td><td class="pos">Improved from 2.14%</td><td style="color:var(--text2);font-size:11px">IIFL Investor Presentation</td></tr>
+        <tr><td>PAT (Q3 FY26)</td><td>₹501 Cr (pre-NCI)</td><td class="pos">+20% QoQ</td><td style="color:var(--text2);font-size:11px">PR Newswire, Jan 2026</td></tr>
+        <tr><td>ROA / ROE (Q3 FY26)</td><td>2.1% / 11.3%</td><td class="pos">Sharp recovery from FY25 lows</td><td style="color:var(--text2);font-size:11px">IIFL Q3 FY26 IR Deck</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="score-box">
+    Growth classification: <strong>RECOVERING (ACCELERATING)</strong><br>
+    <span style="margin-top:4px;display:block">The business is in a strong V-shaped recovery — gold loan AUM has surpassed pre-embargo levels, quarterly PAT is growing ~20% sequentially, and the 5-year pre-ban trajectory showed 20%+ revenue CAGR. For a 5-year investor, the meaningful question is whether this recovery can sustain into compounding territory — the early signals from FY26 are strongly positive.</span>
+  </div>
+
+</div>
+
+<!-- ═══ TAB 3: HEALTH ═══ -->
+<div class="panel" id="p3">
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">Is this company financially safe and stable? (Note: NBFC metrics differ from manufacturing — D/E and ICR benchmarks adjusted accordingly)</div>
+    <table>
+      <thead><tr><th>Metric</th><th>Value</th><th>5Y trend</th><th>Signal</th><th>Plain English</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Debt / Equity</td><td>~4.2x (borrowings/equity)</td><td>→ Stable</td>
+          <td><span class="badge ok">SAFE FOR NBFC</span></td>
+          <td style="color:var(--text2);font-size:12px">Typical NBFC leverage; well below high-risk threshold of 7–8x</td>
+        </tr>
+        <tr>
+          <td>Capital Adequacy (CRAR)</td><td>27.7%</td><td>↑ Strong</td>
+          <td><span class="badge ok">HEALTHY</span></td>
+          <td style="color:var(--text2);font-size:12px">Well above RBI minimum of 15% — strong capital buffer</td>
+        </tr>
+        <tr>
+          <td>GNPA / NNPA</td><td>1.6% / &lt;1%</td><td>↓ Improving</td>
+          <td><span class="badge ok">COMFORTABLE</span></td>
+          <td style="color:var(--text2);font-size:12px">Asset quality improving; provision coverage at 92%</td>
+        </tr>
+        <tr>
+          <td>Free Cash Flow (FY25)</td><td>₹2,489 Cr</td><td>↑ Recovering</td>
+          <td><span class="badge ok">STRONG</span></td>
+          <td style="color:var(--text2);font-size:12px">Operating CF ₹2,737 Cr minus CapEx ₹248 Cr — positive and growing</td>
+        </tr>
+        <tr>
+          <td>Net Interest Margin</td><td>9.9% (FY25) → ~10.5% (FY26E)</td><td>↓ then recovering</td>
+          <td><span class="badge warn">WATCH</span></td>
+          <td style="color:var(--text2);font-size:12px">NIM compressed in FY25 (11.3% → 9.9%), recovering in FY26</td>
+        </tr>
+        <tr>
+          <td>Interest Coverage</td><td>🚩 DATA UNAVAILABLE</td><td>—</td>
+          <td><span class="badge neu">—</span></td>
+          <td style="color:var(--text2);font-size:12px">Verify at <a href="https://www.screener.in/company/IIFL/consolidated/" style="color:var(--b-accent)">Screener.in</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">Forward projections — 5-year horizon (FY26 base to FY31)</div>
+    <table>
+      <thead><tr><th>Scenario</th><th>Assumption</th><th>Est. revenue</th><th>Est. net profit</th><th>Est. EPS</th></tr></thead>
+      <tbody>
+        <tr><td>🐢 Bear</td><td style="color:var(--text2);font-size:12px">10% rev CAGR; NIM stays compressed at ~9.5%; NPA risk rises; regulatory drag</td><td>₹19,300 Cr</td><td>₹2,800 Cr</td><td>₹68</td></tr>
+        <tr><td>🚶 Base</td><td style="color:var(--text2);font-size:12px">18% rev CAGR; NIM normalises to ~10.5%; gold loan and MSME momentum holds</td><td>₹27,400 Cr</td><td>₹4,000 Cr</td><td>₹98</td></tr>
+        <tr><td>🚀 Bull</td><td style="color:var(--text2);font-size:12px">25% rev CAGR; NIM expands to ~12%; gold prices stay high; MFI drag resolved</td><td>₹36,500 Cr</td><td>₹5,600 Cr</td><td>₹137</td></tr>
+      </tbody>
+    </table>
+    <div style="font-size:11px;color:var(--text2);margin-top:8px">Base year: FY26E revenue ~₹12,000 Cr, PAT ~₹1,700 Cr, EPS ~₹42. Projections based on historical CAGR trends only — not guarantees or predictions.</div>
+  </div>
+
+  <div class="score-box">
+    Financial health: <strong>MODERATE RISK</strong><br>
+    <span style="margin-top:4px;display:block">Balance sheet is adequately capitalised with CRAR at 27.7% and improving asset quality. FCF is positive and growing. The key risks are NIM trajectory, Samasta MFI subsidiary stress, and exposure to gold price volatility. The company's leverage is typical for NBFCs and not a concern on its own.</span>
+  </div>
+
+</div>
+
+<!-- ═══ TAB 4: RETURNS ═══ -->
+<div class="panel" id="p4">
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">Is this company creating real value for shareholders?</div>
+    <table>
+      <thead><tr><th>Metric</th><th>Current (FY26)</th><th>3Y avg (FY23–FY25)</th><th>5Y avg (FY21–FY25)</th><th>Signal</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>ROE</td><td>11.3% (Q3 FY26 ann.)</td><td>~10%</td><td>~14%</td>
+          <td><span class="badge warn">AVERAGE</span></td>
+        </tr>
+        <tr>
+          <td>ROCE</td><td>~10% (est. FY26E)</td><td>~9%</td><td>~12%</td>
+          <td><span class="badge warn">AVERAGE</span></td>
+        </tr>
+        <tr>
+          <td>Dividend yield</td><td>~0.8% (₹4 interim FY26)</td><td>~0.5%</td><td>~1.2%</td>
+          <td><span class="badge neu">—</span></td>
+        </tr>
+        <tr>
+          <td>Dividend payout</td><td>~9.5% (FY26E)</td><td>~10%</td><td>~12%</td>
+          <td><span class="badge neu">—</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="font-size:11px;color:var(--text2);margin-top:8px">
+      ROE of 16.7% in FY24 and 3.1% in FY25 — FY25 was distorted by RBI ban. Q3 FY26 annualised ROE of 11.3% shows recovery. Target: return to 15%+ ROE as earnings normalise. Source: Equitymaster Annual Reports, IIFL Q3 FY26 IR Deck.
+    </div>
+  </div>
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">Dividend history — FY21 to FY26</div>
+    <table>
+      <thead><tr><th>Year</th><th>Dividend per share</th><th>Type</th><th>Notes</th></tr></thead>
+      <tbody>
+        <tr><td>FY26 (interim)</td><td>₹4.00</td><td>Interim</td><td style="color:var(--text2);font-size:12px">Declared Q3 FY26 alongside strong results</td></tr>
+        <tr><td>FY25</td><td>₹0</td><td>—</td><td style="color:var(--r-text);font-size:12px">Skipped — low profitability due to RBI ban</td></tr>
+        <tr><td>FY24</td><td>₹4.00</td><td>4 × ₹1</td><td style="color:var(--text2);font-size:12px">Regular payouts in normal year</td></tr>
+        <tr><td>FY23</td><td>~₹3–4</td><td>Regular</td><td style="color:var(--text2);font-size:12px">Source: Goodreturns.in / Trendlyne</td></tr>
+        <tr><td>FY22</td><td>~₹3–4</td><td>Regular</td><td style="color:var(--text2);font-size:12px">Consistent payout in growth years</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="score-box">
+    Return quality: <strong>RECOVERING — POTENTIAL HIGH-QUALITY COMPOUNDER</strong><br>
+    <span style="margin-top:4px;display:block">ROE and ROCE are in recovery mode after FY25 disruption. Pre-ban ROE of 16.7% in FY24 shows the business can generate strong returns. For a 5-year investor, the key question is whether ROE can sustain at 15–18% as earnings normalise — if yes, at current P/B of 1.5x, this is an attractive entry point for compounding returns.</span>
+  </div>
+
+</div>
+
+<!-- ═══ TAB 5: PEERS ═══ -->
+<div class="panel" id="p5">
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">How does IIFL Finance compare to its 3 closest NBFC competitors?</div>
+    <table>
+      <thead><tr><th>Company</th><th>P/E</th><th>P/B</th><th>ROE</th><th>Rev growth</th><th>D/E</th><th>Edge</th></tr></thead>
+      <tbody>
+        <tr class="peer-you">
+          <td><strong>IIFL Finance ◀ you</strong></td>
+          <td>16x</td><td>1.5x</td><td>11.3%</td><td>~38% AUM YoY</td><td>~4.2x</td>
+          <td style="font-size:12px">Valuation</td>
+        </tr>
+        <tr>
+          <td>Bajaj Finance</td>
+          <td>~29x</td><td>~4.5x</td><td>~22%</td><td>~25% YoY</td><td>~5.0x</td>
+          <td style="font-size:12px">Scale/Brand</td>
+        </tr>
+        <tr>
+          <td>Muthoot Finance</td>
+          <td>~15x</td><td>~3.0x</td><td>~25%</td><td>~20% YoY</td><td>~2.5x</td>
+          <td style="font-size:12px">Gold focus</td>
+        </tr>
+        <tr>
+          <td>Chola Finance</td>
+          <td>~25x</td><td>~4.0x</td><td>~18%</td><td>~22% YoY</td><td>~6.0x</td>
+          <td style="font-size:12px">Growth rate</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="font-size:11px;color:var(--text2);margin-top:8px">Source: Screener.in, Business Standard, MarketsMojo — approximate as of March 2026</div>
+  </div>
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">Latest news — top 5 long-term relevant items</div>
+
+    <div style="padding:10px 0;border-bottom:0.5px solid var(--border)">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+        <div>
+          <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:3px">RBI lifts gold loan ban on IIFL Finance</div>
+          <div style="font-size:12px;color:var(--text2)">Single most important catalyst — gold loan AUM now +189% YoY and has surpassed pre-ban tonnage. Core business fully restored.</div>
+        </div>
+        <div style="font-size:11px;color:var(--text2);white-space:nowrap">Sep 2024 · Business Standard</div>
+      </div>
+    </div>
+
+    <div style="padding:10px 0;border-bottom:0.5px solid var(--border)">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+        <div>
+          <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:3px">RBI proposes easing branch opening rules for gold lenders</div>
+          <div style="font-size:12px;color:var(--text2)">RBI's Feb 2026 proposal to relax branch expansion norms for established gold lenders is a structural positive — could accelerate IIFL's network growth and AUM.</div>
+        </div>
+        <div style="font-size:11px;color:var(--text2);white-space:nowrap">Feb 2026 · WhalesBook</div>
+      </div>
+    </div>
+
+    <div style="padding:10px 0;border-bottom:0.5px solid var(--border)">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+        <div>
+          <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:3px">Q3 FY26: PAT ₹501 Cr, AUM ₹98,336 Cr — strong sequential momentum</div>
+          <div style="font-size:12px;color:var(--text2)">Quarterly earnings trajectory is strongly upward — 20% QoQ PAT growth confirms recovery is durable, not a one-time bounce.</div>
+        </div>
+        <div style="font-size:11px;color:var(--text2);white-space:nowrap">Jan 2026 · PR Newswire</div>
+      </div>
+    </div>
+
+    <div style="padding:10px 0;border-bottom:0.5px solid var(--border)">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+        <div>
+          <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:3px">Income Tax Dept orders special audit on IIFL Finance</div>
+          <div style="font-size:12px;color:var(--text2)">Company says procedural in nature and will cooperate. Creates near-term uncertainty around potential tax liability — watch for resolution. Stock fell ~17% on this news.</div>
+        </div>
+        <div style="font-size:11px;color:var(--text2);white-space:nowrap">Jan 2026 · WhalesBook</div>
+      </div>
+    </div>
+
+    <div style="padding:10px 0">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+        <div>
+          <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:3px">IIFL exploring sale of Samasta MFI subsidiary stake, hires EY</div>
+          <div style="font-size:12px;color:var(--text2)">Samasta (microfinance subsidiary) reported losses in 9M FY26. Potential stake sale could release capital and reduce drag — but valuation gap with potential buyer (Piramal) remains a challenge.</div>
+        </div>
+        <div style="font-size:11px;color:var(--text2);white-space:nowrap">Mar 2026 · Business Standard</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="score-box">
+    Peer standing: <strong>MID-PACK — LEADING ON VALUE</strong><br>
+    <span style="margin-top:4px;display:block">IIFL Finance trades at a massive discount to peers on P/B (1.5x vs 3–4.5x for Bajaj, Chola) and lower ROE due to FY25 disruption. However, AUM growth (+38% YoY) is competitive. Muthoot Finance — its closest gold loan competitor — shows what IIFL could look like with sustained ROE recovery. IIFL is the cheapest large NBFC on the board right now.</span>
+  </div>
+
+</div>
+
+<!-- ═══ TAB 6: OWNERSHIP ═══ -->
+<div class="panel" id="p6">
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">Who is backing this company — and are they buying or stepping away?</div>
+    <table>
+      <thead><tr><th>Holder</th><th>Latest %</th><th>8-quarter trend</th><th>Signal</th><th>What it means</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Promoter</td><td>24.9%</td><td>→ Stable</td>
+          <td><span class="badge warn">STABLE (LOW)</span></td>
+          <td style="color:var(--text2);font-size:12px">Promoter stake is stable but at a low ~25% — watch for any further dilution</td>
+        </tr>
+        <tr>
+          <td>FII</td><td>27.8%</td><td>→ Stable</td>
+          <td><span class="badge ok">STABLE</span></td>
+          <td style="color:var(--text2);font-size:12px">Strong foreign institutional interest — signals international confidence in recovery</td>
+        </tr>
+        <tr>
+          <td>DII</td><td>~4.5%</td><td>→ Stable</td>
+          <td><span class="badge ok">STABLE</span></td>
+          <td style="color:var(--text2);font-size:12px">Domestic MFs/insurance present; lower than pre-ban levels</td>
+        </tr>
+        <tr>
+          <td>Public / Retail</td><td>~38%</td><td>→ High</td>
+          <td><span class="badge warn">WATCH</span></td>
+          <td style="color:var(--text2);font-size:12px">High retail share = sensitive to sentiment — can cause sharp swings</td>
+        </tr>
+        <tr>
+          <td>Promoter pledging</td><td>🚩 DATA UNAVAILABLE</td><td>—</td>
+          <td><span class="badge neu">—</span></td>
+          <td style="color:var(--text2);font-size:12px">Verify at <a href="https://trendlyne.com/equity/share-holding/598/IIFL/latest/iifl-finance-ltd/" style="color:var(--b-accent)">Trendlyne</a> or NSE filings</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="font-size:11px;color:var(--text2);margin-top:8px">Source: Choice India shareholding pattern, Trendlyne — Jan/Dec 2025 data</div>
+  </div>
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">Latest earnings call — Q3 FY26 (Oct–Dec 2025)</div>
+    <table>
+      <thead><tr><th>What management said</th><th>What it means for you</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>"Gold loan AUM has surpassed pre-embargo tonnage at ₹43,432 Cr, +189% YoY"</td>
+          <td style="color:var(--text2);font-size:12px">Core business fully restored — no permanent damage from ban. The franchise is intact.</td>
+        </tr>
+        <tr>
+          <td>"We have exited micro LAP and digital unsecured MSME — pivoting to low-risk secured lending"</td>
+          <td style="color:var(--text2);font-size:12px">Conservative risk stance post-ban. Better asset quality long-term, but slower growth in MSME short-term.</td>
+        </tr>
+        <tr>
+          <td>"GNPA improved to 1.6% from 2.14%; provision coverage at 92%"</td>
+          <td style="color:var(--text2);font-size:12px">Asset quality trajectory is positive — balance sheet cleanup is well advanced.</td>
+        </tr>
+        <tr>
+          <td>"Expect significant SR (security receipts) redemption in calendar year 2026"</td>
+          <td style="color:var(--text2);font-size:12px">SR redemption will clean up legacy stressed assets — a structural positive for book value and ROE recovery.</td>
+        </tr>
+        <tr>
+          <td>S&P revised outlook from Stable to Positive, credit rating affirmed at 'B+'</td>
+          <td style="color:var(--text2);font-size:12px">International credit agency validation of the recovery thesis — reduces funding cost risk over medium term.</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="font-size:12px;color:var(--text2);margin-top:8px">
+      Management tone: <strong style="color:var(--text)">CONFIDENT</strong> — on gold loan recovery, capital position, and asset quality. <strong style="color:var(--a-text)">CAUTIOUS</strong> — on MFI (Samasta) segment and exit from high-risk unsecured products.
+    </div>
+  </div>
+
+  <div class="score-box">
+    Ownership signal: <strong>HOLDING STEADY</strong><br>
+    <span style="margin-top:4px;display:block">Promoter is stable at ~25% (low but not declining further); FIIs at 27.8% indicate sustained institutional interest despite the regulatory overhang. High retail float (~38%) means any catalysts — like Samasta resolution or IT audit clarity — could cause sharp upside moves. The combination of FII holding + S&P positive outlook shift is a mild positive signal.</span>
+  </div>
+
+</div>
+
+<!-- ═══ TAB 7: VIEW (default active) ═══ -->
+<div class="panel on" id="p7">
+
+  <div class="card amber">
+    <div class="view-label amber">MODERATE FUNDAMENTALS — RECOVERY STORY IN PROGRESS</div>
+    <div class="view-reason">IIFL Finance is a structurally sound NBFC emerging from an exceptional regulatory disruption — its core gold loan business is fully restored, valuation is cheap vs peers, but meaningful risks around regulatory track record, Samasta MFI stress, and tax audit keep this from a STRONG rating today.</div>
+
+    <div class="sec-label">What works for this stock</div>
+    <div class="bullet-row"><span class="bicon" style="color:var(--g-accent)">✓</span><span><strong>Gold business fully back:</strong> Gold loan AUM at ₹43,432 Cr (+189% YoY) has surpassed pre-ban levels — the core franchise is intact and accelerating on the back of record gold prices.</span></div>
+    <div class="bullet-row"><span class="bicon" style="color:var(--g-accent)">✓</span><span><strong>Deep valuation discount vs peers:</strong> P/B of 1.5x vs sector avg 2.0x and Muthoot/Chola at 3–4x suggests significant re-rating potential if ROE normalises toward 15–18%.</span></div>
+    <div class="bullet-row"><span class="bicon" style="color:var(--g-accent)">✓</span><span><strong>Strong capital buffer + improving asset quality:</strong> CRAR of 27.7% (vs 15% RBI minimum), GNPA declining to 1.6%, provision coverage at 92%, and positive FCF of ₹2,489 Cr provide a stable foundation for growth.</span></div>
+
+    <div class="sec-label">What to watch</div>
+    <div class="bullet-row"><span class="bicon" style="color:var(--a-accent)">⚠</span><span><strong>Regulatory track record is a real risk:</strong> The RBI has already acted once (gold ban Mar–Sep 2024). Any new compliance lapse or regulatory action could repeat the FY25 disruption. This is the single biggest risk for a 5-year holder — monitor RBI communications and audit findings closely.</span></div>
+    <div class="bullet-row"><span class="bicon" style="color:var(--a-accent)">⚠</span><span><strong>Samasta MFI subsidiary is a drag:</strong> Samasta reported ₹39 Cr loss in 9M FY26 (vs ₹20 Cr profit in FY25). A failed or value-destructive stake sale could weigh on consolidated earnings and book value. The Income Tax special audit (Jan 2026) adds another layer of uncertainty.</span></div>
+
+    <div class="sec-label">Track this going forward</div>
+    <div class="bullet-row"><span class="bicon" style="color:var(--text2)">→</span><span><strong>ROE trajectory and NIM recovery:</strong> IIFL's ability to push ROE back toward 15–17% (from current ~11%) is the key value driver over 5 years. Monitor quarterly: NIM trend, gold loan AUM growth rate, MSME NPA, and any regulatory or audit updates. A clean resolution of the IT audit + Samasta stake sale could be meaningful catalysts.</span></div>
+
+    <div style="margin-top:16px;font-size:11px;color:var(--text2);font-style:italic">
+      This is a VIEW based on fundamentals only. Not a buy/sell recommendation. The decision is always yours.
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px">
+    <div class="card green">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--g-text);margin-bottom:8px">Opportunities</div>
+      <div class="bullet-row" style="border-color:var(--g-border)"><span class="bicon" style="color:var(--g-accent)">+</span><span style="color:var(--g-text);font-size:12px">Gold at record prices globally → higher loan-to-value eligibility → organic gold loan AUM growth without new customers</span></div>
+      <div class="bullet-row" style="border-color:var(--g-border)"><span class="bicon" style="color:var(--g-accent)">+</span><span style="color:var(--g-text);font-size:12px">RBI easing branch norms (Feb 2026) → network expansion → faster market share gains in rural and semi-urban gold lending</span></div>
+      <div class="bullet-row" style="border-color:var(--g-border);border-bottom:none"><span class="bicon" style="color:var(--g-accent)">+</span><span style="color:var(--g-text);font-size:12px">Pivot to secured MSME lending → better asset quality, sustainable profitability, and potential re-rating as a cleaner-book NBFC</span></div>
+    </div>
+    <div class="card red">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--r-text);margin-bottom:8px">Risks</div>
+      <div class="bullet-row" style="border-color:var(--r-border)"><span class="bicon" style="color:var(--r-accent)">−</span><span style="color:var(--r-text);font-size:12px">Any new regulatory action (RBI ban repeat) would severely disrupt operations and repeat the FY25 earnings destruction</span></div>
+      <div class="bullet-row" style="border-color:var(--r-border)"><span class="bicon" style="color:var(--r-accent)">−</span><span style="color:var(--r-text);font-size:12px">Gold price correction → falling gold prices reduce LTV headroom, increase NPAs in gold loan book, and shrink AUM</span></div>
+      <div class="bullet-row" style="border-color:var(--r-border);border-bottom:none"><span class="bicon" style="color:var(--r-accent)">−</span><span style="color:var(--r-text);font-size:12px">IT special audit outcome + Samasta MFI losses → potential write-downs or capital dilution in coming quarters</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- GLOSSARY -->
+<details style="margin-top:20px;padding:0 4px">
+  <summary>Definitions — tap to expand</summary>
+  <p><strong>P/E ratio</strong> — What you pay per ₹1 of profit. Lower vs history and sector = cheaper.</p>
+  <p><strong>P/B ratio</strong> — Price vs what the company actually owns (book value). For NBFCs, below 2x is generally considered cheap.</p>
+  <p><strong>EV/EBITDA</strong> — Full business value check including debt. Lower = better value.</p>
+  <p><strong>ROE</strong> — For every ₹100 shareholders invested, how much profit did the company make. Above 15% = good for NBFC.</p>
+  <p><strong>ROCE</strong> — How efficiently the whole business uses capital including borrowed money. Above 15% = healthy.</p>
+  <p><strong>CRAR</strong> — Capital to Risk-weighted Assets Ratio. RBI minimum for NBFCs is 15%. IIFL at 27.7% is well-capitalised.</p>
+  <p><strong>GNPA / NNPA</strong> — Gross/Net Non-Performing Assets. Lower is better. Below 2% is healthy for a diversified NBFC.</p>
+  <p><strong>NIM</strong> — Net Interest Margin. The spread between what an NBFC earns on loans vs what it pays on borrowings. Above 10% is healthy for IIFL's business mix.</p>
+  <p><strong>AUM</strong> — Assets Under Management. Total loan book size. Growing AUM = growing revenue base.</p>
+  <p><strong>Free Cash Flow</strong> — Cash left after all expenses and investments. Positive and growing = genuinely healthy business.</p>
+  <p><strong>CAGR</strong> — Compound Annual Growth Rate. The average yearly growth rate over a period.</p>
+</details>
+
+<div class="disc">
+  This is a fundamental screening and education tool only. Data sourced from NSE India, BSE, Equitymaster Annual Report Analysis, PR Newswire (IIFL Q3 FY26 Press Release), Business Standard, MarketsMojo, Trendlyne, Choice India, and Screener.in. Quarterly EPS figures for Q1–Q3 FY25 and Q1–Q2 FY26 are estimated from publicly reported quarterly PAT data divided by ~40.8 Cr shares — exact figures should be verified at NSE or company filings. This is NOT investment advice, a buy/sell recommendation, or SEBI-registered financial research. AI can make errors — verify all numbers before making any decision. Past performance does not guarantee future results. Investing carries risk. Consult a SEBI-registered financial advisor before investing.
+</div>
+
+</div>
+
+<script>
+function show(n){
+  var panels=document.querySelectorAll('.panel');
+  var tabs=document.querySelectorAll('.tab-btn');
+  for(var i=0;i<panels.length;i++){
+    panels[i].className='panel'+(i===n?' on':'');
+    tabs[i].className='tab-btn'+(i===n?' active':'');
+  }
+}
+</script>
+</body>
+</html>
