@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Northern Arc Capital — Fundamental Analysis</title>
+</head>
+<body>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --g-fill:#EAF3DE;--g-text:#27500A;--g-border:#C0DD97;--g-accent:#639922;
+  --a-fill:#FAEEDA;--a-text:#854F0B;--a-border:#FAC775;--a-accent:#EF9F27;
+  --r-fill:#FCEBEB;--r-text:#A32D2D;--r-border:#F7C1C1;--r-accent:#E24B4A;
+  --b-fill:#E6F1FB;--b-text:#185FA5;--b-border:#B5D4F4;--b-accent:#378ADD;
+  --n-fill:#F1EFE8;--n-text:#444441;--n-border:#D3D1C7;
+  --bg:#F7F7F5;--surface:#FFFFFF;--surface2:#F1F0EC;
+  --text:#1A1A18;--text2:#6B6B67;--text3:#9B9B97;
+  --border:rgba(0,0,0,0.09);--shadow:0 1px 3px rgba(0,0,0,0.07),0 4px 12px rgba(0,0,0,0.04)
+}
+@media(prefers-color-scheme:dark){:root{
+  --g-fill:#173404;--g-text:#C0DD97;--g-border:#3B6D11;--g-accent:#97C459;
+  --a-fill:#412402;--a-text:#FAC775;--a-border:#854F0B;--a-accent:#EF9F27;
+  --r-fill:#501313;--r-text:#F09595;--r-border:#A32D2D;--r-accent:#E24B4A;
+  --b-fill:#042C53;--b-text:#85B7EB;--b-border:#185FA5;--b-accent:#378ADD;
+  --n-fill:#2C2C2A;--n-text:#D3D1C7;--n-border:#5F5E5A;
+  --bg:#141413;--surface:#1E1E1C;--surface2:#2A2A28;
+  --text:#E8E8E4;--text2:#A0A09A;--text3:#65655F;
+  --border:rgba(255,255,255,0.08);--shadow:0 1px 3px rgba(0,0,0,0.3),0 4px 12px rgba(0,0,0,0.2)
+}}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;font-size:13px;line-height:1.6;color:var(--text);background:var(--bg);padding:20px 16px 40px}
+.wrap{max-width:860px;margin:0 auto;padding:0 0 32px}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border:1px solid var(--border);border-radius:100px;background:var(--surface);color:var(--text2);font-size:12px;text-decoration:none;transition:all 0.15s}
+.back-btn:hover{border-color:var(--b-accent);color:var(--b-accent)}
+.page-title{font-size:20px;font-weight:700;color:var(--text);letter-spacing:-0.3px}
+.page-sub{font-size:12px;color:var(--text3);margin-top:2px}
+
+.conf{padding:10px 16px;border-radius:8px;margin-bottom:14px;font-size:12px}
+.conf.high{background:var(--g-fill);color:var(--g-text)}
+.conf.moderate{background:var(--a-fill);color:var(--a-text)}
+
+.tab-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.tab-btn{padding:7px 18px;border-radius:100px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:13px;cursor:pointer;font-family:inherit;transition:all 0.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border:1.5px solid var(--text);color:var(--text);font-weight:500}
+.panel{display:none}.panel.on{display:block}
+
+.card{background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:12px;box-shadow:var(--shadow)}
+.card.green{background:var(--g-fill);border-color:var(--g-border)}
+.card.amber{background:var(--a-fill);border-color:var(--a-border)}
+.card.red{background:var(--r-fill);border-color:var(--r-border)}
+.card.blue{background:var(--b-fill);border-color:var(--b-border)}
+.card.grey{background:var(--n-fill);border-color:var(--n-border)}
+
+.view-label{font-size:18px;font-weight:500;margin-bottom:6px}
+.view-label.amber{color:var(--a-text)}.view-label.green{color:var(--g-text)}.view-label.red{color:var(--r-text)}
+.view-reason{font-size:13px;margin-bottom:16px;color:var(--text)}
+
+.sec-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin:14px 0 8px}
+.bullet-row{display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:0.5px solid var(--border);font-size:13px}
+.bullet-row:last-child{border-bottom:none}
+.bicon{font-size:14px;min-width:18px;margin-top:1px}
+
+table{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0}
+th{text-align:left;padding:7px 10px;font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:0.7px;color:var(--text2);border-bottom:0.5px solid var(--border)}
+td{padding:9px 10px;color:var(--text);border-bottom:0.5px solid var(--border)}
+tr:last-child td{border-bottom:none}
+.pos{color:var(--g-accent);font-weight:500}.neg{color:var(--r-accent);font-weight:500}.neu{color:var(--text2)}
+
+.badge{display:inline-block;padding:2px 9px;border-radius:100px;font-size:11px;font-weight:500}
+.badge.ok{background:var(--g-fill);color:var(--g-text)}
+.badge.warn{background:var(--a-fill);color:var(--a-text)}
+.badge.bad{background:var(--r-fill);color:var(--r-text)}
+.badge.info{background:var(--b-fill);color:var(--b-text)}
+.badge.neu{background:var(--n-fill);color:var(--n-text)}
+
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:12px 0}
+.mc{background:var(--surface2);border-radius:8px;padding:12px 14px;border:0.5px solid var(--border)}
+.mc .ml{font-size:10px;text-transform:uppercase;letter-spacing:0.8px;color:var(--text2);margin-bottom:4px}
+.mc .mv{font-size:18px;font-weight:600;color:var(--text)}
+.mc .ms{font-size:11px;color:var(--text3);margin-top:2px}
+
+.info-row{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;border-bottom:0.5px solid var(--border);gap:16px}
+.info-row:last-child{border-bottom:none}
+.il{font-size:12px;color:var(--text2)}
+.iv{font-size:12px;color:var(--text);font-weight:500;text-align:right;max-width:480px}
+
+.flag-card{border-left:3px solid var(--a-accent);background:var(--a-fill);border-radius:0 8px 8px 0;padding:10px 14px;margin-bottom:8px}
+.flag-title{font-size:13px;font-weight:500;color:var(--a-text);margin-bottom:3px}
+.flag-note{font-size:12px;color:var(--a-text)}
+
+.flag-card.blue{border-left-color:var(--b-accent);background:var(--b-fill)}
+.flag-card.blue .flag-title{color:var(--b-text)}
+.flag-card.blue .flag-note{color:var(--b-text)}
+
+.score-box{background:var(--surface2);border-radius:8px;padding:14px 16px;margin-top:14px;font-size:12px;color:var(--text2);border:0.5px solid var(--border)}
+
+.eps-row{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.eps-chip{background:var(--surface2);border-radius:8px;padding:10px 14px;text-align:center;min-width:85px;border:0.5px solid var(--border)}
+.eps-q{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px}
+.eps-v{font-size:15px;font-weight:600;color:var(--text);margin:3px 0}
+.eps-y{font-size:11px}
+
+.peer-you{background:var(--surface2)}
+.disc{font-size:11px;color:var(--text3);border-top:0.5px solid var(--border);padding-top:14px;margin-top:24px;line-height:1.6}
+
+details summary{font-size:12px;color:var(--text2);cursor:pointer;padding:8px 0}
+details p{font-size:12px;color:var(--text2);padding:4px 0;border-bottom:0.5px solid var(--border)}
+details p:last-child{border-bottom:none}
+details strong{color:var(--text);font-weight:500}
+
+.ipo-banner{background:var(--b-fill);border:1px solid var(--b-border);border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:12px;color:var(--b-text)}
+</style>
+
+<div class="wrap">
+
+<div class="topbar">
+  <a class="back-btn" href="home.html">← Back to Dashboard</a>
+  <div>
+    <div class="page-title">Northern Arc Capital Ltd</div>
+    <div class="page-sub">NSE: NORTHARC &nbsp;·&nbsp; 5-Year Horizon Analysis &nbsp;·&nbsp; Updated 30 Mar 2026</div>
+  </div>
+</div>
+
+<!-- CONFIDENCE BAR -->
+<div class="conf moderate">
+  <strong>Data confidence: MODERATE</strong><br>
+  Live metrics retrieved: 8 of 12 key sections &nbsp;|&nbsp; Sources: NSE India, Screener.in, Equitymaster Annual Report FY25, ICRA Ratings, MarketsMojo, Trendlyne, PR Newswire, WhalesBook, Choice India, Business Standard &nbsp;|&nbsp; Note: Listed Sep 2024 — no 5Y own valuation history available; sector comparisons used instead.
+</div>
+
+<!-- TAB ROW -->
+<div class="tab-row">
+  <button class="tab-btn" onclick="show(0)">Snapshot</button>
+  <button class="tab-btn" onclick="show(1)">Valuation</button>
+  <button class="tab-btn" onclick="show(2)">Growth</button>
+  <button class="tab-btn" onclick="show(3)">Health</button>
+  <button class="tab-btn" onclick="show(4)">Returns</button>
+  <button class="tab-btn" onclick="show(5)">Peers</button>
+  <button class="tab-btn" onclick="show(6)">Ownership</button>
+  <button class="tab-btn active" onclick="show(7)">View</button>
+</div>
+
+<!-- ═══ TAB 0: SNAPSHOT ═══ -->
+<div class="panel" id="p0">
+
+  <div class="ipo-banner">
+    ℹ️ <strong>New listing context:</strong> Northern Arc Capital listed on NSE/BSE on 24 Sep 2024 at a 33% premium to its IPO price of ₹263. The current CMP of ~₹207 is <strong>below the IPO price</strong> — a flag worth noting. The company was previously PE-backed (IFMR Capital) and has no traditional promoter.
+  </div>
+
+  <div class="card">
+    <div class="info-row"><span class="il">Company</span><span class="iv">Northern Arc Capital Limited</span></div>
+    <div class="info-row"><span class="il">Ticker</span><span class="iv">NSE: NORTHARC &nbsp;|&nbsp; BSE: 544260</span></div>
+    <div class="info-row"><span class="il">Sector</span><span class="iv">Financial Services</span></div>
+    <div class="info-row"><span class="il">Industry</span><span class="iv">NBFC — Diversified Fintech Lender (Debt Marketplace + Direct Lending)</span></div>
+    <div class="info-row"><span class="il">What it does</span><span class="iv">Provides credit to under-served segments (MSME, Microfinance, Consumer, Vehicle, Affordable Housing, Agriculture) through both direct lending (D2C: 52% of AUM) and a marketplace/co-lending platform that connects capital with originators.</span></div>
+    <div class="info-row"><span class="il">What makes it different</span><span class="iv">Unique dual-engine model — earns as both a lender AND a platform (fee income from Nimbus, nPOS, AltiFi tech stack), with best-in-class GNPA of 0.45% across deeply under-served borrower segments.</span></div>
+    <div class="info-row"><span class="il">Listed</span><span class="iv">24 Sep 2024 · IPO price ₹263 · Listed at +33% premium · Current: ~₹207 (below IPO price)</span></div>
+  </div>
+
+  <div class="mgrid">
+    <div class="mc"><div class="ml">CMP</div><div class="mv">₹207</div><div class="ms">30 Mar 2026 · NSE</div></div>
+    <div class="mc"><div class="ml">52W High</div><div class="mv">₹290</div><div class="ms">NSE</div></div>
+    <div class="mc"><div class="ml">52W Low</div><div class="mv">₹141.47</div><div class="ms">NSE</div></div>
+    <div class="mc"><div class="ml">Market Cap</div><div class="mv">₹3,427 Cr</div><div class="ms">NSE · 30 Mar 2026</div></div>
+    <div class="mc"><div class="ml">Face Value</div><div class="mv">₹10</div><div class="ms">NSE</div></div>
+    <div class="mc"><div class="ml">vs IPO Price</div><div class="mv" style="color:var(--r-accent)">−21%</div><div class="ms">Below ₹263 IPO</div></div>
+  </div>
+
+  <div class="flag-card">
+    <div class="flag-title">⚠ TRADING BELOW IPO PRICE</div>
+    <div class="flag-note">At ₹207, the stock is ~21% below its IPO price of ₹263 (Sep 2024). This reflects: (1) MFI sector stress impacting sentiment for all microfinance-adjacent NBFCs; (2) post-IPO P/E derating; (3) FY25 Q4 PAT drop of 55%. However, Q3 FY26 delivered record quarterly profits — business fundamentals are recovering.</div>
+  </div>
+
+  <div class="flag-card">
+    <div class="flag-title">⚠ NO TRADITIONAL PROMOTER (0% PROMOTER HOLDING)</div>
+    <div class="flag-note">Northern Arc is a PE/institutional investor-backed company with 0% promoter holding. Top shareholder is Leapfrog Financial Inclusion India II Ltd at 16.18%. This is structurally different from a founder-led company — governance accountability, succession planning, and management incentive alignment work differently. Not inherently bad, but warrants monitoring of key management continuity.</div>
+  </div>
+
+  <div class="flag-card blue">
+    <div class="flag-title">ℹ UNIQUE BUSINESS MODEL — PLATFORM + LENDER</div>
+    <div class="flag-note">Unlike most NBFCs that only lend, Northern Arc also runs a debt placement/co-lending platform (Nimbus, nPOS). This generates fee-based income independent of its own balance sheet, offering earnings diversification. D2C direct lending AUM is ₹8,492 Cr and credit funds AUM is ₹3,207 Cr out of total ₹15,121 Cr AUM.</div>
+  </div>
+
+</div>
+
+<!-- ═══ TAB 1: VALUATION ═══ -->
+<div class="panel" id="p1">
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">Is this stock cheap, fair, or expensive right now?</div>
+    <table>
+      <thead><tr><th>Metric</th><th>Current</th><th>Sector median (NBFC)</th><th>Own 5Y avg</th><th>Signal</th><th>Plain English</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>P/E</td><td>10.97x</td><td>~20.64x</td><td>🚩 N/A (listed Sep 2024)</td>
+          <td><span class="badge ok">CHEAP</span></td>
+          <td style="color:var(--text2);font-size:12px">47% discount to peer median — you pay ₹11 per ₹1 of profit</td>
+        </tr>
+        <tr>
+          <td>P/B</td><td>0.91x</td><td>~1.65x</td><td>🚩 N/A (listed Sep 2024)</td>
+          <td><span class="badge ok">CHEAP</span></td>
+          <td style="color:var(--text2);font-size:12px">Trading <em>below</em> book value — 45% discount to peer median</td>
+        </tr>
+        <tr>
+          <td>EV/EBITDA</td><td colspan="3" style="color:var(--text2);font-size:12px">🚩 DATA UNAVAILABLE — verify at <a href="https://stockanalysis.com/quote/bom/544260/statistics/" style="color:var(--b-accent)">Stock Analysis</a></td>
+          <td><span class="badge neu">—</span></td>
+          <td style="color:var(--text2);font-size:12px">Less meaningful for NBFC model</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="font-size:11px;color:var(--a-text);background:var(--a-fill);border-radius:6px;padding:8px 10px;margin-top:8px">⚠ No 5-year own price history available — listed only Sep 2024. Sector medians used for peer context. Discount partly reflects MFI sector stress and post-IPO sentiment. Source: MarketsMojo / Tickertape (30 Mar 2026).</div>
+  </div>
+
+  <div class="card grey">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--n-text);margin-bottom:8px">Why is it trading at a deep discount?</div>
+    <div style="font-size:12px;color:var(--n-text);line-height:1.8">
+      <strong style="color:var(--text)">1. MFI sector headwinds:</strong> Industry-wide NPA stress in microfinance (FY25 H2) dampened sentiment for all MFI-adjacent lenders. Northern Arc has ~15-20% AUM in microfinance through its originator network.<br><br>
+      <strong style="color:var(--text)">2. ROE below 15%:</strong> At 9-10% ROE, the stock arguably deserves to trade below book. However, this reflects IPO equity dilution — the capital needs time to get deployed and generate returns.<br><br>
+      <strong style="color:var(--text)">3. Post-IPO correction:</strong> Listed at ₹350+ (33% premium to ₹263 IPO price) and has since corrected ~40% from peak. Much of the froth has been washed out.<br><br>
+      <strong style="color:var(--text)">The case for rerating:</strong> As ROE recovers toward 13-15%, P/B expansion toward 1.5-2x is historically normal for quality NBFCs. At P/B 0.91x, the risk-reward is skewed positively if fundamentals deliver.
+    </div>
+  </div>
+
+  <div class="score-box">
+    Overall valuation: <strong>UNDERVALUED</strong><br>
+    <span style="margin-top:4px;display:block">At P/B below 1x and P/E at a 47% discount to peer median, NORTHARC is one of the cheapest mid-size NBFCs on the board. The discount reflects near-term concerns (MFI stress, ROE recovery), not a broken business. Record Q3 FY26 profits suggest the worst may be behind it.</span>
+  </div>
+
+</div>
+
+<!-- ═══ TAB 2: GROWTH ═══ -->
+<div class="panel" id="p2">
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">Is this company growing its revenue and profits?</div>
+    <table>
+      <thead><tr><th>Metric</th><th>3Y CAGR (FY22–FY25)</th><th>5Y CAGR</th><th>Trend</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr><td>Revenue</td><td>~40%</td><td>~35% (AUM proxy)</td><td>📈</td><td style="color:var(--text2);font-size:11px">Equitymaster FY25 Annual Report Analysis</td></tr>
+        <tr><td>Net profit</td><td>~25–30%</td><td>~25% (est.)</td><td>➡️</td><td style="color:var(--text2);font-size:11px">Equitymaster / Q4 FY25 results</td></tr>
+        <tr><td>EPS</td><td>~20–25%</td><td>🚩 Limited data (pre-IPO)</td><td>➡️</td><td style="color:var(--text2);font-size:11px">BSE filings / Analyst estimates</td></tr>
+        <tr><td>NIM (EBITDA proxy)</td><td>FY25: 11.9% vs FY22: ~9%</td><td>Expanding</td><td>📈</td><td style="color:var(--text2);font-size:11px">Equitymaster FY25 / ICRA Ratings Report</td></tr>
+        <tr><td>Net profit margin</td><td>FY25: ~12.2%</td><td>~12–15% range</td><td>➡️</td><td style="color:var(--text2);font-size:11px">PAT ₹305 Cr / Rev ₹2,498 Cr (FY25)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">Revenue trajectory — FY22 to FY26E</div>
+    <table>
+      <thead><tr><th>Year</th><th>Revenue</th><th>YoY growth</th><th>PAT</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr><td>FY22</td><td>₹910 Cr</td><td>—</td><td>~₹130 Cr (est.)</td><td style="color:var(--text2);font-size:11px">Equitymaster / Pre-IPO filings</td></tr>
+        <tr><td>FY23</td><td>₹1,305 Cr</td><td class="pos">+43%</td><td>~₹200 Cr (est.)</td><td style="color:var(--text2);font-size:11px">Equitymaster FY24 Annual Report</td></tr>
+        <tr><td>FY24</td><td>₹1,890 Cr</td><td class="pos">+45%</td><td>~₹337 Cr</td><td style="color:var(--text2);font-size:11px">Equitymaster FY24 Annual Report</td></tr>
+        <tr><td>FY25</td><td>₹2,498 Cr</td><td class="pos">+32%</td><td>₹305 Cr</td><td style="color:var(--text2);font-size:11px">Equitymaster FY25 Annual Report Analysis</td></tr>
+        <tr><td>FY26E</td><td>~₹2,900–3,000 Cr</td><td class="pos">~18–20%</td><td>~₹385–400 Cr</td><td style="color:var(--text2);font-size:11px">Extrapolated from Q3 FY26 run rate (₹725 Cr × 4)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">EPS — last 8 quarters (consolidated, approximate)</div>
+    <div class="eps-row">
+      <div class="eps-chip">
+        <div class="eps-q">Q4 FY24</div>
+        <div class="eps-v">₹5.2</div>
+        <div class="eps-y pos">Pre-IPO high</div>
+      </div>
+      <div class="eps-chip">
+        <div class="eps-q">Q1 FY25</div>
+        <div class="eps-v">₹4.5</div>
+        <div class="eps-y neu">Stable</div>
+      </div>
+      <div class="eps-chip">
+        <div class="eps-q">Q2 FY25</div>
+        <div class="eps-v">₹4.5</div>
+        <div class="eps-y neu">Stable</div>
+      </div>
+      <div class="eps-chip">
+        <div class="eps-q">Q3 FY25</div>
+        <div class="eps-v">₹4.0</div>
+        <div class="eps-y neg">MFI stress</div>
+      </div>
+      <div class="eps-chip">
+        <div class="eps-q">Q4 FY25</div>
+        <div class="eps-v">₹2.3</div>
+        <div class="eps-y neg">−55% YoY</div>
+      </div>
+      <div class="eps-chip">
+        <div class="eps-q">Q1 FY26</div>
+        <div class="eps-v">₹5.0</div>
+        <div class="eps-y pos">Recovery</div>
+      </div>
+      <div class="eps-chip">
+        <div class="eps-q">Q2 FY26</div>
+        <div class="eps-v">₹5.5</div>
+        <div class="eps-y pos">+22% YoY</div>
+      </div>
+      <div class="eps-chip">
+        <div class="eps-q">Q3 FY26</div>
+        <div class="eps-v">₹6.1</div>
+        <div class="eps-y pos">+51% YoY ★</div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--text2);margin-top:6px">Q3 FY26 EPS derived from PAT ₹101 Cr ÷ ~16.56 Cr shares. Q1/Q2 FY25/FY26 are estimated from quarterly trajectory data. Q4 FY25 PAT of ₹38.4 Cr confirmed (down 55% YoY). Source: MarketsMojo, BSE filings.</div>
+  </div>
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">AUM and operating metrics — Q3 FY26 highlights</div>
+    <table>
+      <thead><tr><th>Metric</th><th>Q3 FY26</th><th>YoY change</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr><td>Lending AUM</td><td>₹15,121 Cr</td><td class="pos">+33% YoY · +18% QoQ</td><td style="color:var(--text2);font-size:11px">MarketsMojo / WhalesBook</td></tr>
+        <tr><td>D2C Direct AUM</td><td>₹8,492 Cr</td><td class="pos">Growing (52% of AUM)</td><td style="color:var(--text2);font-size:11px">ICRA Ratings Report</td></tr>
+        <tr><td>Credit Funds AUM</td><td>₹3,207 Cr</td><td class="pos">Growing</td><td style="color:var(--text2);font-size:11px">ICRA Ratings Report</td></tr>
+        <tr><td>Placement volumes</td><td>₹3,669 Cr</td><td class="pos">+73% YoY · +43% QoQ</td><td style="color:var(--text2);font-size:11px">MarketsMojo Q3 FY26</td></tr>
+        <tr><td>Net Interest Income</td><td>₹371 Cr</td><td class="pos">+39% YoY · +15% QoQ</td><td style="color:var(--text2);font-size:11px">MarketsMojo Q3 FY26</td></tr>
+        <tr><td>PPoP (Pre-provision profit)</td><td>₹265 Cr</td><td class="pos">+51% YoY · +24% QoQ</td><td style="color:var(--text2);font-size:11px">MarketsMojo Q3 FY26</td></tr>
+        <tr><td>NIM (Q3 FY26)</td><td>9.9%</td><td class="neu">vs 11.9% FY25 full year</td><td style="color:var(--text2);font-size:11px">ICRA / IIFL Capital Research</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="score-box">
+    Growth classification: <strong>ACCELERATING</strong><br>
+    <span style="margin-top:4px;display:block">Revenue has grown at ~35-40% CAGR over 3 years. AUM growing +33% YoY. Q3 FY26 delivered record quarterly revenue and profit (+51% YoY PAT). For a 5-year investor, the long-term trajectory is compelling — the under-served credit market in India is structurally underpenetrated and Northern Arc has a proven origination + technology platform. The Q4 FY25 dip was sector-driven, not business-specific.</span>
+  </div>
+
+</div>
+
+<!-- ═══ TAB 3: HEALTH ═══ -->
+<div class="panel" id="p3">
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">Is this company financially safe and stable? (NBFC-adjusted benchmarks)</div>
+    <table>
+      <thead><tr><th>Metric</th><th>Value</th><th>5Y trend</th><th>Signal</th><th>Plain English</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Debt / Equity (borrowings/equity)</td><td>1.71x (FY25)</td><td>↓ Falling (was 2.39x in FY24)</td>
+          <td><span class="badge ok">SAFE FOR NBFC</span></td>
+          <td style="color:var(--text2);font-size:12px">Conservative leverage; D/E fell as IPO equity infusion ₹500 Cr boosted networth. Typical NBFCs run 4–7x.</td>
+        </tr>
+        <tr>
+          <td>Capital Adequacy (CRAR)</td><td>24.7% (FY25) · Tier I: 23.4%</td><td>↑ Rising sharply (was 18.3% FY24)</td>
+          <td><span class="badge ok">STRONG</span></td>
+          <td style="color:var(--text2);font-size:12px">Well above RBI 15% minimum. IPO proceeds boosted capital significantly.</td>
+        </tr>
+        <tr>
+          <td>GNPA / NNPA</td><td>0.45% / 0.10%</td><td>→ Stable (best-in-class)</td>
+          <td><span class="badge ok">EXCELLENT</span></td>
+          <td style="color:var(--text2);font-size:12px">Among the lowest GNPA in the NBFC space. Rigorous credit underwriting model at work.</td>
+        </tr>
+        <tr>
+          <td>Free Cash Flow</td><td>₹−1,877 Cr (FY25)</td><td>Negative (lending growth)</td>
+          <td><span class="badge warn">TYPICAL (GROWTH NBFC)</span></td>
+          <td style="color:var(--text2);font-size:12px">Negative FCF is normal for a high-growth lending business — capital is being deployed into new loans. Not a concern by itself.</td>
+        </tr>
+        <tr>
+          <td>Interest Coverage</td><td>🚩 DATA UNAVAILABLE</td><td>—</td>
+          <td><span class="badge neu">—</span></td>
+          <td style="color:var(--text2);font-size:12px">Verify at <a href="https://www.screener.in/company/NORTHARC/consolidated/" style="color:var(--b-accent)">Screener.in</a></td>
+        </tr>
+        <tr>
+          <td>NIM</td><td>11.9% FY25 (Q3 FY26: ~9.9%)</td><td>↑ Expanding (FY24: 10.4%)</td>
+          <td><span class="badge ok">HEALTHY</span></td>
+          <td style="color:var(--text2);font-size:12px">Rising yield on loans (13.5% → 15-16%) is improving margin structure</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">Forward projections — 5-year horizon (FY26E base to FY31E)</div>
+    <table>
+      <thead><tr><th>Scenario</th><th>Assumption</th><th>Est. revenue</th><th>Est. net profit</th><th>Est. EPS</th></tr></thead>
+      <tbody>
+        <tr><td>🐢 Bear</td><td style="color:var(--text2);font-size:12px">12% rev CAGR; MFI/MSME NPA stress; ROE stays ~10%; sector slowdown</td><td>₹5,300 Cr</td><td>₹680 Cr</td><td>₹41</td></tr>
+        <tr><td>🚶 Base</td><td style="color:var(--text2);font-size:12px">20% rev CAGR; ROE recovers to 13–15%; AUM compounds at 22%</td><td>₹7,500 Cr</td><td>₹1,020 Cr</td><td>₹62</td></tr>
+        <tr><td>🚀 Bull</td><td style="color:var(--text2);font-size:12px">28% rev CAGR; ROE reaches 17%+; platform fee income scales; D2C pivot completes</td><td>₹10,600 Cr</td><td>₹1,500 Cr</td><td>₹91</td></tr>
+      </tbody>
+    </table>
+    <div style="font-size:11px;color:var(--text2);margin-top:8px">Base year: FY26E revenue ~₹2,950 Cr, PAT ~₹390 Cr, EPS ~₹23.5. Projections based on historical CAGR trends only — not guarantees or predictions. EPS assumes ~16.56 Cr shares (no dilution assumed).</div>
+  </div>
+
+  <div class="score-box">
+    Financial health: <strong>MODERATE RISK</strong><br>
+    <span style="margin-top:4px;display:block">Balance sheet is well-capitalised with CRAR at 24.7% and best-in-class GNPA of 0.45%. Conservative leverage (D/E 1.71x) leaves room to grow. Negative FCF is a feature of growth-stage lending — not a distress signal. The main watch point is whether asset quality holds as D2C direct lending scales into newer, riskier borrower segments.</span>
+  </div>
+
+</div>
+
+<!-- ═══ TAB 4: RETURNS ═══ -->
+<div class="panel" id="p4">
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">Is this company creating real value for shareholders?</div>
+    <table>
+      <thead><tr><th>Metric</th><th>Current (FY26E)</th><th>FY25</th><th>FY24</th><th>Signal</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>ROE</td><td>~10.7% (Q3 FY26 ann.)</td><td>9.0%</td><td>13.5%</td>
+          <td><span class="badge warn">AVERAGE</span></td>
+        </tr>
+        <tr>
+          <td>ROCE</td><td>~10% (est. FY26E)</td><td>9.88%</td><td>11.30%</td>
+          <td><span class="badge warn">AVERAGE</span></td>
+        </tr>
+        <tr>
+          <td>Dividend yield</td><td>0% (no dividend)</td><td>0%</td><td>0%</td>
+          <td><span class="badge neu">NIL</span></td>
+        </tr>
+        <tr>
+          <td>PAT / AMA (return on managed assets)</td><td>~2.3%</td><td>2.2%</td><td>2.8%</td>
+          <td><span class="badge warn">WATCH</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="font-size:11px;color:var(--text2);margin-top:8px">
+      <strong>Why ROE is low and why it may recover:</strong> FY24's ROE of 13.5% was decent. FY25's 9% reflects equity dilution from IPO (~₹882 Cr raised in FY25 — ₹382 Cr from new investor + ₹500 Cr IPO). This capital is being deployed into the loan book. As AUM grows into this new equity base, ROE should normalise toward 13-15% over the next 2-3 years. This is a known, temporary dilution effect. Source: Equitymaster FY25, ICRA.
+    </div>
+  </div>
+
+  <div class="card grey">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--n-text);margin-bottom:8px">Dividend policy</div>
+    <div style="font-size:12px;color:var(--n-text)">Northern Arc Capital has <strong style="color:var(--text)">never paid a dividend</strong> since listing. The company retains all profits to fund AUM growth. Given the high-growth phase and under-penetrated market opportunity, this is consistent with management's reinvestment strategy. For income-seeking investors, this is not an appropriate holding. For growth investors with a 5+ year horizon, reinvested profits are a feature, not a bug — if ROE recovers to 15%+. Source: Trendlyne dividend history.</div>
+  </div>
+
+  <div class="score-box">
+    Return quality: <strong>POTENTIAL COMPOUNDER — ROE IN RECOVERY</strong><br>
+    <span style="margin-top:4px;display:block">Currently averaging 10% ROE — below the 15% threshold for "good." But this is a function of recent equity dilution, not structural weakness. Pre-dilution ROE was 13.5% in FY24. With ₹882 Cr of fresh capital now being deployed into a high-yielding loan book (~15-16% yield), ROE recovery toward 13-16% is a credible thesis over the 5-year horizon. Zero dividends means all returns come through price appreciation — a pure growth story.</span>
+  </div>
+
+</div>
+
+<!-- ═══ TAB 5: PEERS ═══ -->
+<div class="panel" id="p5">
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">How does NORTHARC compare to its closest NBFC peers?</div>
+    <table>
+      <thead><tr><th>Company</th><th>P/E</th><th>P/B</th><th>ROE</th><th>AUM / Rev growth</th><th>D/E</th><th>Edge</th></tr></thead>
+      <tbody>
+        <tr class="peer-you">
+          <td><strong>NORTHARC ◀ you</strong></td>
+          <td>11x</td><td>0.91x</td><td>10.7%</td><td>+33% AUM YoY</td><td>1.71x</td>
+          <td style="font-size:12px">Asset quality</td>
+        </tr>
+        <tr>
+          <td>Five Star Business Finance</td>
+          <td>~20x</td><td>~2.8x</td><td>~17%</td><td>~20% YoY</td><td>~1.8x</td>
+          <td style="font-size:12px">Secured MSME</td>
+        </tr>
+        <tr>
+          <td>SBFC Finance</td>
+          <td>~18x</td><td>~2.2x</td><td>~14%</td><td>~18% YoY</td><td>~2.5x</td>
+          <td style="font-size:12px">Profitability</td>
+        </tr>
+        <tr>
+          <td>MAS Financial Services</td>
+          <td>~17x</td><td>~2.0x</td><td>~15%</td><td>~15% YoY</td><td>~3.0x</td>
+          <td style="font-size:12px">Scale/track record</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="font-size:11px;color:var(--text2);margin-top:8px">Source: Screener.in, MarketsMojo, BSE filings — approximate as of March 2026. NORTHARC's GNPA of 0.45% is best-in-class among listed NBFC peers; most peers run 1.5–2.5% GNPA.</div>
+  </div>
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">Latest news — top 5 long-term relevant items</div>
+
+    <div style="padding:10px 0;border-bottom:0.5px solid var(--border)">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+        <div>
+          <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:3px">Q3 FY26: Record quarterly profit — PAT ₹101 Cr, AUM ₹15,121 Cr (+33% YoY)</div>
+          <div style="font-size:12px;color:var(--text2)">Highest-ever quarterly revenue and profit confirms the business is in full acceleration — not just recovering but setting new highs.</div>
+        </div>
+        <div style="font-size:11px;color:var(--text2);white-space:nowrap">Jan 2026 · MarketsMojo</div>
+      </div>
+    </div>
+
+    <div style="padding:10px 0;border-bottom:0.5px solid var(--border)">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+        <div>
+          <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:3px">Placement volumes surge +73% YoY to ₹3,669 Cr in Q3 FY26</div>
+          <div style="font-size:12px;color:var(--text2)">Platform/marketplace revenues scaling rapidly — fee income engine is growing faster than the lending book, which reduces balance-sheet risk over time.</div>
+        </div>
+        <div style="font-size:11px;color:var(--text2);white-space:nowrap">Jan 2026 · Prysm.fi / BSE</div>
+      </div>
+    </div>
+
+    <div style="padding:10px 0;border-bottom:0.5px solid var(--border)">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+        <div>
+          <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:3px">IPO listed Sep 2024 at 33% premium — stock has since corrected below IPO price</div>
+          <div style="font-size:12px;color:var(--text2)">For long-term investors, buying below IPO price in a company with record profits is a contrarian opportunity worth examining. The IPO funds (₹500 Cr) are being deployed and AUM is scaling.</div>
+        </div>
+        <div style="font-size:11px;color:var(--text2);white-space:nowrap">Sep 2024 · NSE / BSE</div>
+      </div>
+    </div>
+
+    <div style="padding:10px 0;border-bottom:0.5px solid var(--border)">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+        <div>
+          <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:3px">Q4 FY25 PAT fell 55% YoY to ₹38.4 Cr — sector-wide MFI NPA stress</div>
+          <div style="font-size:12px;color:var(--text2)">Sharp Q4 FY25 decline was driven by microfinance sector stress (industry-wide NPA rise). NORTHARC's own GNPA stayed at 0.45% — the provisioning was precautionary/proactive, not a balance sheet event.</div>
+        </div>
+        <div style="font-size:11px;color:var(--text2);white-space:nowrap">May 2025 · BSE filings</div>
+      </div>
+    </div>
+
+    <div style="padding:10px 0">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+        <div>
+          <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:3px">Management: "Easing interest rate environment creates improving credit landscape"</div>
+          <div style="font-size:12px;color:var(--text2)">Q3 FY26 earnings call commentary — lower interest rates reduce borrowing costs for NORTHARC (a net borrower) and improve credit demand in underserved segments. A structural tailwind for the business model.</div>
+        </div>
+        <div style="font-size:11px;color:var(--text2);white-space:nowrap">Jan 2026 · Q3 FY26 call</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="score-box">
+    Peer standing: <strong>LEADING ON VALUE &amp; ASSET QUALITY — MID-PACK ON RETURNS</strong><br>
+    <span style="margin-top:4px;display:block">NORTHARC has the cheapest valuation among listed mid-size NBFCs (P/B 0.91x vs 2–3x for peers) and best-in-class GNPA (0.45% vs 1.5-2.5% for peers). It lags peers on ROE (10.7% vs 14-17% for Five Star/SBFC) — but this gap is largely IPO-dilution related and should close as capital is deployed. The combination of best asset quality + cheapest valuation is a rare and notable setup.</span>
+  </div>
+
+</div>
+
+<!-- ═══ TAB 6: OWNERSHIP ═══ -->
+<div class="panel" id="p6">
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">Who is backing this company — and are they buying or stepping away?</div>
+    <table>
+      <thead><tr><th>Holder</th><th>Latest %</th><th>8-quarter trend</th><th>Signal</th><th>What it means</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Promoter</td><td>0% (No promoter)</td><td>N/A</td>
+          <td><span class="badge warn">NO PROMOTER</span></td>
+          <td style="color:var(--text2);font-size:12px">PE-backed company; top shareholder is Leapfrog Financial Inclusion India II Ltd (16.18%). Watch for management continuity.</td>
+        </tr>
+        <tr>
+          <td>FII</td><td>~4.27–5.23%</td><td>→ Limited data (new listing)</td>
+          <td><span class="badge neu">STABLE</span></td>
+          <td style="color:var(--text2);font-size:12px">Foreign institutional interest is low but present — growing awareness as the company builds listed track record</td>
+        </tr>
+        <tr>
+          <td>DII</td><td>~8–23%</td><td>→ Growing (new listing)</td>
+          <td><span class="badge ok">INCREASING</span></td>
+          <td style="color:var(--text2);font-size:12px">Domestic MFs/insurance are building positions; range varies across sources (some include PE investor block)</td>
+        </tr>
+        <tr>
+          <td>Public / Retail</td><td>~84%</td><td>↑ Very high</td>
+          <td><span class="badge warn">WATCH</span></td>
+          <td style="color:var(--text2);font-size:12px">84% retail float creates extreme price sensitivity to sentiment — sharp swings in both directions are likely</td>
+        </tr>
+        <tr>
+          <td>Leapfrog Financial (top shareholder)</td><td>16.18%</td><td>→ Stable (locked post-IPO)</td>
+          <td><span class="badge ok">STABLE</span></td>
+          <td style="color:var(--text2);font-size:12px">Global impact investor focused on financial inclusion — aligned long-term interests</td>
+        </tr>
+        <tr>
+          <td>Promoter pledging</td><td>N/A (0% promoter)</td><td>—</td>
+          <td><span class="badge ok">NOT APPLICABLE</span></td>
+          <td style="color:var(--text2);font-size:12px">No promoter = no pledging risk</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="font-size:11px;color:var(--text2);margin-top:8px">Source: Choice India shareholding pattern, Trendlyne, Screener.in — Dec 2025 / Jan 2026 data</div>
+  </div>
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">Q3 FY26 earnings call — management commentary (Jan 30, 2026)</div>
+    <table>
+      <thead><tr><th>What management said</th><th>What it means for you</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>"Record quarterly revenue and profit — highest-ever NII of ₹371 Cr (+39% YoY)"</td>
+          <td style="color:var(--text2);font-size:12px">Business is not just recovering — it's hitting new milestones. Q3 FY25 was the low; trajectory is firmly upward.</td>
+        </tr>
+        <tr>
+          <td>"D2C direct lending AUM reached ₹8,492 Cr — 52% of total AUM vs 19% in FY21"</td>
+          <td style="color:var(--text2);font-size:12px">Deliberate shift from pure marketplace to balance-sheet lender. Higher margin but also higher capital intensity. Strategically sound if executed well.</td>
+        </tr>
+        <tr>
+          <td>"Placement volumes +73% YoY — platform business scaling rapidly"</td>
+          <td style="color:var(--text2);font-size:12px">Fee income from the marketplace (Nimbus, nPOS, AltiFi) is growing faster than the lending book. This is the moat — asset-light income that scales without proportional capital requirements.</td>
+        </tr>
+        <tr>
+          <td>"Early signs of recovery and easing interest rate environment point to stronger credit landscape ahead"</td>
+          <td style="color:var(--text2);font-size:12px">Management is cautiously optimistic — not over-promising. Lower interest rates benefit Northern Arc's cost of funds and borrower repayment capacity.</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="font-size:12px;color:var(--text2);margin-top:8px">
+      Management tone: <strong style="color:var(--text)">CONFIDENT</strong> on platform growth and AUM expansion. <strong style="color:var(--a-text)">CAUTIOUS</strong> on near-term macro/credit cycle. Professional management team (no founder-promoter dynamics).
+    </div>
+  </div>
+
+  <div class="score-box">
+    Ownership signal: <strong>HOLDING STEADY — WATCH FOR PE EXIT</strong><br>
+    <span style="margin-top:4px;display:block">No promoter is the defining ownership characteristic here. Leapfrog (16.18%) is a long-term impact investor unlikely to exit quickly. The 84% retail float is the single biggest structural concern — it creates volatility but also means institutional accumulation at these levels could drive meaningful re-rating. Key watch: post-IPO lock-in expiry for institutional shareholders and any large block deals.</span>
+  </div>
+
+</div>
+
+<!-- ═══ TAB 7: VIEW (default active) ═══ -->
+<div class="panel on" id="p7">
+
+  <div class="card amber">
+    <div class="view-label amber">MODERATE FUNDAMENTALS — DIFFERENTIATED GROWTH NBFC AT DEEP VALUE</div>
+    <div class="view-reason">Northern Arc Capital is a structurally differentiated fintech NBFC with best-in-class asset quality (GNPA 0.45%), a unique platform+lender business model, and record quarterly profits — but trades below book value (P/B 0.91x) and below its IPO price, reflecting sector sentiment headwinds and ROE that is still rebuilding after significant equity dilution from the Sep 2024 IPO.</div>
+
+    <div class="sec-label">What works for this stock</div>
+    <div class="bullet-row"><span class="bicon" style="color:var(--g-accent)">✓</span><span><strong>Exceptional asset quality in high-risk segments:</strong> GNPA of 0.45% and NNPA of 0.1% in microfinance/MSME lending is remarkable and reflects a rigorous credit model — the best among listed NBFC peers who average 1.5-2.5% GNPA.</span></div>
+    <div class="bullet-row"><span class="bicon" style="color:var(--g-accent)">✓</span><span><strong>Deep value — below book at record profits:</strong> Trading at P/B 0.91x and P/E 11x (47% discount to peers) while simultaneously delivering record quarterly profits. This combination is rare and typically reversal-prone over a 5-year horizon.</span></div>
+    <div class="bullet-row"><span class="bicon" style="color:var(--g-accent)">✓</span><span><strong>Platform flywheel + direct lending = dual moat:</strong> Placement volumes growing +73% YoY alongside AUM growth of +33% YoY suggests both business engines are firing — the asset-light fee income (Nimbus, nPOS, AltiFi) is scaling fast and diversifies earnings beyond just net interest income.</span></div>
+
+    <div class="sec-label">What to watch</div>
+    <div class="bullet-row"><span class="bicon" style="color:var(--a-accent)">⚠</span><span><strong>No promoter + 84% retail float = governance and volatility risk:</strong> Without a founder-promoter, management accountability structures differ. Watch for any key management departures (especially MD/CEO). High retail float means the stock can swing 20-30% on sentiment alone — this is noise, but emotionally difficult to hold through.</span></div>
+    <div class="bullet-row"><span class="bicon" style="color:var(--a-accent)">⚠</span><span><strong>ROE needs to reach 15%+ to justify a higher P/B:</strong> At 9-10% ROE, the market is right to price this near book value. The investment thesis hinges on ROE recovering to 13-15% as IPO capital gets deployed — if this doesn't materialise in 2-3 years, the re-rating story weakens.</span></div>
+
+    <div class="sec-label">Track this going forward</div>
+    <div class="bullet-row"><span class="bicon" style="color:var(--text2)">→</span><span><strong>ROE trajectory + D2C AUM growth + platform fee income share:</strong> Monitor quarterly: (1) Is ROE trending toward 13-15%? (2) Is D2C direct AUM growing faster than 20% annually? (3) Is platform placement income growing as % of total revenues? These three metrics together determine whether the 5-year re-rating thesis plays out.</span></div>
+
+    <div style="margin-top:16px;font-size:11px;color:var(--text2);font-style:italic">
+      This is a VIEW based on fundamentals only. Not a buy/sell recommendation. The decision is always yours.
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px">
+    <div class="card green">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--g-text);margin-bottom:8px">Opportunities</div>
+      <div class="bullet-row" style="border-color:var(--g-border)"><span class="bicon" style="color:var(--g-accent)">+</span><span style="color:var(--g-text);font-size:12px">India's under-served credit market (~₹30+ lakh Cr addressable) is structurally underpenetrated — Northern Arc is positioned at the exact intersection where growth will happen over 5-10 years</span></div>
+      <div class="bullet-row" style="border-color:var(--g-border)"><span class="bicon" style="color:var(--g-accent)">+</span><span style="color:var(--g-text);font-size:12px">Easing interest rate cycle → lower borrowing costs improve NIM and make lending more affordable for under-served borrowers → dual tailwind for volumes and profitability</span></div>
+      <div class="bullet-row" style="border-color:var(--g-border);border-bottom:none"><span class="bicon" style="color:var(--g-accent)">+</span><span style="color:var(--g-text);font-size:12px">Platform business (Nimbus, nPOS, AltiFi) is asset-light and high-margin — if this scales, it creates a valuation re-rating toward a fintech multiple rather than a plain NBFC multiple</span></div>
+    </div>
+    <div class="card red">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--r-text);margin-bottom:8px">Risks</div>
+      <div class="bullet-row" style="border-color:var(--r-border)"><span class="bicon" style="color:var(--r-accent)">−</span><span style="color:var(--r-text);font-size:12px">MFI sector stress could worsen — if microfinance NPAs rise further across the industry, NORTHARC's originator partners face distress and portfolio quality could deteriorate despite strong current GNPA</span></div>
+      <div class="bullet-row" style="border-color:var(--r-border)"><span class="bicon" style="color:var(--r-accent)">−</span><span style="color:var(--r-text);font-size:12px">PE investor exit risk — Leapfrog and other large institutional holders have no lock-in obligation long-term; large block sales could pressure the stock significantly given the shallow 84% retail-dominated float</span></div>
+      <div class="bullet-row" style="border-color:var(--r-border);border-bottom:none"><span class="bicon" style="color:var(--r-accent)">−</span><span style="color:var(--r-text);font-size:12px">ROE stagnation — if fresh IPO capital (₹882 Cr) is not deployed efficiently or if credit costs rise, ROE remains at 9-10%, keeping P/B anchored below 1x and limiting price appreciation</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- GLOSSARY -->
+<details style="margin-top:20px;padding:0 4px">
+  <summary>Definitions — tap to expand</summary>
+  <p><strong>P/E ratio</strong> — What you pay per ₹1 of profit. 11x means you pay ₹11 per ₹1 of annual earnings.</p>
+  <p><strong>P/B ratio</strong> — Price vs book value. Below 1x means you're buying ₹1 of net assets for less than ₹1 — technically buying at a discount to what the company owns.</p>
+  <p><strong>ROE</strong> — For every ₹100 of shareholder equity, how much profit. Above 15% = good; below 10% = concerning.</p>
+  <p><strong>CRAR</strong> — Capital to Risk-weighted Assets Ratio. RBI minimum for NBFCs is 15%. NORTHARC at 24.7% has ample headroom to grow the loan book.</p>
+  <p><strong>GNPA / NNPA</strong> — Gross/Net Non-Performing Assets. 0.45% GNPA for NORTHARC is exceptional — peers typically run 1.5-2.5%.</p>
+  <p><strong>NIM</strong> — Net Interest Margin. Spread between what Northern Arc earns on loans (~15-16%) and pays on borrowings. Higher NIM = more profitable lending.</p>
+  <p><strong>D2C</strong> — Direct-to-customer lending from Northern Arc's own balance sheet (vs marketplace where it places debt from third-party capital).</p>
+  <p><strong>AUM</strong> — Assets Under Management. Total loan book. Growing AUM = growing revenue base.</p>
+  <p><strong>PAT/AMA</strong> — Profit After Tax as % of Average Managed Assets. The NBFC equivalent of return on assets. 2.2-2.3% is moderate.</p>
+  <p><strong>CAGR</strong> — Compound Annual Growth Rate. The average yearly growth rate over a period.</p>
+</details>
+
+<div class="disc">
+  This is a fundamental screening and education tool only. Data sourced from NSE India, BSE, Equitymaster Annual Report Analysis FY25, ICRA Ratings Report, MarketsMojo, Trendlyne, WhalesBook, Choice India shareholding, Screener.in, Prysm.fi (BSE filings), and company press releases. Quarterly EPS figures for Q1–Q2 FY25 and Q1–Q2 FY26 are estimated from quarterly PAT trajectory and reported YoY/QoQ growth rates — exact figures should be verified at NSE or BSE filing portal. This is NOT investment advice, a buy/sell recommendation, or SEBI-registered financial research. AI can make errors — verify all numbers before making any decision. Past performance does not guarantee future results. Investing carries risk. Consult a SEBI-registered financial advisor before investing.
+</div>
+
+</div>
+
+<script>
+function show(n){
+  var panels=document.querySelectorAll('.panel');
+  var tabs=document.querySelectorAll('.tab-btn');
+  for(var i=0;i<panels.length;i++){
+    panels[i].className='panel'+(i===n?' on':'');
+    tabs[i].className='tab-btn'+(i===n?' active':'');
+  }
+}
+</script>
+</body>
+</html>
