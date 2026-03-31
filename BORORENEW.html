@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Borosil Renewables — Fundamental Analysis</title>
+</head>
+<body>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --g-fill:#EAF3DE;--g-text:#27500A;--g-border:#C0DD97;--g-accent:#639922;
+  --a-fill:#FAEEDA;--a-text:#854F0B;--a-border:#FAC775;--a-accent:#EF9F27;
+  --r-fill:#FCEBEB;--r-text:#A32D2D;--r-border:#F7C1C1;--r-accent:#E24B4A;
+  --b-fill:#E6F1FB;--b-text:#185FA5;--b-border:#B5D4F4;--b-accent:#378ADD;
+  --n-fill:#F1EFE8;--n-text:#444441;--n-border:#D3D1C7;
+  --bg:#F7F7F5;--surface:#FFFFFF;--surface2:#F1F0EC;
+  --text:#1A1A18;--text2:#6B6B67;--text3:#9B9B97;
+  --border:rgba(0,0,0,0.09);--shadow:0 1px 3px rgba(0,0,0,0.07),0 4px 12px rgba(0,0,0,0.04)
+}
+@media(prefers-color-scheme:dark){:root{
+  --g-fill:#173404;--g-text:#C0DD97;--g-border:#3B6D11;--g-accent:#97C459;
+  --a-fill:#412402;--a-text:#FAC775;--a-border:#854F0B;--a-accent:#EF9F27;
+  --r-fill:#501313;--r-text:#F09595;--r-border:#A32D2D;--r-accent:#E24B4A;
+  --b-fill:#042C53;--b-text:#85B7EB;--b-border:#185FA5;--b-accent:#378ADD;
+  --n-fill:#2C2C2A;--n-text:#D3D1C7;--n-border:#5F5E5A;
+  --bg:#141413;--surface:#1E1E1C;--surface2:#2A2A28;
+  --text:#E8E8E4;--text2:#A0A09A;--text3:#65655F;
+  --border:rgba(255,255,255,0.08);--shadow:0 1px 3px rgba(0,0,0,0.3),0 4px 12px rgba(0,0,0,0.2)
+}}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;font-size:13px;line-height:1.6;color:var(--text);background:var(--bg);padding:20px 16px 40px}
+.wrap{max-width:860px;margin:0 auto;padding:0 0 32px}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border:1px solid var(--border);border-radius:100px;background:var(--surface);color:var(--text2);font-size:12px;text-decoration:none;transition:all 0.15s}
+.back-btn:hover{border-color:var(--b-accent);color:var(--b-accent)}
+.page-title{font-size:20px;font-weight:700;color:var(--text);letter-spacing:-0.3px}
+.page-sub{font-size:12px;color:var(--text3);margin-top:2px}
+.conf{padding:10px 16px;border-radius:8px;margin-bottom:14px;font-size:12px}
+.conf.moderate{background:var(--a-fill);color:var(--a-text)}
+.tab-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.tab-btn{padding:7px 18px;border-radius:100px;border:1px solid var(--border);background:transparent;color:var(--text2);font-size:13px;cursor:pointer;font-family:inherit;transition:all 0.15s}
+.tab-btn:hover{color:var(--text)}
+.tab-btn.active{border:1.5px solid var(--text);color:var(--text);font-weight:500}
+.panel{display:none}.panel.on{display:block}
+.card{background:var(--surface);border:0.5px solid var(--border);border-radius:12px;padding:16px 20px;margin-bottom:12px;box-shadow:var(--shadow)}
+.card.green{background:var(--g-fill);border-color:var(--g-border)}
+.card.amber{background:var(--a-fill);border-color:var(--a-border)}
+.card.red{background:var(--r-fill);border-color:var(--r-border)}
+.card.blue{background:var(--b-fill);border-color:var(--b-border)}
+.card.grey{background:var(--n-fill);border-color:var(--n-border)}
+.view-label{font-size:18px;font-weight:500;margin-bottom:6px}
+.view-label.amber{color:var(--a-text)}.view-label.green{color:var(--g-text)}.view-label.red{color:var(--r-text)}
+.view-reason{font-size:13px;margin-bottom:16px;color:var(--text)}
+.sec-label{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin:14px 0 8px}
+.bullet-row{display:flex;gap:10px;align-items:flex-start;padding:6px 0;border-bottom:0.5px solid var(--border);font-size:13px}
+.bullet-row:last-child{border-bottom:none}
+.bicon{font-size:14px;min-width:18px;margin-top:1px}
+table{width:100%;border-collapse:collapse;font-size:12px;margin:8px 0}
+th{text-align:left;padding:7px 10px;font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:0.7px;color:var(--text2);border-bottom:0.5px solid var(--border)}
+td{padding:9px 10px;color:var(--text);border-bottom:0.5px solid var(--border)}
+tr:last-child td{border-bottom:none}
+.pos{color:var(--g-accent);font-weight:500}.neg{color:var(--r-accent);font-weight:500}.neu{color:var(--text2)}
+.badge{display:inline-block;padding:2px 9px;border-radius:100px;font-size:11px;font-weight:500}
+.badge.ok{background:var(--g-fill);color:var(--g-text)}
+.badge.warn{background:var(--a-fill);color:var(--a-text)}
+.badge.bad{background:var(--r-fill);color:var(--r-text)}
+.badge.info{background:var(--b-fill);color:var(--b-text)}
+.badge.neu{background:var(--n-fill);color:var(--n-text)}
+.mgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:12px 0}
+.mc{background:var(--surface2);border-radius:8px;padding:12px 14px;border:0.5px solid var(--border)}
+.mc .ml{font-size:10px;text-transform:uppercase;letter-spacing:0.8px;color:var(--text2);margin-bottom:4px}
+.mc .mv{font-size:18px;font-weight:600;color:var(--text)}
+.mc .ms{font-size:11px;color:var(--text3);margin-top:2px}
+.info-row{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;border-bottom:0.5px solid var(--border);gap:16px}
+.info-row:last-child{border-bottom:none}
+.il{font-size:12px;color:var(--text2)}
+.iv{font-size:12px;color:var(--text);font-weight:500;text-align:right;max-width:480px}
+.flag-card{border-left:3px solid var(--a-accent);background:var(--a-fill);border-radius:0 8px 8px 0;padding:10px 14px;margin-bottom:8px}
+.flag-card.red{border-left-color:var(--r-accent);background:var(--r-fill)}
+.flag-card.red .flag-title{color:var(--r-text)}
+.flag-card.red .flag-note{color:var(--r-text)}
+.flag-card.green{border-left-color:var(--g-accent);background:var(--g-fill)}
+.flag-card.green .flag-title{color:var(--g-text)}
+.flag-card.green .flag-note{color:var(--g-text)}
+.flag-title{font-size:13px;font-weight:500;color:var(--a-text);margin-bottom:3px}
+.flag-note{font-size:12px;color:var(--a-text)}
+.score-box{background:var(--surface2);border-radius:8px;padding:14px 16px;margin-top:14px;font-size:12px;color:var(--text2);border:0.5px solid var(--border)}
+.eps-row{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.eps-chip{background:var(--surface2);border-radius:8px;padding:10px 14px;text-align:center;min-width:85px;border:0.5px solid var(--border)}
+.eps-q{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px}
+.eps-v{font-size:15px;font-weight:600;margin:3px 0}
+.eps-y{font-size:11px}
+.peer-you{background:var(--surface2)}
+.disc{font-size:11px;color:var(--text3);border-top:0.5px solid var(--border);padding-top:14px;margin-top:24px;line-height:1.6}
+details summary{font-size:12px;color:var(--text2);cursor:pointer;padding:8px 0}
+details p{font-size:12px;color:var(--text2);padding:4px 0;border-bottom:0.5px solid var(--border)}
+details p:last-child{border-bottom:none}
+details strong{color:var(--text);font-weight:500}
+.timeline{border-left:2px solid var(--border);margin:12px 0 4px 8px}
+.tl-item{padding:6px 0 6px 16px;position:relative;font-size:12px;color:var(--text2)}
+.tl-item::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--border);position:absolute;left:-5px;top:10px}
+.tl-item.bad::before{background:var(--r-accent)}
+.tl-item.good::before{background:var(--g-accent)}
+.tl-item.warn::before{background:var(--a-accent)}
+.tl-label{font-weight:500;color:var(--text);font-size:12px}
+</style>
+
+<div class="wrap">
+
+<div class="topbar">
+  <a class="back-btn" href="index.html">← Back to Dashboard</a>
+  <div>
+    <div class="page-title">Borosil Renewables Ltd</div>
+    <div class="page-sub">NSE: BORORENEW &nbsp;·&nbsp; 5-Year Horizon Analysis &nbsp;·&nbsp; Updated 31 Mar 2026</div>
+  </div>
+</div>
+
+<div class="conf moderate">
+  <strong>Data confidence: MODERATE</strong><br>
+  Live metrics retrieved: 8 of 12 key sections &nbsp;|&nbsp; Sources: NSE India, Screener.in, Equitymaster FY25 Annual Report Analysis, Mercom India, Business Standard, SaurEnergy, MarketsMojo, Trendlyne, Prysm.fi (BSE filings) &nbsp;|&nbsp; Note: Trailing P/E and ROE are distorted by exceptional items (₹360 Cr German write-off). Forward metrics are more meaningful here.
+</div>
+
+<div class="tab-row">
+  <button class="tab-btn" onclick="show(0)">Snapshot</button>
+  <button class="tab-btn" onclick="show(1)">Valuation</button>
+  <button class="tab-btn" onclick="show(2)">Growth</button>
+  <button class="tab-btn" onclick="show(3)">Health</button>
+  <button class="tab-btn" onclick="show(4)">Returns</button>
+  <button class="tab-btn" onclick="show(5)">Peers</button>
+  <button class="tab-btn" onclick="show(6)">Ownership</button>
+  <button class="tab-btn active" onclick="show(7)">View</button>
+</div>
+
+<!-- ═══ TAB 0: SNAPSHOT ═══ -->
+<div class="panel" id="p0">
+
+  <div class="flag-card green">
+    <div class="flag-title">✅ INDIA'S ONLY SOLAR GLASS MANUFACTURER + ANTI-DUMPING DUTY PROTECTION</div>
+    <div class="flag-note">Borosil Renewables is the first and only large-scale solar glass manufacturer in India with >20% domestic market share. India imposed a 5-year anti-dumping duty on Chinese & Vietnamese solar glass imports (effective Dec 2024). This is the single biggest structural catalyst — it has transformed loss-making operations into a ₹100 Cr/quarter profit business within two quarters.</div>
+  </div>
+
+  <div class="card">
+    <div class="info-row"><span class="il">Company</span><span class="iv">Borosil Renewables Limited (formerly Borosil Glass Works)</span></div>
+    <div class="info-row"><span class="il">Ticker</span><span class="iv">NSE: BORORENEW &nbsp;|&nbsp; BSE: 502219</span></div>
+    <div class="info-row"><span class="il">Sector</span><span class="iv">Materials / Specialty Glass / Renewable Energy Infrastructure</span></div>
+    <div class="info-row"><span class="il">Industry</span><span class="iv">Solar Glass Manufacturing (Low-Iron Textured Solar Glass)</span></div>
+    <div class="info-row"><span class="il">What it does</span><span class="iv">Manufactures low-iron textured solar glass used in photovoltaic (PV) solar panels, flat plate solar collectors and greenhouses. India's only domestic producer. Revenue model: volume × price per sq. metre of glass.</span></div>
+    <div class="info-row"><span class="il">What makes it different</span><span class="iv">Domestic monopoly on solar glass production, protected by a government-imposed 5-year anti-dumping duty on Chinese imports. India's 500 GW renewable energy target by 2030 is a structural demand tailwind.</span></div>
+    <div class="info-row"><span class="il">Current capacity</span><span class="iv">~6.5 GW (current) → expanding to ~11 GW (600 TPD new capacity, ₹950 Cr investment, commissioning Oct–Dec 2026)</span></div>
+  </div>
+
+  <div class="mgrid">
+    <div class="mc"><div class="ml">CMP</div><div class="mv">₹415</div><div class="ms">Mar 2026 · NSE</div></div>
+    <div class="mc"><div class="ml">52W High</div><div class="mv">₹721</div><div class="ms">NSE</div></div>
+    <div class="mc"><div class="ml">52W Low</div><div class="mv">₹396.90</div><div class="ms">NSE</div></div>
+    <div class="mc"><div class="ml">Market Cap</div><div class="mv">₹5,591 Cr</div><div class="ms">NSE · Mar 2026</div></div>
+    <div class="mc"><div class="ml">Face Value</div><div class="mv">₹1</div><div class="ms">NSE</div></div>
+    <div class="mc"><div class="ml">vs 52W High</div><div class="mv" style="color:var(--r-accent)">−42%</div><div class="ms">From ₹721 peak</div></div>
+  </div>
+
+  <!-- Story Timeline -->
+  <div class="card grey" style="margin-top:4px">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--n-text);margin-bottom:10px">The Borosil Story — Why the numbers look messy (and why that may matter for 5-year investors)</div>
+    <div class="timeline">
+      <div class="tl-item good"><span class="tl-label">FY20–FY22:</span> Profitable years. India's solar sector growing. Company making money as domestic supplier.</div>
+      <div class="tl-item bad"><span class="tl-label">FY23–FY25:</span> China floods India with cheap solar glass, undercutting domestic prices. Borosil posts losses for 3 consecutive years. EBITDA margin crashes from ~15% to 3.9% in FY25.</div>
+      <div class="tl-item bad"><span class="tl-label">Jul 2025:</span> German subsidiary GMB Glasmanufaktur (Europe's largest solar glass maker) files for insolvency. Borosil writes off entire German exposure (~₹360 Cr exceptional charge over 9M FY26).</div>
+      <div class="tl-item good"><span class="tl-label">Dec 2024 / May 2025:</span> GAME CHANGER — India imposes 5-year anti-dumping duty on Chinese and Vietnamese solar glass (up to USD 664/tonne). Chinese competition neutralised.</div>
+      <div class="tl-item good"><span class="tl-label">Q3 FY26 (Dec 2025):</span> Record quarterly profit — ₹100 Cr PAT, Revenue ₹390 Cr (+40% YoY India standalone). EBITDA margin 31.5%.</div>
+      <div class="tl-item warn"><span class="tl-label">May 2025:</span> Board approves 600 TPD capacity expansion (₹950 Cr). Two 300 TPD furnaces. Target: Oct–Dec 2026 commissioning. India-only focus going forward.</div>
+    </div>
+  </div>
+
+  <div class="flag-card red">
+    <div class="flag-title">⚠ GERMAN SUBSIDIARY WRITE-OFF (₹360 Cr EXCEPTIONAL LOSS)</div>
+    <div class="flag-note">Borosil had invested in GMB Glasmanufaktur Brandenburg GmbH and Geosphere Glassworks GmbH in Germany. Both went insolvent (GMB: Jul 2025, Geosphere: Dec 2025). Full provision of ₹360 Cr taken in FY26. This was a significant capital allocation mistake by management and has clouded consolidated FY26 numbers. The silver lining: the exposure is now fully written off — no further losses expected from Germany.</div>
+  </div>
+
+  <div class="flag-card">
+    <div class="flag-title">⚠ PROMOTER STAKE DECLINING (−343 BPS IN 3 QUARTERS)</div>
+    <div class="flag-note">Promoter holding has declined from ~62% to 58.8% over the last 3 quarters (Sep 2025 to Dec 2025 period). While still high at 58.8%, the downward trend warrants monitoring. Promoter pledging remains 0% — no distress signal, but gradual stake reduction is worth watching.</div>
+  </div>
+
+</div>
+
+<!-- ═══ TAB 1: VALUATION ═══ -->
+<div class="panel" id="p1">
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">Valuation is complex here — trailing metrics are distorted. Forward earnings are what matter.</div>
+    <table>
+      <thead><tr><th>Metric</th><th>Current</th><th>Sector / Peers</th><th>5Y own avg</th><th>Signal</th><th>Plain English</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>P/E (trailing TTM)</td><td>Negative / ~38x*</td><td>Specialty glass: 25–35x</td><td>~30–40x (loss years)</td>
+          <td><span class="badge warn">DISTORTED</span></td>
+          <td style="color:var(--text2);font-size:12px">*Distorted by ₹360 Cr exceptional items. TTM EPS = −₹6.6. Not meaningful.</td>
+        </tr>
+        <tr>
+          <td>P/E (forward FY27E)</td><td>~14x</td><td>Specialty glass: ~25–35x</td><td>—</td>
+          <td><span class="badge ok">CHEAP</span></td>
+          <td style="color:var(--text2);font-size:12px">On ₹350–400 Cr FY27E PAT (first clean year): EPS ~₹26–30 → P/E ~14x</td>
+        </tr>
+        <tr>
+          <td>P/B</td><td>6.51x</td><td>Specialty glass: 2–5x</td><td>~3–5x (profitable years)</td>
+          <td><span class="badge bad">EXPENSIVE</span></td>
+          <td style="color:var(--text2);font-size:12px">High P/B reflects years of losses eroding book value. Improving earnings will rebuild book.</td>
+        </tr>
+        <tr>
+          <td>EV/EBITDA</td><td>18.27x (trailing)</td><td>Specialty glass: 12–20x</td><td>~15–25x (historical)</td>
+          <td><span class="badge warn">FAIR</span></td>
+          <td style="color:var(--text2);font-size:12px">On Q3 FY26 annualized EBITDA (~₹520 Cr), EV/EBITDA ≈ 11x — significant compression expected. Source: ValueInvesting.io / Equitymaster</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card grey">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--n-text);margin-bottom:8px">The valuation context — why forward matters more than trailing</div>
+    <div style="font-size:12px;color:var(--n-text);line-height:1.8">
+      <strong style="color:var(--text)">Trailing numbers are misleading:</strong> FY23–FY25 losses (Chinese dumping) + ₹360 Cr German write-off in FY26 = all historical metrics look terrible (negative ROE, distorted P/E, eroded book value).<br><br>
+      <strong style="color:var(--text)">What Q3 FY26 proves:</strong> India operations can generate ₹100 Cr profit/quarter (₹400 Cr annualised) with current capacity. EBITDA margin of 31.5% is world-class for a specialty glass manufacturer — better than what Chinese competitors were making before dumping.<br><br>
+      <strong style="color:var(--text)">The forward case:</strong> Anti-dumping duty runs until ~Dec 2029. ₹950 Cr capacity expansion doubles output by end of 2026. If these execute, FY28–29 could deliver ₹600–800 Cr PAT — at current market cap of ₹5,591 Cr, that's a P/E of ~7–9x. For a monopoly with protected margins, that's potentially very cheap.<br><br>
+      <strong style="color:var(--text)">The risk:</strong> The market knows all this — the stock ran to ₹721 (before Q1 FY26 German write-off hit). The current ₹415 CMP reflects execution risk (₹950 Cr capex), AD duty renewal risk, and distrust from the German misadventure.
+    </div>
+  </div>
+
+  <div class="score-box">
+    Overall valuation: <strong>MIXED — CHEAP ON FORWARD, EXPENSIVE ON TRAILING</strong><br>
+    <span style="margin-top:4px;display:block">Trailing metrics are not the right lens — this is a pure turnaround. Forward P/E of ~14x on FY27E earnings looks attractive for India's only solar glass manufacturer. However, P/B of 6.5x and execution risks (₹950 Cr capex, AD duty reliance) mean this is not a straightforward "cheap" call. It's a bet on structural earnings recovery materialising.</span>
+  </div>
+
+</div>
+
+<!-- ═══ TAB 2: GROWTH ═══ -->
+<div class="panel" id="p2">
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">Revenue growing steadily; profitability destroyed by Chinese dumping, now dramatically restored by AD duty</div>
+    <table>
+      <thead><tr><th>Metric</th><th>3Y CAGR (FY22–FY25)</th><th>5Y CAGR (FY20–FY25)</th><th>Trend</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr><td>Revenue</td><td>~18%</td><td>~22% (est.)</td><td>📈</td><td style="color:var(--text2);font-size:11px">Equitymaster FY25 / Mercom India</td></tr>
+        <tr><td>Net profit</td><td>🚩 Not meaningful (loss years)</td><td>🚩 Not meaningful</td><td>📉→📈</td><td style="color:var(--text2);font-size:11px">PAT negative FY23–FY25, turning positive FY26</td></tr>
+        <tr><td>EPS</td><td>🚩 Negative (loss years FY23–25)</td><td>🚩 Not meaningful</td><td>📉→📈</td><td style="color:var(--text2);font-size:11px">TTM EPS -₹6.6 (distorted by ₹360 Cr write-off)</td></tr>
+        <tr><td>EBITDA margin</td><td>FY22: ~15% → FY25: 3.9%</td><td>Peak ~20% (FY20)</td><td>📉→📈</td><td style="color:var(--text2);font-size:11px">Equitymaster FY25; Q3 FY26: 31.5%</td></tr>
+        <tr><td>Net profit margin</td><td>FY25: −5.7%</td><td>Pre-dumping: ~8–12%</td><td>📉→📈</td><td style="color:var(--text2);font-size:11px">FY25 loss ₹86.97 Cr / Revenue ₹1,515 Cr</td></tr>
+      </tbody>
+    </table>
+    <div style="font-size:11px;color:var(--b-text);background:var(--b-fill);border-radius:6px;padding:8px 10px;margin-top:8px">📌 Revenue CAGR is meaningful here; profit CAGR is not. The business was structurally profitable before Chinese dumping — Q3 FY26's 31.5% EBITDA margin proves the underlying economics are strong when protected.</div>
+  </div>
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">Annual revenue and PAT trajectory</div>
+    <table>
+      <thead><tr><th>Year</th><th>Revenue</th><th>PAT</th><th>EBITDA margin</th><th>Key event</th></tr></thead>
+      <tbody>
+        <tr><td>FY23</td><td>~₹1,200 Cr</td><td class="neg">Loss (est.)</td><td>~8%</td><td style="color:var(--text2);font-size:11px">Chinese glass flood begins</td></tr>
+        <tr><td>FY24</td><td>₹1,392 Cr</td><td class="neg">−₹50 Cr</td><td>6.6%</td><td style="color:var(--text2);font-size:11px">Losses deepen. Anti-dumping petition filed.</td></tr>
+        <tr><td>FY25</td><td>₹1,515 Cr (+8.8%)</td><td class="neg">−₹87 Cr</td><td>3.9%</td><td style="color:var(--text2);font-size:11px">Worst year. AD duty effective Dec 2024.</td></tr>
+        <tr><td>9M FY26</td><td>₹1,116 Cr (flat YoY)</td><td class="neg">−₹40 Cr (post-exceptional)</td><td>Rising sharply</td><td style="color:var(--text2);font-size:11px">₹360 Cr German write-off distorts. India ops: ₹100 Cr Q3.</td></tr>
+        <tr><td>FY26E (full year)</td><td>~₹1,550 Cr</td><td class="pos">~₹60–80 Cr (post-exceptional)</td><td>~28–31%</td><td style="color:var(--text2);font-size:11px">Germany fully provisioned; India recovers</td></tr>
+        <tr><td>FY27E (clean year)</td><td>~₹1,800–2,000 Cr</td><td class="pos">~₹350–400 Cr</td><td>~25–30%</td><td style="color:var(--text2);font-size:11px">First full year post German exit + full AD duty year</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">EPS — last 8 quarters (consolidated, approximate)</div>
+    <div class="eps-row">
+      <div class="eps-chip">
+        <div class="eps-q">Q4 FY24</div>
+        <div class="eps-v" style="color:var(--r-accent)">−₹4.3</div>
+        <div class="eps-y neg">Chinese dumps</div>
+      </div>
+      <div class="eps-chip">
+        <div class="eps-q">Q1 FY25</div>
+        <div class="eps-v" style="color:var(--r-accent)">~−₹2.5</div>
+        <div class="eps-y neg">Loss deepens</div>
+      </div>
+      <div class="eps-chip">
+        <div class="eps-q">Q2 FY25</div>
+        <div class="eps-v" style="color:var(--r-accent)">~−₹2.5</div>
+        <div class="eps-y neg">Loss deepens</div>
+      </div>
+      <div class="eps-chip">
+        <div class="eps-q">Q3 FY25</div>
+        <div class="eps-v" style="color:var(--r-accent)">−₹2.0</div>
+        <div class="eps-y neg">−₹26.75 Cr loss</div>
+      </div>
+      <div class="eps-chip">
+        <div class="eps-q">Q4 FY25</div>
+        <div class="eps-v" style="color:var(--a-accent)">~₹0</div>
+        <div class="eps-y neu">Near breakeven</div>
+      </div>
+      <div class="eps-chip">
+        <div class="eps-q">Q1 FY26</div>
+        <div class="eps-v" style="color:var(--r-accent)">~−₹12</div>
+        <div class="eps-y neg">German write-off</div>
+      </div>
+      <div class="eps-chip">
+        <div class="eps-q">Q2 FY26</div>
+        <div class="eps-v" style="color:var(--g-accent)">₹2.0</div>
+        <div class="eps-y pos">+371% YoY</div>
+      </div>
+      <div class="eps-chip">
+        <div class="eps-q">Q3 FY26</div>
+        <div class="eps-v" style="color:var(--g-accent)">₹7.4</div>
+        <div class="eps-y pos">Record ★</div>
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--text2);margin-top:6px">EPS derived from PAT ÷ ~13.5 Cr shares. Q1 FY26 EPS distorted by ₹360 Cr exceptional provision for German subsidiaries (one-time, fully written off). Q3 FY26 PAT: ₹100.10 Cr. Source: Business Standard, Prysm.fi / BSE filings.</div>
+  </div>
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">Q3 FY26 operating metrics — the turnaround in numbers</div>
+    <table>
+      <thead><tr><th>Metric</th><th>Q3 FY26</th><th>Q3 FY25</th><th>YoY change</th><th>Source</th></tr></thead>
+      <tbody>
+        <tr><td>Revenue (India standalone)</td><td>₹386.5 Cr</td><td>~₹275 Cr</td><td class="pos">+40.4%</td><td style="color:var(--text2);font-size:11px">Prysm.fi / BSE filing</td></tr>
+        <tr><td>PAT (consolidated)</td><td>₹100.10 Cr</td><td>−₹26.75 Cr</td><td class="pos">Turnaround</td><td style="color:var(--text2);font-size:11px">Business Standard</td></tr>
+        <tr><td>EBITDA</td><td>₹130.94 Cr</td><td>~₹5 Cr</td><td class="pos">+2,520% YoY</td><td style="color:var(--text2);font-size:11px">Business Standard / Trendlyne</td></tr>
+        <tr><td>EBITDA margin</td><td>31.5%</td><td>~2%</td><td class="pos">Dramatic expansion</td><td style="color:var(--text2);font-size:11px">MarketsMojo Q3 FY26</td></tr>
+        <tr><td>Revenue (consolidated)</td><td>₹390.46 Cr</td><td>~₹362 Cr</td><td class="pos">+8% YoY</td><td style="color:var(--text2);font-size:11px">Business Standard</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="score-box">
+    Growth classification: <strong>RECOVERING → ACCELERATING</strong><br>
+    <span style="margin-top:4px;display:block">Revenue has been growing steadily (18%+ CAGR). Profitability was destroyed by Chinese dumping (FY23–FY25) and is now dramatically restored by the 5-year anti-dumping duty. Q3 FY26's 31.5% EBITDA margin is actually BETTER than the pre-dumping baseline — higher selling prices as the market reprices to protect domestic producers. For a 5-year investor, the key question is whether India's solar capacity addition (targeting 200 GW by 2030) can keep pace with Borosil's expanding capacity.</span>
+  </div>
+
+</div>
+
+<!-- ═══ TAB 3: HEALTH ═══ -->
+<div class="panel" id="p3">
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">Is this company financially safe and stable?</div>
+    <table>
+      <thead><tr><th>Metric</th><th>Value</th><th>5Y trend</th><th>Signal</th><th>Plain English</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Debt / Equity</td><td>0.2x (FY25)</td><td>↓ Falling (from 0.5x FY24)</td>
+          <td><span class="badge ok">SAFE</span></td>
+          <td style="color:var(--text2);font-size:12px">Very low leverage — long-term debt fell 61.5% YoY in FY25. Room to borrow for ₹950 Cr expansion.</td>
+        </tr>
+        <tr>
+          <td>Interest Coverage</td><td>−1.4x (FY25)</td><td>↑ Now recovering (Q3 FY26 +ve EBIT)</td>
+          <td><span class="badge warn">WATCH (improving)</span></td>
+          <td style="color:var(--text2);font-size:12px">Was negative due to losses. With Q3 FY26 EBIT positive, this will normalise in FY27. Verify latest at Screener.in</td>
+        </tr>
+        <tr>
+          <td>Operating Cash Flow (FY25)</td><td>₹99.8 Cr</td><td>↑ Improving (+45% YoY)</td>
+          <td><span class="badge ok">POSITIVE</span></td>
+          <td style="color:var(--text2);font-size:12px">Even in loss-making FY25, operating cash flow was positive — quality of business model holds.</td>
+        </tr>
+        <tr>
+          <td>Free Cash Flow</td><td>~Negative (capex cycle)</td><td>↓ Investing phase</td>
+          <td><span class="badge warn">CAPEX CYCLE</span></td>
+          <td style="color:var(--text2);font-size:12px">₹950 Cr investment in new furnaces = FCF negative for FY26–FY27. Expected — strategic growth capex.</td>
+        </tr>
+        <tr>
+          <td>Current Ratio</td><td>🚩 DATA UNAVAILABLE</td><td>—</td>
+          <td><span class="badge neu">—</span></td>
+          <td style="color:var(--text2);font-size:12px">Verify at <a href="https://www.screener.in/company/BORORENEW/consolidated/" style="color:var(--b-accent)">Screener.in</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">Forward projections — 5-year horizon (FY27E base, first clean year)</div>
+    <table>
+      <thead><tr><th>Scenario</th><th>Assumption</th><th>Est. revenue</th><th>Est. net profit</th><th>Est. EPS</th></tr></thead>
+      <tbody>
+        <tr><td>🐢 Bear</td><td style="color:var(--text2);font-size:12px">AD duty not renewed in 2029; Chinese glass re-enters; margins compress to ~12%; 600 TPD expansion underutilised</td><td>₹3,000 Cr</td><td>₹380 Cr</td><td>₹28</td></tr>
+        <tr><td>🚶 Base</td><td style="color:var(--text2);font-size:12px">AD duty renewed (or domestic demand strong enough); 600 TPD expansion fully utilised; margins at ~22–25%</td><td>₹4,500 Cr</td><td>₹870 Cr</td><td>₹64</td></tr>
+        <tr><td>🚀 Bull</td><td style="color:var(--text2);font-size:12px">India's 200 GW solar target drives demand; further expansion announced; monopoly pricing power; margins ~28–30%</td><td>₹6,200 Cr</td><td>₹1,400 Cr</td><td>₹104</td></tr>
+      </tbody>
+    </table>
+    <div style="font-size:11px;color:var(--text2);margin-top:8px">Base year: FY27E revenue ~₹1,900 Cr, PAT ~₹380 Cr, EPS ~₹28. Projections to FY31 (5 years). Based on historical trajectory + capacity expansion plan. Not guarantees or predictions.</div>
+  </div>
+
+  <div class="score-box">
+    Financial health: <strong>MODERATE RISK — LOW DEBT, HIGH CAPEX CYCLE</strong><br>
+    <span style="margin-top:4px;display:block">Balance sheet is actually quite clean — D/E of 0.2x and long-term debt falling. The company has room to fund the ₹950 Cr capacity expansion through a mix of debt and internal accruals. Key risk: If operations don't deliver ₹100 Cr+/quarter profit going forward, the capex becomes a strain. But Q3 FY26 data suggests the cash generation machine is now running.</span>
+  </div>
+
+</div>
+
+<!-- ═══ TAB 4: RETURNS ═══ -->
+<div class="panel" id="p4">
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">Is this company creating real value for shareholders? (Distorted by loss years — use cautiously)</div>
+    <table>
+      <thead><tr><th>Metric</th><th>FY26E (Q3 ann.)</th><th>FY25</th><th>FY24</th><th>Signal</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>ROE</td><td>~25–30% (if clean)</td><td>−9.6%</td><td>−6.8%</td>
+          <td><span class="badge warn">IN RECOVERY</span></td>
+        </tr>
+        <tr>
+          <td>ROCE</td><td>~20–25% (if clean)</td><td>−4.0%</td><td>−1.8%</td>
+          <td><span class="badge warn">IN RECOVERY</span></td>
+        </tr>
+        <tr>
+          <td>Dividend yield</td><td>0% (no dividend)</td><td>0%</td><td>0%</td>
+          <td><span class="badge neu">NIL</span></td>
+        </tr>
+        <tr>
+          <td>EBITDA margin</td><td>31.5% (Q3 FY26)</td><td>3.9%</td><td>6.6%</td>
+          <td><span class="badge ok">STRONG</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="font-size:11px;color:var(--text2);margin-top:8px">ROE and ROCE are not meaningful on trailing basis (loss years). On Q3 FY26 annualised PAT of ~₹400 Cr and book equity of ~₹860 Cr (estimated), ROE could reach 45%+ in FY27. This needs to be verified as book value and equity base normalise. Source: Equitymaster FY25 annual analysis.</div>
+  </div>
+
+  <div class="card grey">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--n-text);margin-bottom:8px">Dividend policy — No dividends since FY24 losses began; not expected soon</div>
+    <div style="font-size:12px;color:var(--n-text);line-height:1.7">Borosil Renewables has not paid any dividend in FY24, FY25, or FY26 (so far). With the ₹950 Cr capex programme underway and the company only now turning cash-positive, dividends are unlikely in the near term (FY26–FY27). Once the new capacity is operational and generating free cash flow, dividend resumption becomes possible — possibly from FY28 onwards. This is a pure capital appreciation play for now.</div>
+  </div>
+
+  <div class="score-box">
+    Return quality: <strong>POTENTIAL HIGH-QUALITY COMPOUNDER — IF AD DUTY HOLDS</strong><br>
+    <span style="margin-top:4px;display:block">Pre-dumping, Borosil generated solid returns. The Q3 FY26 EBITDA margin of 31.5% — if sustained — implies a very high-quality, high-return business. For a 5-year investor, the key question: can the company deliver 20%+ ROE consistently? If yes, and if capacity doubles, the compounding potential is substantial. If AD duty expires or Chinese competition returns, the story reverses. This is a high-conviction, high-risk-reward setup.</span>
+  </div>
+
+</div>
+
+<!-- ═══ TAB 5: PEERS ═══ -->
+<div class="panel" id="p5">
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">How does BORORENEW compare? (No direct listed Indian peer — closest comparables used)</div>
+    <table>
+      <thead><tr><th>Company</th><th>P/E</th><th>P/B</th><th>EBITDA margin</th><th>Rev growth</th><th>D/E</th><th>Edge</th></tr></thead>
+      <tbody>
+        <tr class="peer-you">
+          <td><strong>BORORENEW ◀ you</strong></td>
+          <td>~14x fwd</td><td>6.5x</td><td>31.5%</td><td>+40% India YoY</td><td>0.2x</td>
+          <td style="font-size:12px">Monopoly</td>
+        </tr>
+        <tr>
+          <td>Asahi India Glass</td>
+          <td>~28x</td><td>~3.5x</td><td>~18–22%</td><td>~12% YoY</td><td>~0.4x</td>
+          <td style="font-size:12px">Auto glass</td>
+        </tr>
+        <tr>
+          <td>Gujarat Borosil (unlisted)</td>
+          <td>N/A (unlisted)</td><td>N/A</td><td>~20–25%</td><td>N/A</td><td>N/A</td>
+          <td style="font-size:12px">Float glass</td>
+        </tr>
+        <tr>
+          <td>Waaree Energies (solar modules)</td>
+          <td>~22x</td><td>~5x</td><td>~15–18%</td><td>~35% YoY</td><td>~0.3x</td>
+          <td style="font-size:12px">Scale</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="font-size:11px;color:var(--text2);margin-top:8px">⚠ No direct listed Indian peer for solar glass. Asahi India Glass is the closest specialty glass comp. Borosil's 31.5% EBITDA margin already exceeds all listed glass peers. Source: Screener.in, Equitymaster — approximate March 2026.</div>
+  </div>
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">Latest news — top 5 long-term relevant items</div>
+
+    <div style="padding:10px 0;border-bottom:0.5px solid var(--border)">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+        <div>
+          <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:3px">India imposes 5-year anti-dumping duty on Chinese &amp; Vietnamese solar glass (Dec 2024)</div>
+          <div style="font-size:12px;color:var(--text2)">The single most important event in this company's history. Level playing field restored. Borosil goes from losses to ₹100 Cr/quarter profit within 2 quarters. Duty valid until ~Dec 2029.</div>
+        </div>
+        <div style="font-size:11px;color:var(--text2);white-space:nowrap">May 2025 · Business Standard</div>
+      </div>
+    </div>
+
+    <div style="padding:10px 0;border-bottom:0.5px solid var(--border)">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+        <div>
+          <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:3px">Board approves ₹950 Cr capacity expansion — 600 TPD, target Dec 2026</div>
+          <div style="font-size:12px;color:var(--text2)">Two 300 TPD furnaces doubling capacity from ~6.5 GW to ~11 GW. Commissioning by Oct–Dec 2026. This is the long-term growth driver — if successful, FY28 revenue could reach ₹2,500–3,000 Cr.</div>
+        </div>
+        <div style="font-size:11px;color:var(--text2);white-space:nowrap">May 2025 · Business Upturn</div>
+      </div>
+    </div>
+
+    <div style="padding:10px 0;border-bottom:0.5px solid var(--border)">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+        <div>
+          <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:3px">Q3 FY26 record quarterly profit — PAT ₹100 Cr, EBITDA margin 31.5%</div>
+          <div style="font-size:12px;color:var(--text2)">Confirms the AD duty protection is working. Second consecutive profitable quarter after 2+ years of losses. EBITDA margin better than pre-dumping era — structural, not cyclical improvement.</div>
+        </div>
+        <div style="font-size:11px;color:var(--text2);white-space:nowrap">Jan 2026 · Business Standard</div>
+      </div>
+    </div>
+
+    <div style="padding:10px 0;border-bottom:0.5px solid var(--border)">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+        <div>
+          <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:3px">German subsidiary Geosphere files for voluntary insolvency (Dec 2025)</div>
+          <div style="font-size:12px;color:var(--text2)">₹360 Cr total exceptional write-off taken for all German operations. Painful but fully provisioned — no further losses expected. Borosil is now a pure India play.</div>
+        </div>
+        <div style="font-size:11px;color:var(--text2);white-space:nowrap">Dec 2025 · SolarQuarter</div>
+      </div>
+    </div>
+
+    <div style="padding:10px 0">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+        <div>
+          <div style="font-size:13px;font-weight:500;color:var(--text);margin-bottom:3px">DGTR recommends extension of anti-dumping duty — positive signal for renewal</div>
+          <div style="font-size:12px;color:var(--text2)">India's trade watchdog recommended extending the duty, signalling regulatory intent to protect domestic solar glass manufacturing. A preview of what likely happens when the 5-year duty expires in Dec 2029.</div>
+        </div>
+        <div style="font-size:11px;color:var(--text2);white-space:nowrap">2025 · SaurEnergy</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="score-box">
+    Peer standing: <strong>UNIQUE — NO DIRECT LISTED PEER IN INDIA</strong><br>
+    <span style="margin-top:4px;display:block">Borosil Renewables has no direct listed Indian competitor in solar glass manufacturing — it is in a class of its own. Comparison to specialty glass peers (Asahi India) shows Borosil's forward margins (31.5% EBITDA) are superior. The relevant competition is Chinese imports — and that competition is currently blocked by government policy for 5 years. The monopoly premium is real but also policy-dependent.</span>
+  </div>
+
+</div>
+
+<!-- ═══ TAB 6: OWNERSHIP ═══ -->
+<div class="panel" id="p6">
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">Who is backing this company — and are they buying or stepping away?</div>
+    <table>
+      <thead><tr><th>Holder</th><th>Latest % (Dec 2025)</th><th>8-quarter trend</th><th>Signal</th><th>What it means</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>Promoter (Borosil Group)</td><td>58.8%</td><td>↓ Declining (−343 bps in 3 qtrs)</td>
+          <td><span class="badge warn">WATCH</span></td>
+          <td style="color:var(--text2);font-size:12px">Still high at 58.8% but the downward trend in 3 recent quarters is worth monitoring</td>
+        </tr>
+        <tr>
+          <td>FII</td><td>4.0%</td><td>↓ Reduced</td>
+          <td><span class="badge warn">DECREASING</span></td>
+          <td style="color:var(--text2);font-size:12px">Foreign funds reduced exposure — likely due to loss years and German write-off uncertainty</td>
+        </tr>
+        <tr>
+          <td>DII</td><td>2.6%</td><td>↑ Rising (0.21% → 2.27% since Mar 2025)</td>
+          <td><span class="badge ok">INCREASING</span></td>
+          <td style="color:var(--text2);font-size:12px">Domestic funds accumulating — a positive signal that Indian institutions see the turnaround</td>
+        </tr>
+        <tr>
+          <td>Public / Retail</td><td>34.7%</td><td>↑ Rising</td>
+          <td><span class="badge warn">WATCH</span></td>
+          <td style="color:var(--text2);font-size:12px">High retail float creates volatility; retail absorbed shares from declining promoter and FII</td>
+        </tr>
+        <tr>
+          <td>Promoter pledging</td><td>0%</td><td>→ Stable (clean)</td>
+          <td><span class="badge ok">EXCELLENT</span></td>
+          <td style="color:var(--text2);font-size:12px">Zero pledging — no financial distress at promoter level despite the loss years</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="font-size:11px;color:var(--text2);margin-top:8px">Source: Trendlyne / Screener.in shareholding pattern — Dec 2025 / Jan 2026</div>
+  </div>
+
+  <div class="card">
+    <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--text2);margin-bottom:10px">Q3 FY26 earnings call — management commentary</div>
+    <table>
+      <thead><tr><th>What management said / did</th><th>What it means for you</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>"Record quarterly revenue and EBITDA — EBITDA of ₹130.94 Cr, margin 31.5%"</td>
+          <td style="color:var(--text2);font-size:12px">Management is delivering on the turnaround promise. The anti-dumping protection is translating directly into margin expansion — not just recovery to old levels but surpassing them.</td>
+        </tr>
+        <tr>
+          <td>Board approved 600 TPD capacity expansion at ₹950 Cr; commissioning Oct–Dec 2026</td>
+          <td style="color:var(--text2);font-size:12px">Management is backing the turnaround with significant capital. If they're putting ₹950 Cr on the table with AD duty protection, they clearly believe the economics are durable — not a one-quarter blip.</td>
+        </tr>
+        <tr>
+          <td>"Full provision made for German exposure — Geosphere and GMB fully written off"</td>
+          <td style="color:var(--text2);font-size:12px">Clean break from the failed German venture. No further write-offs expected. Balance sheet clarity from Q4 FY26 onwards — India-only business with protected economics.</td>
+        </tr>
+        <tr>
+          <td>"India-only strategic focus; overseas contribution now minimal (₹207 Cr vs ₹3,658 Cr India revenue in Q3)"</td>
+          <td style="color:var(--text2);font-size:12px">Portfolio simplification. Management refocusing on the India opportunity — where the policy support, demand growth, and margin protection are aligned.</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="font-size:12px;color:var(--text2);margin-top:8px">
+      Management tone: <strong style="color:var(--text)">CONFIDENT</strong> on India operations and capacity expansion. <strong style="color:var(--r-text)">CLOSED CHAPTER</strong> on German operations.
+    </div>
+  </div>
+
+  <div class="score-box">
+    Ownership signal: <strong>MIXED — PROMOTER HIGH BUT TRIMMING; DII BUILDING</strong><br>
+    <span style="margin-top:4px;display:block">Promoters at 58.8% (still strong) but the 3-quarter declining trend from ~62% is a mild caution flag. The more constructive signal is DII accumulation (+185 bps since Mar 2025) — Indian mutual funds are quietly building positions as the turnaround story becomes clearer. Zero promoter pledging through even the worst loss years shows financial discipline at the promoter level.</span>
+  </div>
+
+</div>
+
+<!-- ═══ TAB 7: VIEW (default active) ═══ -->
+<div class="panel on" id="p7">
+
+  <div class="card amber">
+    <div class="view-label amber">MODERATE FUNDAMENTALS — HIGH-STAKES TURNAROUND WITH MONOPOLY UPSIDE</div>
+    <div class="view-reason">Borosil Renewables is India's only solar glass manufacturer, emerging from 3 years of China-induced losses after a 5-year government anti-dumping duty has transformed operations — Q3 FY26 delivered record ₹100 Cr quarterly PAT and 31.5% EBITDA margins. The 5-year investment thesis is compelling, but hinges critically on: (1) anti-dumping duty renewal in 2029, and (2) ₹950 Cr capacity expansion executing on time.</div>
+
+    <div class="sec-label">What works for this stock</div>
+    <div class="bullet-row"><span class="bicon" style="color:var(--g-accent)">✓</span><span><strong>Domestic monopoly, government-protected:</strong> India's ONLY large-scale solar glass manufacturer, shielded by a 5-year anti-dumping duty on Chinese/Vietnamese glass (Dec 2024–Dec 2029). EBITDA margins jumped from 3.9% (FY25) to 31.5% (Q3 FY26) in two quarters — this is not a recovery, this is a structural reset.</span></div>
+    <div class="bullet-row"><span class="bicon" style="color:var(--g-accent)">✓</span><span><strong>India's solar ambition is the demand engine:</strong> India targets 500 GW renewable energy by 2030 (currently ~180 GW). Each GW of solar requires ~5–6 million sq. metres of solar glass. Borosil's expanding capacity (6.5 GW → 11 GW) is positioned directly in the path of this structural demand wave.</span></div>
+    <div class="bullet-row"><span class="bicon" style="color:var(--g-accent)">✓</span><span><strong>Low debt + strong promoter backing:</strong> D/E of just 0.2x with zero promoter pledging means the company can fund the ₹950 Cr expansion without distress. The Borosil Group (58.8% promoter) has been committed through even the worst loss years — confidence signal.</span></div>
+
+    <div class="sec-label">What to watch</div>
+    <div class="bullet-row"><span class="bicon" style="color:var(--a-accent)">⚠</span><span><strong>Anti-dumping duty expiry in Dec 2029 — the existential risk:</strong> The entire turnaround is predicated on AD duty protection. If the duty expires in 2029 and isn't renewed, Chinese competition returns and margins could collapse back to 3–5%. For a 5-year investor, the duty renewal decision (likely 2028–2029) is the single most important event to monitor.</span></div>
+    <div class="bullet-row"><span class="bicon" style="color:var(--a-accent)">⚠</span><span><strong>₹950 Cr capacity expansion — execution and demand risk:</strong> If the two new 300 TPD furnaces face cost overruns, delays, or commissioning issues, or if India's solar addition pace slows, the expansion capital could sit underutilised. Management's German adventure showed they can make poor capital allocation calls internationally — though the India expansion is on home turf and policy-supported.</span></div>
+
+    <div class="sec-label">Track this going forward</div>
+    <div class="bullet-row"><span class="bicon" style="color:var(--text2)">→</span><span><strong>Q4 FY26 + FY27 EBITDA margins and capacity utilisation:</strong> Watch every quarter whether the 28–32% EBITDA margin is holding — this is the proof of concept for the AD duty impact. Also track: (1) ₹950 Cr capex progress and commissioning dates; (2) Any government signals on AD duty renewal post-2029; (3) Whether promoter stake trimming continues or stabilises.</span></div>
+
+    <div style="margin-top:16px;font-size:11px;color:var(--text2);font-style:italic">
+      This is a VIEW based on fundamentals only. Not a buy/sell recommendation. The decision is always yours.
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:4px">
+    <div class="card green">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--g-text);margin-bottom:8px">Opportunities</div>
+      <div class="bullet-row" style="border-color:var(--g-border)"><span class="bicon" style="color:var(--g-accent)">+</span><span style="color:var(--g-text);font-size:12px">India's solar capacity addition (targeting 500 GW by 2030) creates structural demand growth for solar glass — Borosil is the only domestic supplier</span></div>
+      <div class="bullet-row" style="border-color:var(--g-border)"><span class="bicon" style="color:var(--g-accent)">+</span><span style="color:var(--g-text);font-size:12px">600 TPD capacity expansion (₹950 Cr) commissioning by Dec 2026 — if India's solar ramp continues, this capacity will be absorbed quickly, potentially driving 2–3x revenue growth by FY29</span></div>
+      <div class="bullet-row" style="border-color:var(--g-border);border-bottom:none"><span class="bicon" style="color:var(--g-accent)">+</span><span style="color:var(--g-text);font-size:12px">DGTR recommending AD duty extension signals long-term government support — Borosil is a strategic asset for India's energy security narrative</span></div>
+    </div>
+    <div class="card red">
+      <div style="font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--r-text);margin-bottom:8px">Risks</div>
+      <div class="bullet-row" style="border-color:var(--r-border)"><span class="bicon" style="color:var(--r-accent)">−</span><span style="color:var(--r-text);font-size:12px">Anti-dumping duty expires Dec 2029 — if not renewed, business model reverts to crisis mode. This is the defining 5-year risk for any investor entering today</span></div>
+      <div class="bullet-row" style="border-color:var(--r-border)"><span class="bicon" style="color:var(--r-accent)">−</span><span style="color:var(--r-text);font-size:12px">Capital misallocation risk — German adventure cost ₹360 Cr. If management pursues another international or non-core venture, capital discipline could be questioned</span></div>
+      <div class="bullet-row" style="border-color:var(--r-border);border-bottom:none"><span class="bicon" style="color:var(--r-accent)">−</span><span style="color:var(--r-text);font-size:12px">India solar policy uncertainty — any slowdown in India's solar installation pace (policy changes, grid integration issues) directly reduces Borosil's demand and could leave ₹950 Cr of new capacity underutilised</span></div>
+    </div>
+  </div>
+
+</div>
+
+<details style="margin-top:20px;padding:0 4px">
+  <summary>Definitions — tap to expand</summary>
+  <p><strong>Anti-dumping duty</strong> — A protective tariff imposed when a foreign country sells goods below fair market value. India imposed USD 664/tonne on Chinese/Vietnamese solar glass to prevent them from undercutting domestic prices. Effective Dec 2024, valid for 5 years.</p>
+  <p><strong>TPD</strong> — Tonnes per day. A measure of glass furnace capacity. 600 TPD expansion = two new furnaces of 300 TPD each, adding ~4.5 GW of solar glass output.</p>
+  <p><strong>EBITDA margin</strong> — Operating profit as % of revenue. 31.5% EBITDA margin (Q3 FY26) means ₹31.5 of every ₹100 of revenue becomes operating profit. World-class for a materials manufacturer.</p>
+  <p><strong>EV/EBITDA</strong> — Full enterprise value (market cap + net debt) divided by operating profit. Lower = better value. Useful when P/E is distorted by losses.</p>
+  <p><strong>Exceptional items</strong> — One-time charges not part of regular operations. The ₹360 Cr German write-off is an exceptional item — it distorts FY26 headline PAT but doesn't reflect ongoing India business performance.</p>
+  <p><strong>P/B ratio</strong> — Price vs book value (net assets). High P/B (6.5x) partly reflects years of losses eroding the equity base. As profitability recovers and book value builds, P/B will normalise.</p>
+  <p><strong>Interest coverage</strong> — EBIT divided by interest expense. Negative in FY25 (EBIT was negative). Now recovering with profitable Q3 FY26 — will normalise to healthy levels in FY27.</p>
+  <p><strong>CAGR</strong> — Compound Annual Growth Rate. The average yearly growth rate over a period.</p>
+</details>
+
+<div class="disc">
+  This is a fundamental screening and education tool only. Data sourced from NSE India, BSE, Equitymaster FY25 Annual Report Analysis, Mercom India, Business Standard, SaurEnergy, MarketsMojo, Trendlyne, Prysm.fi (BSE filings), Scanx.trade, and company press releases. Quarterly EPS figures for Q1–Q2 FY25 are estimated from quarterly PAT trajectory; Q1 FY26 is estimated from 9M FY26 reported net loss minus Q2 and Q3 actuals. Exact figures should be verified at NSE/BSE. This is NOT investment advice, a buy/sell recommendation, or SEBI-registered financial research. AI can make errors — verify all numbers before making any decision. Past performance does not guarantee future results. Investing carries risk. Consult a SEBI-registered financial advisor before investing.
+</div>
+
+</div>
+
+<script>
+function show(n){
+  var panels=document.querySelectorAll('.panel');
+  var tabs=document.querySelectorAll('.tab-btn');
+  for(var i=0;i<panels.length;i++){
+    panels[i].className='panel'+(i===n?' on':'');
+    tabs[i].className='tab-btn'+(i===n?' active':'');
+  }
+}
+</script>
+</body>
+</html>
