@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Eureka Forbes Ltd — Fundamental Analysis</title>
+<style>
+:root{
+  --bg:#f4f6fa;--surface:#fff;--border:#e2e8f0;--text:#1a202c;--sub:#4a5568;
+  --green:#16a34a;--amber:#d97706;--red:#dc2626;--blue:#2563eb;--purple:#7c3aed;
+  --green-bg:#f0fdf4;--amber-bg:#fffbeb;--red-bg:#fef2f2;--blue-bg:#eff6ff;--purple-bg:#f5f3ff;
+  --pill-green:#dcfce7;--pill-amber:#fef3c7;--pill-red:#fee2e2;--pill-blue:#dbeafe;--pill-grey:#f1f5f9;
+  --tab-active:#2563eb;--tab-text:#64748b;
+  --card-shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#0f172a;--surface:#1e293b;--border:#334155;--text:#f1f5f9;--sub:#94a3b8;
+    --green:#22c55e;--amber:#fbbf24;--red:#f87171;--blue:#60a5fa;--purple:#a78bfa;
+    --green-bg:#14532d22;--amber-bg:#78350f22;--red-bg:#7f1d1d22;--blue-bg:#1e3a5f22;--purple-bg:#3b0764 22;
+    --pill-green:#14532d;--pill-amber:#78350f;--pill-red:#7f1d1d;--pill-blue:#1e3a5f;--pill-grey:#1e293b;
+    --tab-active:#60a5fa;
+  }
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:14px;line-height:1.6}
+a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+
+/* ── header ── */
+.header{background:linear-gradient(135deg,#1e3a8a 0%,#1d4ed8 60%,#0284c7 100%);color:#fff;padding:28px 32px 20px}
+.header-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px}
+.back-btn{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);color:#fff;padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;text-decoration:none;transition:background .2s}
+.back-btn:hover{background:rgba(255,255,255,.28);text-decoration:none}
+.company-name{font-size:22px;font-weight:700;margin-bottom:2px}
+.company-sub{font-size:13px;opacity:.8;margin-bottom:10px}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.badge{padding:3px 10px;border-radius:99px;font-size:11px;font-weight:600;background:rgba(255,255,255,.2);color:#fff}
+.badge.green{background:#16a34a}
+.badge.amber{background:#d97706}
+.badge.red{background:#dc2626}
+.badge.blue{background:#2563eb;border:1px solid rgba(255,255,255,.3)}
+.badge.purple{background:#7c3aed}
+
+/* ── tab bar ── */
+.tabs{display:flex;overflow-x:auto;background:var(--surface);border-bottom:2px solid var(--border);padding:0 24px;gap:4px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:11px 16px;font-size:13px;font-weight:500;color:var(--tab-text);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:color .15s}
+.tab:hover{color:var(--text)}
+.tab.active{color:var(--tab-active);border-bottom-color:var(--tab-active);font-weight:600}
+
+/* ── panels ── */
+.panel{display:none;padding:24px;max-width:960px;margin:0 auto}
+.panel.on{display:block}
+
+/* ── cards / sections ── */
+.section{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:18px;box-shadow:var(--card-shadow)}
+.section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--sub);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
+.kpi{background:var(--bg);border-radius:8px;padding:12px 14px}
+.kpi-label{font-size:11px;color:var(--sub);margin-bottom:3px}
+.kpi-value{font-size:17px;font-weight:700;color:var(--text)}
+.kpi-sub{font-size:11px;color:var(--sub);margin-top:2px}
+.kpi-value.green{color:var(--green)} .kpi-value.amber{color:var(--amber)} .kpi-value.red{color:var(--red)} .kpi-value.blue{color:var(--blue)}
+
+/* ── pill tags ── */
+.pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:11px;font-weight:600}
+.pill.green{background:var(--pill-green);color:var(--green)}
+.pill.amber{background:var(--pill-amber);color:var(--amber)}
+.pill.red{background:var(--pill-red);color:var(--red)}
+.pill.blue{background:var(--pill-blue);color:var(--blue)}
+.pill.grey{background:var(--pill-grey);color:var(--sub)}
+
+/* ── tables ── */
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:8px 10px;background:var(--bg);color:var(--sub);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+td{padding:8px 10px;border-top:1px solid var(--border)}
+tr:hover td{background:var(--bg)}
+.right{text-align:right}
+
+/* ── flag box ── */
+.flag-box{border-left:4px solid var(--amber);background:var(--amber-bg);border-radius:6px;padding:12px 16px;margin-bottom:12px}
+.flag-box.red{border-color:var(--red);background:var(--red-bg)}
+.flag-box.green{border-color:var(--green);background:var(--green-bg)}
+.flag-box.blue{border-color:var(--blue);background:var(--blue-bg)}
+.flag-title{font-weight:700;font-size:13px;margin-bottom:3px}
+.flag-body{font-size:12.5px;color:var(--sub)}
+
+/* ── bar ── */
+.bar-wrap{background:var(--border);border-radius:99px;height:8px;margin-top:4px}
+.bar-fill{height:8px;border-radius:99px;background:var(--green)}
+.bar-fill.amber{background:var(--amber)}
+.bar-fill.red{background:var(--red)}
+.bar-fill.blue{background:var(--blue)}
+
+/* ── view card ── */
+.view-card{border-radius:12px;padding:28px 32px;margin-bottom:18px}
+.view-card.green{background:var(--green-bg);border:1.5px solid var(--green)}
+.view-card.amber{background:var(--amber-bg);border:1.5px solid var(--amber)}
+.view-card.red{background:var(--red-bg);border:1.5px solid var(--red)}
+.verdict{font-size:20px;font-weight:800;margin-bottom:6px}
+.verdict.green{color:var(--green)} .verdict.amber{color:var(--amber)} .verdict.red{color:var(--red)}
+.horizon-note{font-size:13px;color:var(--sub);margin-bottom:14px}
+.rationale{font-size:13.5px;line-height:1.7;color:var(--text)}
+
+/* ── timeline ── */
+.timeline{position:relative;padding-left:22px}
+.timeline::before{content:'';position:absolute;left:6px;top:0;bottom:0;width:2px;background:var(--border)}
+.tl-item{position:relative;margin-bottom:14px}
+.tl-dot{position:absolute;left:-22px;top:3px;width:12px;height:12px;border-radius:50%;background:var(--blue);border:2px solid var(--surface)}
+.tl-dot.green{background:var(--green)} .tl-dot.amber{background:var(--amber)} .tl-dot.red{background:var(--red)}
+.tl-date{font-size:11px;color:var(--sub);font-weight:600}
+.tl-text{font-size:13px;color:var(--text)}
+
+/* ── source tag ── */
+.src{font-size:11px;color:var(--sub);font-style:italic;margin-top:4px}
+
+/* ── confidence ── */
+.conf-bar{background:var(--border);border-radius:99px;height:14px;margin-top:6px;overflow:hidden;position:relative}
+.conf-fill{height:14px;border-radius:99px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:10px;font-weight:700;color:#fff}
+
+/* ── responsive ── */
+@media(max-width:600px){
+  .header{padding:18px 16px 14px} .panel{padding:16px}
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}
+  .view-card{padding:18px}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ HEADER ══════════════ -->
+<div class="header">
+  <div class="header-top">
+    <div>
+      <div class="company-name">Eureka Forbes Limited</div>
+      <div class="company-sub">NSE: EUREKAFORB &nbsp;·&nbsp; Consumer Durables / Health &amp; Hygiene &nbsp;·&nbsp; Horizon: 5 Years</div>
+    </div>
+    <a href="index.html" class="back-btn">← Dashboard</a>
+  </div>
+  <div class="badges">
+    <span class="badge blue">Aquaguard · Forbes Vacuum · Air Purifiers</span>
+    <span class="badge amber">MODERATE</span>
+    <span class="badge red">OVERVALUED</span>
+    <span class="badge green">ACCELERATING Growth</span>
+    <span class="badge blue">PE-Backed · Advent International</span>
+    <span class="badge blue">Updated: 31 Mar 2026</span>
+  </div>
+</div>
+
+<!-- ══════════════ TAB BAR ══════════════ -->
+<div class="tabs" id="tabBar">
+  <div class="tab" onclick="show(1)" id="t1">1 · Snapshot</div>
+  <div class="tab" onclick="show(2)" id="t2">2 · Valuation</div>
+  <div class="tab" onclick="show(3)" id="t3">3 · Growth</div>
+  <div class="tab" onclick="show(4)" id="t4">4 · Financial Health</div>
+  <div class="tab" onclick="show(5)" id="t5">5 · Returns &amp; Efficiency</div>
+  <div class="tab" onclick="show(6)" id="t6">6 · Projections</div>
+  <div class="tab" onclick="show(7)" id="t7">7 · View ★</div>
+  <div class="tab" onclick="show(8)" id="t8">8 · Peers</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 1 — SNAPSHOT
+══════════════════════════════════════ -->
+<div class="panel" id="p1">
+
+  <div class="section">
+    <div class="section-title">Market Data — 31 Mar 2026</div>
+    <div class="kpi-grid">
+      <div class="kpi"><div class="kpi-label">CMP (NSE)</div><div class="kpi-value">₹447</div><div class="kpi-sub">As of 27 Mar 2026</div></div>
+      <div class="kpi"><div class="kpi-label">52W High</div><div class="kpi-value amber">₹668.30</div><div class="kpi-sub">−33% from peak</div></div>
+      <div class="kpi"><div class="kpi-label">52W Low</div><div class="kpi-value green">₹403.20</div><div class="kpi-sub">+10.8% from low</div></div>
+      <div class="kpi"><div class="kpi-label">Market Cap</div><div class="kpi-value">₹8,760 Cr</div><div class="kpi-sub">Mid-cap</div></div>
+      <div class="kpi"><div class="kpi-label">P/E (TTM)</div><div class="kpi-value red">54.4×</div><div class="kpi-sub">Elevated</div></div>
+      <div class="kpi"><div class="kpi-label">P/B</div><div class="kpi-value amber">~2.0×</div><div class="kpi-sub">Neg. tangible book</div></div>
+      <div class="kpi"><div class="kpi-label">EV/EBITDA</div><div class="kpi-value red">~30×</div><div class="kpi-sub">FY25 EBITDA ₹285 Cr</div></div>
+      <div class="kpi"><div class="kpi-label">Face Value</div><div class="kpi-value">₹2</div><div class="kpi-sub">No dividend paid</div></div>
+    </div>
+    <div class="src">Sources: NSE India, Tickertape, Finology, MarketsMojo — 27–31 Mar 2026</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Business Overview</div>
+    <div class="flag-box blue">
+      <div class="flag-title">India's #1 Water Purifier Brand — 45-Year Legacy</div>
+      <div class="flag-body">Eureka Forbes is the market leader in residential water purification under the iconic <strong>Aquaguard</strong> brand, and a pioneer in vacuum cleaners under <strong>Forbes</strong>. The company operates a large direct sales force (~7,000+) and an expanding D2C model. PE firm Advent International acquired a ~72.56% controlling stake from the Shapoorji Pallonji Group in 2022 for ~₹4,400 Cr via its SPV Lunolux Limited. The company is now listed on NSE (re-listed 2022) and is focused on premiumisation, margin expansion, and building recurring annuity revenue through AMC (Annual Maintenance Contracts).</div>
+    </div>
+    <div class="flag-box green">
+      <div class="flag-title">Two Clear Revenue Streams: Products + Services (AMC)</div>
+      <div class="flag-body"><strong>Products:</strong> Water purifiers, vacuum cleaners, air purifiers, robotic cleaners (fast-growing). <strong>Services:</strong> AMC contracts providing annuity-like recurring income — AMC bookings grew double-digits for the 3rd consecutive quarter in Q3 FY26. The service layer is Eureka Forbes' structural moat.</div>
+    </div>
+    <div class="flag-box blue">
+      <div class="flag-title">5-Year Vision: 2× Revenue, 3× EBITDA</div>
+      <div class="flag-body">Management targets ₹5,400–5,600 Cr revenue (from ₹2,436 Cr in FY25) and ₹800–850 Cr Adj. EBITDA (from ₹285 Cr in FY25) within 5 years. This implies ~18% revenue CAGR and ~24% EBITDA CAGR — aspirational but achievable if execution sustains.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Key Products &amp; Segments</div>
+    <table>
+      <tr><th>Segment</th><th>Brand</th><th>Status</th><th>FY26 Trend</th></tr>
+      <tr><td>Water Purifiers (RO/UV)</td><td>Aquaguard</td><td><span class="pill green">Market Leader</span></td><td>Steady +8–10% growth</td></tr>
+      <tr><td>Vacuum Cleaners</td><td>Forbes</td><td><span class="pill amber">Mature</span></td><td>Stable</td></tr>
+      <tr><td>Air Purifiers</td><td>Aquaguard</td><td><span class="pill green">Accelerating</span></td><td>High growth, small base</td></tr>
+      <tr><td>Robotic Cleaners</td><td>Forbes</td><td><span class="pill green">Accelerating</span></td><td>New; drove Q3 FY26 beat</td></tr>
+      <tr><td>AMC / Service Contracts</td><td>Aquaguard AMC</td><td><span class="pill green">Moat</span></td><td>DD growth 3 qtrs in a row</td></tr>
+      <tr><td>D2C / Subscriptions</td><td>Multi</td><td><span class="pill blue">Emerging</span></td><td>Expanding; filter subs</td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Investment Story Timeline</div>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-dot green"></div><div class="tl-date">1982–2021</div><div class="tl-text">Eureka Forbes founded; 45 years as Aquaguard brand leader under Shapoorji Pallonji Group</div></div>
+      <div class="tl-item"><div class="tl-dot amber"></div><div class="tl-date">2021–22</div><div class="tl-text">Advent International acquires 72.56% for ₹4,400 Cr; new PE ownership; company re-listed on NSE</div></div>
+      <div class="tl-item"><div class="tl-dot amber"></div><div class="tl-date">FY22–FY23</div><div class="tl-text">Post-acquisition transition; EPS ₹3.4; margins compressed during restructuring</div></div>
+      <div class="tl-item"><div class="tl-dot amber"></div><div class="tl-date">FY24</div><div class="tl-text">PAT ₹91.5 Cr; margin recovery begins; EPS ₹5.7 (+68% YoY)</div></div>
+      <div class="tl-item"><div class="tl-dot green"></div><div class="tl-date">FY25</div><div class="tl-text">Revenue ₹2,436 Cr (+11.3%), PAT ₹163.3 Cr (+78.4%), EBITDA margin 11.7%; strong execution; EPS ₹8.33</div></div>
+      <div class="tl-item"><div class="tl-dot green"></div><div class="tl-date">9M FY26</div><div class="tl-text">Revenue ₹2,026.6 Cr (+11.1%), Adj. PAT ₹139.1 Cr (+23.6%); robotics, air purifiers, AMC all accelerating</div></div>
+      <div class="tl-item"><div class="tl-dot amber"></div><div class="tl-date">Q3 FY26</div><div class="tl-text">Revenue +8%, Adj. EBITDA +13.7%; reported PAT hit by ₹40.4 Cr one-time Labour Code charge (non-recurring)</div></div>
+      <div class="tl-item"><div class="tl-dot blue"></div><div class="tl-date">FY27–FY30</div><div class="tl-text">Execution phase: can company sustain 12–15% revenue growth and reach 2× revenue, 3× EBITDA target?</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Red Flags &amp; Risk Factors</div>
+    <div class="flag-box red">
+      <div class="flag-title">🔴 Elevated Valuation — 54× TTM P/E, 30× EV/EBITDA</div>
+      <div class="flag-body">At current prices, the market has priced in significant future growth. Any execution miss or macro slowdown could trigger a meaningful de-rating. The stock is down ~33% from its 52-week high (₹668), suggesting some correction, but still expensive on fundamentals.</div>
+    </div>
+    <div class="flag-box amber">
+      <div class="flag-title">⚠️ Negative Tangible Book Value</div>
+      <div class="flag-body">Total goodwill and intangibles on balance sheet exceed ₹5,000 Cr (from Advent's acquisition-related goodwill). Tangible book is negative. This creates balance sheet fragility if goodwill impairment is ever required.</div>
+    </div>
+    <div class="flag-box amber">
+      <div class="flag-title">⚠️ PE-Backed Promoter — Exit Risk Horizon</div>
+      <div class="flag-body">Advent International (via Lunolux) holds ~62.6%. PE firms typically have a 5–7 year exit horizon. An eventual IPO block deal or secondary sale could create short-term price pressure for retail investors. Promoter holding declined from 72.56% at acquisition.</div>
+    </div>
+    <div class="flag-box amber">
+      <div class="flag-title">⚠️ Low Historical ROE (~2.3% 3-Yr Avg)</div>
+      <div class="flag-body">Return on equity has been low due to large equity base (inflated by goodwill from the acquisition) and modest absolute profits during transition. FY25 ROE improved to ~3.7% — still well below FMCG/consumer peers of 20–30%. Needs further improvement to justify the premium valuation.</div>
+    </div>
+    <div class="flag-box amber">
+      <div class="flag-title">⚠️ Competition Intensifying in Water Purifiers</div>
+      <div class="flag-body">KENT RO, A.O. Smith, Livpure, Blue Star, Havells, and new D2C brands are expanding aggressively. Aquaguard's market share lead is real but not insurmountable. Price wars in entry-level RO segment could compress margins.</div>
+    </div>
+    <div class="flag-box green">
+      <div class="flag-title">✅ Virtually Debt-Free</div>
+      <div class="flag-body">D/E of 0.02; net cash position of ~₹219 Cr. No leverage risk. Strong balance sheet to fund growth without dilution.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 2 — VALUATION
+══════════════════════════════════════ -->
+<div class="panel" id="p2">
+
+  <div class="section">
+    <div class="section-title">Valuation Multiples</div>
+    <div class="kpi-grid">
+      <div class="kpi"><div class="kpi-label">P/E (TTM)</div><div class="kpi-value red">54.4×</div><div class="kpi-sub">EPS ₹8.33 (FY25)</div></div>
+      <div class="kpi"><div class="kpi-label">P/E (FY26E Fwd)</div><div class="kpi-value amber">~47×</div><div class="kpi-sub">Est. EPS ₹9.5</div></div>
+      <div class="kpi"><div class="kpi-label">P/E (FY27E Fwd)</div><div class="kpi-value amber">~35×</div><div class="kpi-sub">Est. EPS ₹12.7</div></div>
+      <div class="kpi"><div class="kpi-label">EV/EBITDA</div><div class="kpi-value red">~30×</div><div class="kpi-sub">FY25 EBITDA ₹285 Cr</div></div>
+      <div class="kpi"><div class="kpi-label">P/B (Book Equity)</div><div class="kpi-value amber">~2.0×</div><div class="kpi-sub">Book ₹4,410 Cr</div></div>
+      <div class="kpi"><div class="kpi-label">P/Tangible Book</div><div class="kpi-value red">N/A</div><div class="kpi-sub">Neg. tangible book</div></div>
+      <div class="kpi"><div class="kpi-label">Market Cap</div><div class="kpi-value">₹8,760 Cr</div><div class="kpi-sub">MCap / FY25 Rev = 3.6×</div></div>
+      <div class="kpi"><div class="kpi-label">Dividend Yield</div><div class="kpi-value">0%</div><div class="kpi-sub">No dividend paid</div></div>
+    </div>
+    <div class="src">Source: NSE, Tickertape, StockAnalysis, Finology — Mar 2026</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Valuation Assessment — OVERVALUED</div>
+    <div class="flag-box red">
+      <div class="flag-title">54× TTM P/E is Priced for Perfection</div>
+      <div class="flag-body">At 54× trailing earnings, Eureka Forbes is priced at a steep premium vs. the broader market (Nifty ~22×). This valuation is justifiable only if the company delivers consistent 20%+ PAT growth for 4–5 years. Any earnings disappointment, macro slowdown, or competitive disruption would re-rate the stock downward. Peers in consumer durables (Havells, Blue Star, V-Guard) trade at 40–60× — making it relative premium within the sector too.</div>
+    </div>
+    <div class="flag-box amber">
+      <div class="flag-title">EV/EBITDA of 30× — Sector High</div>
+      <div class="flag-body">At 30× FY25 EBITDA, this is significantly above traditional FMCG/consumer durable median of 20–25×. The market is ascribing a brand premium (Aquaguard moat) plus a growth re-rating. Justifiable only with sustained margin expansion toward 14–15%.</div>
+    </div>
+    <div class="flag-box blue">
+      <div class="flag-title">Forward View: P/E Compresses as Earnings Grow</div>
+      <div class="flag-body">If the company delivers management's guidance trajectory — revenue growing to ₹3,300 Cr by FY28, EBITDA to ~₹450–500 Cr, and PAT to ~₹280–300 Cr — forward P/E compresses to ~29–31× by FY28. That's still not cheap, but more reasonable. The 5-year return profile is therefore moderate, not spectacular, given the high entry price.</div>
+    </div>
+    <div class="flag-box green">
+      <div class="flag-title">UBS Initiates Buy With 45% Upside Target</div>
+      <div class="flag-body">UBS initiated coverage with a Buy rating, citing market share gains, D2C expansion, and AMC monetisation. UBS expects Eureka Forbes to gain an additional 1.5% market share by FY28, backed by 30 new product launches. However, this bullish case is contingent on flawless execution.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Peer Valuation Comparison</div>
+    <table>
+      <tr><th>Company</th><th>MCap (Cr)</th><th>TTM P/E</th><th>EV/EBITDA</th><th>ROE %</th><th>Segment</th></tr>
+      <tr><td><strong>Eureka Forbes</strong></td><td class="right">8,760</td><td class="right"><span class="pill red">54×</span></td><td class="right">~30×</td><td class="right"><span class="pill amber">3.7%</span></td><td>Water purifiers + Vacuum</td></tr>
+      <tr><td>Havells India</td><td class="right">~88,000</td><td class="right">58×</td><td class="right">~40×</td><td class="right">18%</td><td>Consumer electricals</td></tr>
+      <tr><td>Blue Star</td><td class="right">~22,000</td><td class="right">55×</td><td class="right">~30×</td><td class="right">22%</td><td>AC / cooling</td></tr>
+      <tr><td>V-Guard Industries</td><td class="right">~11,000</td><td class="right">48×</td><td class="right">~28×</td><td class="right">12%</td><td>Consumer electricals</td></tr>
+      <tr><td>KENT RO (unlisted)</td><td class="right">N/A</td><td class="right">~50×</td><td class="right">N/A</td><td class="right">N/A</td><td>Water purifiers</td></tr>
+    </table>
+    <div class="src">Note: Peers chosen for sector proximity. KENT RO is unlisted; P/E estimate from analyst notes. Source: BSE, NSE, analyst reports — Mar 2026</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 3 — GROWTH
+══════════════════════════════════════ -->
+<div class="panel" id="p3">
+
+  <div class="section">
+    <div class="section-title">Revenue Growth Trend</div>
+    <table>
+      <tr><th>Period</th><th class="right">Revenue (₹ Cr)</th><th class="right">YoY Growth</th><th class="right">EBITDA (₹ Cr)</th><th class="right">EBITDA Margin</th></tr>
+      <tr><td>FY23</td><td class="right">~1,960</td><td class="right"><span class="pill grey">Base Year</span></td><td class="right">~145</td><td class="right">~7.4%</td></tr>
+      <tr><td>FY24</td><td class="right">~2,190</td><td class="right"><span class="pill amber">+11.7%</span></td><td class="right">226.3</td><td class="right">10.3%</td></tr>
+      <tr><td>FY25</td><td class="right">2,436</td><td class="right"><span class="pill green">+11.3%</span></td><td class="right">285.0</td><td class="right">11.7%</td></tr>
+      <tr><td>9M FY26</td><td class="right">2,026.6</td><td class="right"><span class="pill green">+11.1% YoY</span></td><td class="right">241.7</td><td class="right">11.9%</td></tr>
+      <tr><td>FY26E (full yr)</td><td class="right">~2,750</td><td class="right"><span class="pill green">~+13% Est.</span></td><td class="right">~330</td><td class="right">~12.0%</td></tr>
+    </table>
+    <div class="src">Source: Eureka Forbes Investor Relations, MarketsMojo, InvestyWise Q3 FY26 Report — Mar 2026</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Profitability Growth</div>
+    <table>
+      <tr><th>Year</th><th class="right">PAT (₹ Cr)</th><th class="right">YoY Growth</th><th class="right">EPS (₹)</th><th class="right">EPS Growth</th></tr>
+      <tr><td>FY23</td><td class="right">~65</td><td class="right">—</td><td class="right">~3.4</td><td class="right">—</td></tr>
+      <tr><td>FY24</td><td class="right">91.5</td><td class="right"><span class="pill green">+40.8%</span></td><td class="right">5.7</td><td class="right">+67.6%</td></tr>
+      <tr><td>FY25</td><td class="right">163.3</td><td class="right"><span class="pill green">+78.4%</span></td><td class="right">~8.33</td><td class="right">+46%</td></tr>
+      <tr><td>9M FY26 (Adj.)</td><td class="right">139.1</td><td class="right"><span class="pill green">+23.6% YoY</span></td><td class="right">~7.10 (9M)</td><td class="right">Tracking +25%</td></tr>
+      <tr><td>FY26E</td><td class="right">~185–190</td><td class="right"><span class="pill green">~+15% Est.</span></td><td class="right">~9.5</td><td class="right">+14%</td></tr>
+    </table>
+    <div class="src">Note: Q3 FY26 reported PAT ₹9 Cr (hit by ₹40.4 Cr Labour Code exceptional charge, non-recurring). Adj. PAT is the relevant metric. Source: Company results, EquityBulls, ICICI Direct — 2026</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Growth Drivers — What's Accelerating</div>
+    <div class="flag-box green">
+      <div class="flag-title">1. AMC Bookings — Double-Digit Growth for 3 Consecutive Quarters</div>
+      <div class="flag-body">Annual Maintenance Contracts are the highest-margin, recurring revenue component. Growing double-digits means Eureka Forbes is successfully converting its installed base into an annuity-like business model. This is the structural moat.</div>
+    </div>
+    <div class="flag-box green">
+      <div class="flag-title">2. Robotics &amp; Air Purifiers — New High-Growth Verticals</div>
+      <div class="flag-body">Robotic vacuum cleaners (Forbes) and air purifiers (Aquaguard) drove Q3 FY26 outperformance. These categories are early-stage in India and growing fast. Both carry higher margins than traditional product categories.</div>
+    </div>
+    <div class="flag-box green">
+      <div class="flag-title">3. D2C Expansion &amp; Subscription Model</div>
+      <div class="flag-body">In Feb 2025, Eureka Forbes expanded D2C presence with subscription-based filter replacement and WiFi-connected smart purifiers. This reduces channel dependency and builds direct customer relationships — key for long-term margin improvement.</div>
+    </div>
+    <div class="flag-box amber">
+      <div class="flag-title">4. Premium Product Mix Shift (Margin Tailwind)</div>
+      <div class="flag-body">Premiumisation across water purifiers is driving ASP (average selling price) higher, which expands gross margins. Management's target to reach 14–15% EBITDA margins from current 11.9% is largely dependent on this mix shift succeeding.</div>
+    </div>
+    <div class="flag-box amber">
+      <div class="flag-title">5. International Presence (Small Base)</div>
+      <div class="flag-body">Eureka Forbes has international operations in select emerging markets. Contribution is small but adds optionality. No material revenue impact in 5-year view.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Growth Rating: ACCELERATING</div>
+    <div class="flag-box green">
+      <div class="flag-title">Revenue CAGR: ~11–13% over FY24–26 &nbsp;|&nbsp; PAT CAGR: ~30%+ over FY23–FY25</div>
+      <div class="flag-body">The combination of consistent double-digit revenue growth, expanding EBITDA margins (7.4% → 11.9%), and accelerating PAT (low base) paints a clear ACCELERATING trajectory. The key risk is whether margins can continue expanding to reach management's 3× EBITDA target.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 4 — FINANCIAL HEALTH
+══════════════════════════════════════ -->
+<div class="panel" id="p4">
+
+  <div class="section">
+    <div class="section-title">Balance Sheet Snapshot — FY25</div>
+    <div class="kpi-grid">
+      <div class="kpi"><div class="kpi-label">Total Assets</div><div class="kpi-value">₹6,338 Cr</div><div class="kpi-sub">FY25 (audited)</div></div>
+      <div class="kpi"><div class="kpi-label">Total Equity</div><div class="kpi-value green">₹4,410 Cr</div><div class="kpi-sub">Includes goodwill</div></div>
+      <div class="kpi"><div class="kpi-label">Tangible Book</div><div class="kpi-value red">Negative</div><div class="kpi-sub">₹-752 Cr (approx.)</div></div>
+      <div class="kpi"><div class="kpi-label">Total Debt</div><div class="kpi-value green">₹91 Cr</div><div class="kpi-sub">Virtually debt-free</div></div>
+      <div class="kpi"><div class="kpi-label">Cash &amp; Equivalents</div><div class="kpi-value green">₹310 Cr</div><div class="kpi-sub">Net Cash ₹219 Cr</div></div>
+      <div class="kpi"><div class="kpi-label">D/E Ratio</div><div class="kpi-value green">0.02×</div><div class="kpi-sub">Negligible leverage</div></div>
+      <div class="kpi"><div class="kpi-label">Goodwill/Intangibles</div><div class="kpi-value amber">~₹5,162 Cr</div><div class="kpi-sub">Advent acquisition</div></div>
+      <div class="kpi"><div class="kpi-label">Working Capital</div><div class="kpi-value green">Positive</div><div class="kpi-sub">Asset-light model</div></div>
+    </div>
+    <div class="src">Source: StockAnalysis, Yahoo Finance Balance Sheet, Groww Financials — FY25 (March 31, 2025)</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Debt &amp; Liquidity Assessment</div>
+    <div class="flag-box green">
+      <div class="flag-title">✅ Virtually Debt-Free — D/E of 0.02×</div>
+      <div class="flag-body">With only ₹91 Cr in total debt against ₹310 Cr in cash, Eureka Forbes has a net cash position of ~₹219 Cr. There is no leverage risk. The company can fund growth initiatives, new product launches, and technology investment without needing debt financing or equity dilution.</div>
+    </div>
+    <div class="flag-box amber">
+      <div class="flag-title">⚠️ Large Goodwill — Acquisition Overhang</div>
+      <div class="flag-body">The ₹5,162 Cr in goodwill/intangibles constitutes ~82% of total assets. This was created when Advent International acquired control in 2022 at a ~4.4× book premium. If business performance deteriorates, goodwill impairment could create sudden large losses on the P&amp;L — a key tail risk for long-term investors.</div>
+    </div>
+    <div class="flag-box green">
+      <div class="flag-title">✅ Asset-Light Consumer Model</div>
+      <div class="flag-body">Eureka Forbes outsources manufacturing and operates through a direct sales force + D2C channel. This asset-light model supports good free cash flow generation relative to capital employed, enabling reinvestment in brand, R&amp;D, and channel without heavy capex.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Margin Trend</div>
+    <table>
+      <tr><th>Year</th><th class="right">Gross Revenue</th><th class="right">EBITDA</th><th class="right">EBITDA Margin</th><th class="right">PAT Margin</th></tr>
+      <tr><td>FY23</td><td class="right">~₹1,960 Cr</td><td class="right">~₹145 Cr</td><td class="right">~7.4%</td><td class="right">~3.3%</td></tr>
+      <tr><td>FY24</td><td class="right">~₹2,190 Cr</td><td class="right">₹226.3 Cr</td><td class="right">10.3%</td><td class="right">~4.2%</td></tr>
+      <tr><td>FY25</td><td class="right">₹2,436 Cr</td><td class="right">₹285.0 Cr</td><td class="right"><span class="pill green">11.7%</span></td><td class="right">6.7%</td></tr>
+      <tr><td>9M FY26</td><td class="right">₹2,026.6 Cr</td><td class="right">₹241.7 Cr</td><td class="right"><span class="pill green">11.9%</span></td><td class="right">~6.9% (adj.)</td></tr>
+    </table>
+    <div class="src">Consistent margin expansion from 7.4% → 11.9% in 3 years. Target 14–15% in 5 years. Source: Company results, InvestyWise, EquityBulls — Mar 2026</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Credit &amp; Financial Risk Flags</div>
+    <table>
+      <tr><th>Risk Factor</th><th>Level</th><th>Comment</th></tr>
+      <tr><td>Leverage / Debt</td><td><span class="pill green">LOW</span></td><td>D/E 0.02×; net cash positive</td></tr>
+      <tr><td>Liquidity</td><td><span class="pill green">LOW</span></td><td>Cash ₹310 Cr; no near-term refinancing</td></tr>
+      <tr><td>Goodwill Impairment Risk</td><td><span class="pill amber">MEDIUM</span></td><td>₹5,162 Cr goodwill; high if performance misses</td></tr>
+      <tr><td>Working Capital Risk</td><td><span class="pill green">LOW</span></td><td>Asset-light; direct sales model</td></tr>
+      <tr><td>Exceptional Item Risk</td><td><span class="pill amber">MEDIUM</span></td><td>Q3 FY26 Labour Code charge ₹40.4 Cr — flagged; likely non-recurring</td></tr>
+      <tr><td>Currency Risk</td><td><span class="pill green">LOW</span></td><td>Primarily domestic revenues</td></tr>
+      <tr><td>Regulatory Risk</td><td><span class="pill green">LOW</span></td><td>No major regulatory exposure; BIS certification norms apply</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 5 — RETURNS & EFFICIENCY
+══════════════════════════════════════ -->
+<div class="panel" id="p5">
+
+  <div class="section">
+    <div class="section-title">Return Metrics</div>
+    <div class="kpi-grid">
+      <div class="kpi"><div class="kpi-label">ROE (FY25)</div><div class="kpi-value amber">~3.7%</div><div class="kpi-sub">PAT ÷ Equity ₹4,410 Cr</div></div>
+      <div class="kpi"><div class="kpi-label">ROE (3-yr Avg)</div><div class="kpi-value red">~2.3%</div><div class="kpi-sub">Goodwill-inflated equity</div></div>
+      <div class="kpi"><div class="kpi-label">ROCE (FY25)</div><div class="kpi-value amber">~5–6%</div><div class="kpi-sub">Est. from EBIT/Capital</div></div>
+      <div class="kpi"><div class="kpi-label">Asset Turnover</div><div class="kpi-value green">~0.38×</div><div class="kpi-sub">Rev ₹2,436 / Assets ₹6,338</div></div>
+      <div class="kpi"><div class="kpi-label">PAT Margin (FY25)</div><div class="kpi-value amber">6.7%</div><div class="kpi-sub">Improving YoY</div></div>
+      <div class="kpi"><div class="kpi-label">EBITDA Margin</div><div class="kpi-value green">11.9%</div><div class="kpi-sub">9M FY26</div></div>
+      <div class="kpi"><div class="kpi-label">Cash Conversion</div><div class="kpi-value green">Good</div><div class="kpi-sub">Asset-light model</div></div>
+      <div class="kpi"><div class="kpi-label">Dividend</div><div class="kpi-value">NIL</div><div class="kpi-sub">All profits reinvested</div></div>
+    </div>
+    <div class="src">Source: Groww Financials, StockAnalysis, Screener.in — FY25 Annual</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Understanding the Low ROE — Structural Explanation</div>
+    <div class="flag-box amber">
+      <div class="flag-title">ROE is Suppressed by Acquisition Goodwill — Not Operational Weakness</div>
+      <div class="flag-body">Eureka Forbes' ROE appears low (2.3–3.7%) because the denominator (equity) is inflated by ~₹5,162 Cr of goodwill from Advent's ₹4,400 Cr acquisition in 2022. On a <em>tangible equity</em> basis (which is negative), the business generates strong operating cash flows. As PAT grows 15–25% annually, ROE will improve rapidly even without equity base changes. This is a known structural distortion, not a fundamental weakness in the business model.</div>
+    </div>
+    <div class="flag-box green">
+      <div class="flag-title">Pre-Tax ROIC on Operating Assets is Healthy</div>
+      <div class="flag-body">The water purifier + AMC business is asset-light. On operating capital (working capital + fixed assets, ex-goodwill), the business earns healthy returns. The direct sales model (minimal inventory, large workforce but variable AMC income) creates strong operating leverage as revenue scales.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Margin Expansion Journey</div>
+    <div style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>FY23 EBITDA Margin</span><span>7.4%</span></div>
+      <div class="bar-wrap"><div class="bar-fill red" style="width:37%"></div></div>
+    </div>
+    <div style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>FY24 EBITDA Margin</span><span>10.3%</span></div>
+      <div class="bar-wrap"><div class="bar-fill amber" style="width:52%"></div></div>
+    </div>
+    <div style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>FY25 EBITDA Margin</span><span>11.7%</span></div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:59%"></div></div>
+    </div>
+    <div style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>9M FY26 EBITDA Margin</span><span>11.9%</span></div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:60%"></div></div>
+    </div>
+    <div style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>Target EBITDA Margin (FY28–30E)</span><span>14–15%</span></div>
+      <div class="bar-wrap"><div class="bar-fill blue" style="width:72%"></div></div>
+    </div>
+    <div class="src">+450 bps margin expansion over 3 years (FY23→9M FY26). Another 200–300 bps target in 5-year plan.</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 6 — PROJECTIONS
+══════════════════════════════════════ -->
+<div class="panel" id="p6">
+
+  <div class="section">
+    <div class="section-title">5-Year Projection Model — FY25 to FY30 (Base Case)</div>
+    <div class="flag-box amber">
+      <div class="flag-title">⚠️ All projections are estimates based on management guidance, historical growth rates, and analyst consensus. Not a financial forecast. DATA SOURCES: Company FY26 Investor Presentation, UBS initiation note (cited), Q3 FY26 earnings call transcript.</div>
+      <div class="flag-body"></div>
+    </div>
+    <table>
+      <tr><th>Year</th><th class="right">Revenue (₹ Cr)</th><th class="right">EBITDA (₹ Cr)</th><th class="right">EBITDA %</th><th class="right">PAT (₹ Cr)</th><th class="right">EPS (₹)</th></tr>
+      <tr><td>FY25 (Actual)</td><td class="right">2,436</td><td class="right">285</td><td class="right">11.7%</td><td class="right">163</td><td class="right">8.33</td></tr>
+      <tr><td>FY26E</td><td class="right">~2,750</td><td class="right">~330</td><td class="right">~12.0%</td><td class="right">~185</td><td class="right">~9.5</td></tr>
+      <tr><td>FY27E</td><td class="right">~3,100</td><td class="right">~390</td><td class="right">~12.6%</td><td class="right">~240</td><td class="right">~12.2</td></tr>
+      <tr><td>FY28E</td><td class="right">~3,500</td><td class="right">~455</td><td class="right">~13.0%</td><td class="right">~295</td><td class="right">~15.0</td></tr>
+      <tr><td>FY29E</td><td class="right">~3,950</td><td class="right">~535</td><td class="right">~13.5%</td><td class="right">~355</td><td class="right">~18.1</td></tr>
+      <tr><td>FY30E</td><td class="right">~4,450</td><td class="right">~640</td><td class="right">~14.4%</td><td class="right">~425</td><td class="right">~21.7</td></tr>
+    </table>
+    <div class="src">Assumptions: ~12–13% revenue CAGR (FY25–30); gradual EBITDA margin expansion 11.7% → 14.4%; ~15–18% PAT CAGR on expanding base. Mgmt 5-yr target: ₹5,400–5,600 Cr revenue (bull case vs. ₹4,450 Cr base case here).</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">5-Year Return Scenario Analysis (Entry ₹447)</div>
+    <table>
+      <tr><th>Scenario</th><th>Assumption</th><th class="right">FY30E EPS</th><th class="right">Exit P/E</th><th class="right">Target Price</th><th class="right">5-Yr Return</th></tr>
+      <tr><td><span class="pill red">Bear</span></td><td>7% rev CAGR, margin flat</td><td class="right">~₹13</td><td class="right">25×</td><td class="right">~₹325</td><td class="right"><span class="pill red">−27%</span></td></tr>
+      <tr><td><span class="pill amber">Base</span></td><td>12% rev CAGR, margins +250 bps</td><td class="right">~₹22</td><td class="right">30×</td><td class="right">~₹660</td><td class="right"><span class="pill green">+48%</span></td></tr>
+      <tr><td><span class="pill green">Bull</span></td><td>Mgmt target; 18% rev CAGR; 14–15% EBITDA</td><td class="right">~₹32</td><td class="right">35×</td><td class="right">~₹1,120</td><td class="right"><span class="pill green">+150%</span></td></tr>
+    </table>
+    <div class="src">NOTE: Returns exclude dividends (none paid). Bear case reflects execution miss + valuation de-rating. Bull case replicates management guidance. The base case 5-year return of ~48% (~8% CAGR) is modest for the risk taken at 54× entry P/E.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Key Assumptions &amp; Risks to Projections</div>
+    <div class="flag-box amber">
+      <div class="flag-title">Key Upside Risk: AMC Penetration Exceeds Expectations</div>
+      <div class="flag-body">AMC/service revenue carries higher margins (~20–25%+ vs. 10–12% product margins). If AMC bookings continue double-digit growth and penetrate the ₹15,000 Cr non-AMC aftermarket opportunity (per management), revenue mix shift could drive margins above 14% faster than the base case.</div>
+    </div>
+    <div class="flag-box amber">
+      <div class="flag-title">Key Downside Risk: Market Share Erosion</div>
+      <div class="flag-body">KENT RO, A.O. Smith, Livpure, and new D2C players are aggressively expanding. If Aquaguard loses even 3–5% market share in water purifiers, revenue growth slows to 7–9%, and the bear case triggers. This is the highest-probability downside scenario.</div>
+    </div>
+    <div class="flag-box red">
+      <div class="flag-title">PE Exit Risk: Advent International's Investment Horizon</div>
+      <div class="flag-body">Advent International acquired in 2022. Typical PE exit in 5–7 years implies a potential exit by 2027–29. A block deal of ~63% promoter holding hitting the market could suppress the stock price significantly during the exit window, regardless of fundamentals.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 7 — FUNDAMENTAL VIEW (DEFAULT)
+══════════════════════════════════════ -->
+<div class="panel on" id="p7">
+
+  <div class="view-card amber">
+    <div class="verdict amber">⚖️ MODERATE — Accumulate on Dips</div>
+    <div class="horizon-note">5-Year Investment Horizon &nbsp;·&nbsp; Analysis Date: 31 Mar 2026</div>
+    <div class="rationale">
+      Eureka Forbes is a high-quality consumer brand (Aquaguard) with a structural moat in water purification — a category that benefits from India's secular water quality concerns, rising health consciousness, and premiumisation. The AMC (service contract) model creates recurring annuity income, and new categories (robotics, air purifiers) are growing fast. The business fundamentals are improving clearly: EBITDA margins have expanded from 7.4% to 11.9% in three years, and PAT has grown at 30%+ CAGR from FY23 to FY25.
+      <br/><br/>
+      <strong>However, the current valuation leaves little margin of safety.</strong> At 54× TTM P/E and ~30× EV/EBITDA, the market has already priced in strong execution. The 5-year base case return is modest (~48% total or ~8% CAGR) — competitive but not outstanding for a mid-cap. The stock is also 33% below its 52-week high of ₹668, suggesting the market has already partially re-rated it.
+      <br/><br/>
+      <strong>For a 5-year investor:</strong> Eureka Forbes is a HOLD/ACCUMULATE at current levels. The risk-reward improves significantly if the stock corrects toward ₹350–380 (bear case re-rating scenario), where the forward P/E compresses to ~37–40×. At current ₹447, the risk-reward is balanced but not compelling — suited for investors who believe in the management's 2× revenue / 3× EBITDA target. The PE overhang (Advent International's likely exit by 2027–29) is a meaningful timing risk.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Bull vs Bear Summary</div>
+    <div class="flag-box green">
+      <div class="flag-title">BULL CASE — Why This Could Work (5Y)</div>
+      <div class="flag-body">
+        • Aquaguard brand moat is durable — 45 years, market leader in India's ₹8,000+ Cr water purification market<br/>
+        • AMC annuity model = growing recurring revenue with 20%+ margins<br/>
+        • Management targets ₹5,400–5,600 Cr revenue and ₹800–850 Cr EBITDA in 5 years — if achieved, massive P&amp;L upside<br/>
+        • Virtually debt-free with ₹219 Cr net cash — no balance sheet risk<br/>
+        • D2C + subscription + robotics = multiple growth levers beyond core water purifiers<br/>
+        • UBS Buy rating with 45% upside — institutional interest building<br/>
+        • At ₹447 (vs. 52W high ₹668), stock has already de-rated by 33% — some risk priced in
+      </div>
+    </div>
+    <div class="flag-box red">
+      <div class="flag-title">BEAR CASE — Why This Could Underperform (5Y)</div>
+      <div class="flag-body">
+        • 54× P/E is unforgiving — any miss and the stock re-rates sharply<br/>
+        • Historical ROE of 2.3% is very low; high-goodwill balance sheet a structural drag<br/>
+        • Advent International PE exit (2027–29) = possible large block deal overhang<br/>
+        • Competition in water purifiers (KENT, Livpure, Blue Star, Havells) is intensifying with lower prices<br/>
+        • No dividend — investor return entirely dependent on price appreciation<br/>
+        • 5-year base case (~8% CAGR) is not meaningfully above Nifty returns for the risk taken
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Scorecard</div>
+    <table>
+      <tr><th>Dimension</th><th>Rating</th><th>Comment</th></tr>
+      <tr><td>Business Quality</td><td><span class="pill green">HIGH</span></td><td>Brand moat, AMC annuity, market leader</td></tr>
+      <tr><td>Growth Momentum</td><td><span class="pill green">ACCELERATING</span></td><td>11% rev, 24% PAT CAGR; margins expanding</td></tr>
+      <tr><td>Financial Health</td><td><span class="pill green">GOOD</span></td><td>Net cash, D/E 0.02×; goodwill risk flagged</td></tr>
+      <tr><td>Valuation</td><td><span class="pill red">OVERVALUED</span></td><td>54× P/E, 30× EV/EBITDA — priced for perfection</td></tr>
+      <tr><td>Promoter Quality</td><td><span class="pill amber">MODERATE</span></td><td>PE-backed; professional management; exit risk</td></tr>
+      <tr><td>Return on Equity</td><td><span class="pill amber">IMPROVING</span></td><td>2.3% 3-yr avg; FY25: 3.7%; structurally distorted by goodwill</td></tr>
+      <tr><td>5Y Risk-Reward</td><td><span class="pill amber">MODERATE</span></td><td>Base case ~8% CAGR; bull case 20%+ CAGR</td></tr>
+      <tr><td>Overall Verdict</td><td><span class="pill amber">MODERATE</span></td><td>Quality business, expensive entry; accumulate on dips</td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Data Confidence</div>
+    <div class="conf-bar">
+      <div class="conf-fill" style="width:78%;background:var(--green)">78% — HIGH</div>
+    </div>
+    <div style="margin-top:10px;font-size:12.5px;color:var(--sub)">
+      Revenue, PAT, EBITDA figures from company-reported results (Q3 FY26 press release, H1 FY26 results). Market data from NSE/Tickertape. Balance sheet from StockAnalysis/Yahoo Finance. Projections are estimates based on management guidance and analyst consensus — carry inherent uncertainty. Some forward P/E and ROCE estimates are calculated, not directly cited.
+    </div>
+    <div class="src">Primary sources: NSE India, Screener.in, InvestyWise Q3 FY26, MarketsMojo, Trendlyne, EquityBulls, StockAnalysis — March 2026</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 8 — PEERS
+══════════════════════════════════════ -->
+<div class="panel" id="p8">
+
+  <div class="section">
+    <div class="section-title">Peer Comparison — Consumer Durables &amp; Water Purification</div>
+    <div class="flag-box blue">
+      <div class="flag-title">Note on Peer Selection</div>
+      <div class="flag-body">Eureka Forbes has no direct listed pure-play water purifier peer in India. KENT RO is unlisted. Comparisons are made against diversified consumer durable companies that have overlapping product segments (water, air purification, home appliances).</div>
+    </div>
+    <table>
+      <tr>
+        <th>Company</th>
+        <th class="right">MCap (Cr)</th>
+        <th class="right">TTM P/E</th>
+        <th class="right">ROE %</th>
+        <th class="right">Rev CAGR (3Y)</th>
+        <th class="right">EBITDA %</th>
+        <th>Key Overlap</th>
+      </tr>
+      <tr>
+        <td><strong>Eureka Forbes (EUREKAFORB)</strong></td>
+        <td class="right">8,760</td>
+        <td class="right"><span class="pill red">54×</span></td>
+        <td class="right"><span class="pill amber">3.7%</span></td>
+        <td class="right">~11%</td>
+        <td class="right">11.7%</td>
+        <td>Water purifiers, Vacuum, Air</td>
+      </tr>
+      <tr>
+        <td>Havells India (HAVELLS)</td>
+        <td class="right">~88,000</td>
+        <td class="right">58×</td>
+        <td class="right">~18%</td>
+        <td class="right">~13%</td>
+        <td class="right">~12%</td>
+        <td>Water heaters, Small appliances</td>
+      </tr>
+      <tr>
+        <td>Blue Star (BLUESTARCO)</td>
+        <td class="right">~22,000</td>
+        <td class="right">55×</td>
+        <td class="right">~22%</td>
+        <td class="right">~16%</td>
+        <td class="right">~8%</td>
+        <td>Air purifiers, Cooling</td>
+      </tr>
+      <tr>
+        <td>V-Guard Industries (VGUARD)</td>
+        <td class="right">~11,000</td>
+        <td class="right">48×</td>
+        <td class="right">~12%</td>
+        <td class="right">~10%</td>
+        <td class="right">~9%</td>
+        <td>Consumer electricals</td>
+      </tr>
+      <tr>
+        <td>Crompton Consumer (CROMPTON)</td>
+        <td class="right">~12,500</td>
+        <td class="right">38×</td>
+        <td class="right">~15%</td>
+        <td class="right">~8%</td>
+        <td class="right">~10%</td>
+        <td>Small appliances, fans</td>
+      </tr>
+      <tr>
+        <td>A.O. Smith India (AOSMITH)</td>
+        <td class="right">~4,500</td>
+        <td class="right">45×</td>
+        <td class="right">~14%</td>
+        <td class="right">~12%</td>
+        <td class="right">~12%</td>
+        <td>Water purifiers, Water heaters</td>
+      </tr>
+    </table>
+    <div class="src">Source: NSE, BSE, Screener.in, analyst reports — Mar 2026. Peer figures are approximate.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Competitive Position in Water Purifiers</div>
+    <div class="flag-box green">
+      <div class="flag-title">Eureka Forbes Overtook KENT in RO Water Purifiers (TechSci Research)</div>
+      <div class="flag-body">Per TechSci Research, Eureka Forbes reclaimed the #1 position in India's RO water purifier segment from KENT RO. The Aquaguard brand benefits from 45 years of customer trust, a large installed base, and a network of trained service engineers — advantages that are difficult for new entrants to replicate quickly.</div>
+    </div>
+    <div class="flag-box amber">
+      <div class="flag-title">Competition is Intensifying — 10+ Brands Now Active</div>
+      <div class="flag-body">The India water purifier market includes: Eureka Forbes (Aquaguard), KENT RO, Livpure, A.O. Smith, Blue Star, Havells (Havells Delite), Panasonic, LG, HUL (Pureit), and multiple D2C brands. Entry-level RO prices have fallen significantly, creating margin pressure in the mass segment. Eureka Forbes is responding with premiumisation and AMC-focus.</div>
+    </div>
+    <div class="flag-box blue">
+      <div class="flag-title">Global Water Purifier Market Context</div>
+      <div class="flag-body">Global water purifier market valued at USD 35.6B in 2025, growing at 8.3% CAGR through 2032. India is among the fastest-growing markets. Eureka Forbes is a leading participant globally, giving it R&amp;D depth and potential for international expansion beyond India.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Relative Valuation Commentary</div>
+    <div class="flag-box amber">
+      <div class="flag-title">Eureka Forbes Trades at Peer-Comparable Multiples, But with Inferior ROE</div>
+      <div class="flag-body">Eureka Forbes' 54× P/E is comparable to Havells (58×) and Blue Star (55×). However, both Havells and Blue Star have ROEs of 18–22%, versus Eureka Forbes' 3.7%. This means Eureka Forbes is paying a consumer brand premium without the capital efficiency to justify it currently. As PAT grows and the equity base stabilises, ROE should improve — but investors should demand this before ascribing a full-peer premium valuation.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ SCRIPT ══════════════ -->
+<script>
+function show(n){
+  for(let i=1;i<=8;i++){
+    document.getElementById('p'+i).className='panel'+(i===n?' on':'');
+    document.getElementById('t'+i).className='tab'+(i===n?' active':'');
+  }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+// Default active: Tab 7 (View)
+document.getElementById('t7').className='tab active';
+</script>
+</body>
+</html>
