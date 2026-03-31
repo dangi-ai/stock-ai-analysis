@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Tega Industries Ltd — Fundamental Analysis</title>
+<style>
+:root{
+  --bg:#f4f6fa;--surface:#fff;--border:#e2e8f0;--text:#1a202c;--sub:#4a5568;
+  --green:#16a34a;--amber:#d97706;--red:#dc2626;--blue:#2563eb;--purple:#7c3aed;
+  --green-bg:#f0fdf4;--amber-bg:#fffbeb;--red-bg:#fef2f2;--blue-bg:#eff6ff;--purple-bg:#f5f3ff;
+  --pill-green:#dcfce7;--pill-amber:#fef3c7;--pill-red:#fee2e2;--pill-blue:#dbeafe;--pill-grey:#f1f5f9;
+  --tab-active:#2563eb;--tab-text:#64748b;
+  --card-shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#0f172a;--surface:#1e293b;--border:#334155;--text:#f1f5f9;--sub:#94a3b8;
+    --green:#22c55e;--amber:#fbbf24;--red:#f87171;--blue:#60a5fa;--purple:#a78bfa;
+    --green-bg:#14532d22;--amber-bg:#78350f22;--red-bg:#7f1d1d22;--blue-bg:#1e3a5f22;--purple-bg:#3b076422;
+    --pill-green:#14532d;--pill-amber:#78350f;--pill-red:#7f1d1d;--pill-blue:#1e3a5f;--pill-grey:#1e293b;
+    --tab-active:#60a5fa;
+  }
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;font-size:14px;line-height:1.6}
+a{color:var(--blue);text-decoration:none}a:hover{text-decoration:underline}
+
+.header{background:linear-gradient(135deg,#1c1917 0%,#292524 55%,#44403c 100%);color:#fff;padding:28px 32px 20px}
+.header-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px}
+.back-btn{background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);color:#fff;padding:5px 14px;border-radius:6px;font-size:12px;cursor:pointer;text-decoration:none;transition:background .2s}
+.back-btn:hover{background:rgba(255,255,255,.28);text-decoration:none}
+.company-name{font-size:22px;font-weight:700;margin-bottom:2px}
+.company-sub{font-size:13px;opacity:.8;margin-bottom:10px}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.badge{padding:3px 10px;border-radius:99px;font-size:11px;font-weight:600;background:rgba(255,255,255,.2);color:#fff}
+.badge.green{background:#16a34a}.badge.amber{background:#d97706}.badge.red{background:#dc2626}
+.badge.blue{background:#2563eb;border:1px solid rgba(255,255,255,.3)}.badge.purple{background:#7c3aed}
+.badge.copper{background:#b45309}
+
+.tabs{display:flex;overflow-x:auto;background:var(--surface);border-bottom:2px solid var(--border);padding:0 24px;gap:4px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{padding:11px 16px;font-size:13px;font-weight:500;color:var(--tab-text);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:color .15s}
+.tab:hover{color:var(--text)}.tab.active{color:var(--tab-active);border-bottom-color:var(--tab-active);font-weight:600}
+
+.panel{display:none;padding:24px;max-width:960px;margin:0 auto}.panel.on{display:block}
+
+.section{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:18px;box-shadow:var(--card-shadow)}
+.section-title{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--sub);margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid var(--border)}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
+.kpi{background:var(--bg);border-radius:8px;padding:12px 14px}
+.kpi-label{font-size:11px;color:var(--sub);margin-bottom:3px}
+.kpi-value{font-size:17px;font-weight:700;color:var(--text)}
+.kpi-sub{font-size:11px;color:var(--sub);margin-top:2px}
+.kpi-value.green{color:var(--green)}.kpi-value.amber{color:var(--amber)}.kpi-value.red{color:var(--red)}.kpi-value.blue{color:var(--blue)}
+
+.pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:11px;font-weight:600}
+.pill.green{background:var(--pill-green);color:var(--green)}.pill.amber{background:var(--pill-amber);color:var(--amber)}
+.pill.red{background:var(--pill-red);color:var(--red)}.pill.blue{background:var(--pill-blue);color:var(--blue)}
+.pill.grey{background:var(--pill-grey);color:var(--sub)}
+
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:8px 10px;background:var(--bg);color:var(--sub);font-weight:600;font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+td{padding:8px 10px;border-top:1px solid var(--border)}
+tr:hover td{background:var(--bg)}.right{text-align:right}
+
+.flag-box{border-left:4px solid var(--amber);background:var(--amber-bg);border-radius:6px;padding:12px 16px;margin-bottom:12px}
+.flag-box.red{border-color:var(--red);background:var(--red-bg)}.flag-box.green{border-color:var(--green);background:var(--green-bg)}
+.flag-box.blue{border-color:var(--blue);background:var(--blue-bg)}.flag-box.purple{border-color:var(--purple);background:var(--purple-bg)}
+.flag-title{font-weight:700;font-size:13px;margin-bottom:3px}.flag-body{font-size:12.5px;color:var(--sub)}
+
+.bar-wrap{background:var(--border);border-radius:99px;height:8px;margin-top:4px}
+.bar-fill{height:8px;border-radius:99px;background:var(--green)}
+.bar-fill.amber{background:var(--amber)}.bar-fill.red{background:var(--red)}.bar-fill.blue{background:var(--blue)}
+
+.view-card{border-radius:12px;padding:28px 32px;margin-bottom:18px}
+.view-card.green{background:var(--green-bg);border:1.5px solid var(--green)}
+.view-card.amber{background:var(--amber-bg);border:1.5px solid var(--amber)}
+.view-card.red{background:var(--red-bg);border:1.5px solid var(--red)}
+.verdict{font-size:20px;font-weight:800;margin-bottom:6px}
+.verdict.green{color:var(--green)}.verdict.amber{color:var(--amber)}.verdict.red{color:var(--red)}
+.horizon-note{font-size:13px;color:var(--sub);margin-bottom:14px}
+.rationale{font-size:13.5px;line-height:1.7;color:var(--text)}
+
+.timeline{position:relative;padding-left:22px}
+.timeline::before{content:'';position:absolute;left:6px;top:0;bottom:0;width:2px;background:var(--border)}
+.tl-item{position:relative;margin-bottom:14px}
+.tl-dot{position:absolute;left:-22px;top:3px;width:12px;height:12px;border-radius:50%;background:var(--blue);border:2px solid var(--surface)}
+.tl-dot.green{background:var(--green)}.tl-dot.amber{background:var(--amber)}.tl-dot.red{background:var(--red)}.tl-dot.purple{background:var(--purple)}
+.tl-date{font-size:11px;color:var(--sub);font-weight:600}.tl-text{font-size:13px;color:var(--text)}
+
+.src{font-size:11px;color:var(--sub);font-style:italic;margin-top:4px}
+
+.conf-bar{background:var(--border);border-radius:99px;height:14px;margin-top:6px;overflow:hidden}
+.conf-fill{height:14px;border-radius:99px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:10px;font-weight:700;color:#fff}
+
+.acq-box{background:linear-gradient(135deg,#292524,#44403c);color:#fff;border-radius:10px;padding:20px 24px;margin-bottom:18px}
+.acq-title{font-size:16px;font-weight:800;margin-bottom:4px;color:#fcd34d}
+.acq-sub{font-size:12px;opacity:.75;margin-bottom:14px}
+.acq-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.acq-kpi{background:rgba(255,255,255,.1);border-radius:8px;padding:10px 12px}
+.acq-kpi-label{font-size:10px;opacity:.7;margin-bottom:2px}
+.acq-kpi-value{font-size:15px;font-weight:700;color:#fcd34d}
+
+@media(max-width:600px){
+  .header{padding:18px 16px 14px}.panel{padding:16px}
+  .kpi-grid{grid-template-columns:repeat(2,1fr)}.view-card{padding:18px}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════ HEADER ══════════════ -->
+<div class="header">
+  <div class="header-top">
+    <div>
+      <div class="company-name">Tega Industries Limited</div>
+      <div class="company-sub">NSE: TEGA &nbsp;·&nbsp; Mining Wear Solutions / Industrial Consumables &nbsp;·&nbsp; Horizon: 5 Years</div>
+    </div>
+    <a href="index.html" class="back-btn">← Dashboard</a>
+  </div>
+  <div class="badges">
+    <span class="badge copper">Mill Liners · Trommels · Hydrocyclones</span>
+    <span class="badge blue">92+ Countries · &gt;80% Exports</span>
+    <span class="badge amber">MODERATE</span>
+    <span class="badge red">OVERVALUED</span>
+    <span class="badge purple">MOLYCOP ACQ. $1.48B — TRANSFORMATIVE</span>
+    <span class="badge blue">Updated: 31 Mar 2026</span>
+  </div>
+</div>
+
+<!-- ══════════════ TAB BAR ══════════════ -->
+<div class="tabs" id="tabBar">
+  <div class="tab" onclick="show(1)" id="t1">1 · Snapshot</div>
+  <div class="tab" onclick="show(2)" id="t2">2 · Valuation</div>
+  <div class="tab" onclick="show(3)" id="t3">3 · Growth</div>
+  <div class="tab" onclick="show(4)" id="t4">4 · Financial Health</div>
+  <div class="tab" onclick="show(5)" id="t5">5 · Returns &amp; Efficiency</div>
+  <div class="tab" onclick="show(6)" id="t6">6 · Projections</div>
+  <div class="tab" onclick="show(7)" id="t7">7 · View ★</div>
+  <div class="tab" onclick="show(8)" id="t8">8 · Peers</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 1 — SNAPSHOT
+══════════════════════════════════════ -->
+<div class="panel" id="p1">
+
+  <!-- Molycop Alert Banner -->
+  <div class="acq-box">
+    <div class="acq-title">🔶 MAJOR DEVELOPMENT: Molycop Acquisition — $1.48 Billion EV</div>
+    <div class="acq-sub">Tega (77%) + Apollo Global (23%) acquired Molycop from American Industrial Partners · Deal advised by Latham & Watkins (Feb 2026) · Expected close: Mar 31, 2026 (±12M extension)</div>
+    <div class="acq-grid">
+      <div class="acq-kpi"><div class="acq-kpi-label">Deal EV</div><div class="acq-kpi-value">$1.48B</div></div>
+      <div class="acq-kpi"><div class="acq-kpi-label">Tega Stake</div><div class="acq-kpi-value">77%</div></div>
+      <div class="acq-kpi"><div class="acq-kpi-label">Apollo Stake</div><div class="acq-kpi-value">23%</div></div>
+      <div class="acq-kpi"><div class="acq-kpi-label">Debt Raised</div><div class="acq-kpi-value">₹1,500 Cr</div></div>
+      <div class="acq-kpi"><div class="acq-kpi-label">OCRPS Investment</div><div class="acq-kpi-value">₹3,517 Cr</div></div>
+      <div class="acq-kpi"><div class="acq-kpi-label">Value Accretion</div><div class="acq-kpi-value">FY27+</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Market Data — 31 Mar 2026</div>
+    <div class="kpi-grid">
+      <div class="kpi"><div class="kpi-label">CMP (NSE)</div><div class="kpi-value">₹1,663</div><div class="kpi-sub">As of 30 Mar 2026</div></div>
+      <div class="kpi"><div class="kpi-label">52W High</div><div class="kpi-value amber">₹2,125</div><div class="kpi-sub">−21.7% from peak</div></div>
+      <div class="kpi"><div class="kpi-label">52W Low</div><div class="kpi-value green">₹1,200</div><div class="kpi-sub">+38.6% from low</div></div>
+      <div class="kpi"><div class="kpi-label">Market Cap</div><div class="kpi-value">₹11,912 Cr</div><div class="kpi-sub">Mid-cap</div></div>
+      <div class="kpi"><div class="kpi-label">P/E (TTM)</div><div class="kpi-value red">59.5×</div><div class="kpi-sub">TTM EPS ₹26.4</div></div>
+      <div class="kpi"><div class="kpi-label">P/B</div><div class="kpi-value red">8.53×</div><div class="kpi-sub">Premium to book</div></div>
+      <div class="kpi"><div class="kpi-label">Dividend Yield</div><div class="kpi-value green">0.11%</div><div class="kpi-sub">Nominal payout</div></div>
+      <div class="kpi"><div class="kpi-label">Shares Out.</div><div class="kpi-value">~7.16 Cr</div><div class="kpi-sub">Face value ₹1</div></div>
+    </div>
+    <div class="src">Sources: NSE India, Tickertape, Screener.in — 30–31 Mar 2026</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Business Overview — What Does Tega Do?</div>
+    <div class="flag-box blue">
+      <div class="flag-title">Global Niche Leader — Mining Wear &amp; Consumables Since 1976</div>
+      <div class="flag-body">Tega Industries designs, manufactures, and services <strong>wear-resistant consumables</strong> for mineral beneficiation and material handling. Its core products are <strong>mill liners</strong> (rubber, composite, steel, polyurethane) that line the inside of grinding mills, protecting them from abrasion while optimising throughput. These liners are <em>mission-critical, regularly replaced consumables</em> — roughly 70–80% of mill liner demand is replacement, not new installations. Tega serves copper, gold, iron ore, lithium, nickel, and phosphate miners across 92+ countries with &gt;80% of revenue from exports.</div>
+    </div>
+    <div class="flag-box green">
+      <div class="flag-title">Annuity-Like Revenue from Replacement Cycle</div>
+      <div class="flag-body">Mill liners wear out over 6–18 months and must be replaced to prevent catastrophic failure. Once Tega is embedded with a mining client, switching costs are high (recertification, site-specific engineering, installed field service teams). This creates sticky, recurring, high-margin revenue with multi-year supply agreements — similar to a consumables model.</div>
+    </div>
+    <div class="flag-box purple">
+      <div class="flag-title">The Molycop Bet — From ₹1,700 Cr to $2B+ Revenue Company</div>
+      <div class="flag-body">Molycop is the <strong>world's largest grinding media (steel balls)</strong> manufacturer, supplying the complementary consumable in the same mill system where Tega's liners sit. Combining Tega's polymer liners with Molycop's grinding balls creates a full <em>mill optimization</em> offering — the only global provider of both product lines. Molycop's revenue is ~$800M–1B USD annually. If the integration succeeds, Tega-Molycop becomes a ~$1B+ USD revenue industrial giant by FY27–28.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Key Products &amp; Revenue Mix</div>
+    <table>
+      <tr><th>Product</th><th>Description</th><th>Revenue Share</th><th>Margin Profile</th></tr>
+      <tr><td>Mill Liners (Rubber / Composite)</td><td>Core product; grinding mill protection</td><td><span class="pill green">~60–65%</span></td><td>High (25%+ EBITDA)</td></tr>
+      <tr><td>Hydrocyclones</td><td>Mineral separation equipment</td><td><span class="pill amber">~10–12%</span></td><td>Good</td></tr>
+      <tr><td>Trommels &amp; Screens</td><td>Size classification / material handling</td><td><span class="pill amber">~8–10%</span></td><td>Good</td></tr>
+      <tr><td>Conveyor Components</td><td>Belts, chutes, rubber linings</td><td><span class="pill grey">~8%</span></td><td>Moderate</td></tr>
+      <tr><td>Other Wear Solutions</td><td>Ceramic, polyurethane, custom</td><td><span class="pill grey">~8–10%</span></td><td>Variable</td></tr>
+    </table>
+    <div class="src">Post-Molycop acquisition: Grinding Media (steel balls) will become the dominant revenue line at the combined entity level.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Corporate Timeline — Key Events</div>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-dot green"></div><div class="tl-date">1976–2021</div><div class="tl-text">Founded in Kolkata; grew organically to become #2 global polymer mill liner manufacturer; 92+ countries presence</div></div>
+      <div class="tl-item"><div class="tl-dot blue"></div><div class="tl-date">Dec 2021</div><div class="tl-text">IPO at ₹453 per share; strong listing; market enthusiastically receives global mining play</div></div>
+      <div class="tl-item"><div class="tl-dot green"></div><div class="tl-date">FY22–FY24</div><div class="tl-text">Strong growth; revenue from ~₹1,200 Cr to ~₹1,950 Cr; EBITDA margins expanding; EPS peak ~₹29</div></div>
+      <div class="tl-item"><div class="tl-dot amber"></div><div class="tl-date">FY25</div><div class="tl-text">Revenue ₹1,638–1,701 Cr; PAT ~₹202 Cr; EBITDA margin ~23.2%; EPS ₹28.2 — strong but plateau forming</div></div>
+      <div class="tl-item"><div class="tl-dot purple"></div><div class="tl-date">Sep 2025</div><div class="tl-text">Announces Molycop acquisition ($1.48B EV) in consortium with Apollo Global — transformative global deal</div></div>
+      <div class="tl-item"><div class="tl-dot amber"></div><div class="tl-date">Q3 FY26 (Dec 2025)</div><div class="tl-text">PAT plunges 63.7% YoY to ₹19.71 Cr due to acquisition costs + Labour Code provisions (₹63 Cr exceptional charge)</div></div>
+      <div class="tl-item"><div class="tl-dot purple"></div><div class="tl-date">Feb 2026</div><div class="tl-text">Share Purchase Agreement executed; Latham &amp; Watkins advises; Board approves ₹1,500 Cr borrowing facility</div></div>
+      <div class="tl-item"><div class="tl-dot blue"></div><div class="tl-date">FY27+</div><div class="tl-text">Management guides: Molycop integration begins; combined entity targets full mill optimization; value accretion from FY27</div></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Risk Flags</div>
+    <div class="flag-box red">
+      <div class="flag-title">🔴 Molycop Integration Risk — $1.48B Deal on ₹11,912 Cr MCap Company</div>
+      <div class="flag-body">The Molycop acquisition is ~100% of Tega's current market cap. Funding requires ₹1,500 Cr in new debt + ₹3,517 Cr OCRPS investment in the acquisition HoldCo. This will materially increase consolidated leverage. Integration of a $800M+ USD global business by an ₹1,700 Cr Indian company is operationally complex and carries meaningful execution risk.</div>
+    </div>
+    <div class="flag-box amber">
+      <div class="flag-title">⚠️ Q3 FY26 PAT Collapse — 63.7% YoY Decline</div>
+      <div class="flag-body">While most of Q3 FY26's PAT decline is attributed to one-time acquisition costs and Labour Code provisions (₹63 Cr consolidated), the EBITDA margin also contracted from 24% to 14% — a 1,000 bps drop. Operating expenses (employee + other) surged without corresponding revenue growth. Management says adjusted margins are above 20%, but the reported numbers concern investors.</div>
+    </div>
+    <div class="flag-box amber">
+      <div class="flag-title">⚠️ High Valuation — 59.5× TTM P/E on Compressed Earnings</div>
+      <div class="flag-body">TTM P/E of 59.5× is elevated even adjusting for the one-time charges. The stock is valued on the Molycop optionality, not current earnings. If the deal synergies take longer to materialise, the stock may underperform vs its premium valuation.</div>
+    </div>
+    <div class="flag-box amber">
+      <div class="flag-title">⚠️ Promoter Holding Declined 7.53% Last Quarter</div>
+      <div class="flag-body">Promoter stake fell from ~75% to 67.3% in the December 2025 quarter — a significant drop, possibly related to the Molycop acquisition financing structure (OCRPS/equity issuance). Further dilution is possible as the deal closes.</div>
+    </div>
+    <div class="flag-box green">
+      <div class="flag-title">✅ Pre-Acquisition Balance Sheet Was Strong</div>
+      <div class="flag-body">Before Molycop funding, Tega had D/E of just 0.08×, interest coverage of 27.6×, and current ratio of 2.4×. The underlying operating business is financially robust; the risk is purely from the acquisition leverage.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 2 — VALUATION
+══════════════════════════════════════ -->
+<div class="panel" id="p2">
+
+  <div class="section">
+    <div class="section-title">Valuation Multiples — Pre-Molycop Consolidation</div>
+    <div class="kpi-grid">
+      <div class="kpi"><div class="kpi-label">P/E (TTM)</div><div class="kpi-value red">59.5×</div><div class="kpi-sub">EPS ₹26.4 (TTM, declining)</div></div>
+      <div class="kpi"><div class="kpi-label">P/E (FY25 Act.)</div><div class="kpi-value red">~59×</div><div class="kpi-sub">EPS ~₹28.2 (FY25)</div></div>
+      <div class="kpi"><div class="kpi-label">P/B</div><div class="kpi-value red">8.53×</div><div class="kpi-sub">Premium for niche moat</div></div>
+      <div class="kpi"><div class="kpi-label">EV/EBITDA</div><div class="kpi-value amber">~30–35×</div><div class="kpi-sub">On FY25 EBITDA ~₹393 Cr</div></div>
+      <div class="kpi"><div class="kpi-label">MCap/Revenue</div><div class="kpi-value amber">~7×</div><div class="kpi-sub">MCap ₹11,912 / Rev ₹1,701</div></div>
+      <div class="kpi"><div class="kpi-label">Div. Yield</div><div class="kpi-value">0.11%</div><div class="kpi-sub">Nominal; capital gain play</div></div>
+    </div>
+    <div class="src">Note: FY25 EBITDA estimated at ₹393 Cr (23.2% margin × ₹1,701 Cr revenue). Source: NSE, Screener.in, Equitymaster FY25 Annual Analysis — Mar 2026</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Valuation Assessment — OVERVALUED at Current Price</div>
+    <div class="flag-box red">
+      <div class="flag-title">59.5× P/E on Deteriorating Earnings — Market Pricing in Molycop Optionality</div>
+      <div class="flag-body">At ₹1,663, the market is NOT valuing Tega on its current earnings (which are declining in FY26). It is pricing in the post-Molycop combined entity scenario. The current 59.5× P/E on compressed TTM earnings makes the stock appear expensive on a standalone basis. However, if Molycop consolidation is successful and Tega reports EPS of ₹50–70 by FY28, the current price may look reasonable in hindsight. This is high-conviction or nothing — there is limited middle ground.</div>
+    </div>
+    <div class="flag-box amber">
+      <div class="flag-title">P/B of 8.53× — Justified for Niche Global Leader Pre-Deal</div>
+      <div class="flag-body">Before the Molycop announcement, Tega typically traded at 6–9× P/B based on its niche market leadership, high gross margins (~60%), global customer relationships, and recurring revenue. The P/B premium reflects intangible value (customer relationships, technical know-how, global service network) not captured in book value.</div>
+    </div>
+    <div class="flag-box purple">
+      <div class="flag-title">Post-Molycop: Valuation Needs Re-Base</div>
+      <div class="flag-body">Once Molycop is consolidated, Tega's consolidated revenue will jump from ~₹1,700 Cr to ~₹8,500–9,000 Cr ($800M+ Molycop + $200M Tega). Debt will rise significantly (~₹4,000–5,000 Cr gross). EV/EBITDA on the combined entity at current MCap + new debt is a more meaningful metric post-FY27. The acquisition is EV-dilutive in the short run but potentially value-accretive if margins are maintained.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Historical EPS &amp; P/E Journey</div>
+    <table>
+      <tr><th>Year</th><th class="right">EPS (₹)</th><th class="right">YoY Change</th><th class="right">Approx P/E at Year-End</th></tr>
+      <tr><td>FY22 (post-IPO)</td><td class="right">~18</td><td class="right">—</td><td class="right">~55×</td></tr>
+      <tr><td>FY23</td><td class="right">~22</td><td class="right"><span class="pill green">+22%</span></td><td class="right">~45×</td></tr>
+      <tr><td>FY24</td><td class="right">~29.1</td><td class="right"><span class="pill green">+32%</span></td><td class="right">~50×</td></tr>
+      <tr><td>FY25</td><td class="right">~28.2</td><td class="right"><span class="pill amber">−3%</span></td><td class="right">~59×</td></tr>
+      <tr><td>TTM Mar 2026</td><td class="right">26.4</td><td class="right"><span class="pill red">−6%</span></td><td class="right">59.5× (current)</td></tr>
+      <tr><td>FY27E (post-Molycop)</td><td class="right">₹40–60 Est.</td><td class="right"><span class="pill blue">Re-base</span></td><td class="right">~28–42× (fwd)</td></tr>
+    </table>
+    <div class="src">EPS trajectory shows earnings plateau + compression in FY25–26 before potential re-acceleration post-Molycop. Source: Company results, Screener.in, analyst estimates — Mar 2026</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 3 — GROWTH
+══════════════════════════════════════ -->
+<div class="panel" id="p3">
+
+  <div class="section">
+    <div class="section-title">Revenue Growth Trend</div>
+    <table>
+      <tr><th>Period</th><th class="right">Revenue (₹ Cr)</th><th class="right">YoY Growth</th><th class="right">EBITDA (₹ Cr)</th><th class="right">EBITDA %</th></tr>
+      <tr><td>FY22</td><td class="right">~1,200</td><td class="right"><span class="pill grey">Base</span></td><td class="right">~260</td><td class="right">~21.7%</td></tr>
+      <tr><td>FY23</td><td class="right">~1,380</td><td class="right"><span class="pill green">+15%</span></td><td class="right">~296</td><td class="right">~21.4%</td></tr>
+      <tr><td>FY24</td><td class="right">~1,500</td><td class="right"><span class="pill green">+8.7%</span></td><td class="right">~312</td><td class="right">~20.8%</td></tr>
+      <tr><td>FY25</td><td class="right">~1,701</td><td class="right"><span class="pill green">+13.4%</span></td><td class="right">~393</td><td class="right">~23.2%</td></tr>
+      <tr><td>Q1 FY26</td><td class="right">371.6</td><td class="right"><span class="pill amber">Flat YoY</span></td><td class="right">71.1</td><td class="right">19.1%</td></tr>
+      <tr><td>Q3 FY26</td><td class="right">417.5</td><td class="right"><span class="pill amber">−0.7%</span></td><td class="right">~58.5</td><td class="right">14.0%</td></tr>
+    </table>
+    <div class="src">FY22–FY24 figures estimated from EPS / PAT margin data. FY25 from Equitymaster annual analysis. Q1, Q3 FY26 from InvestyWise, MarketsMojo investor presentations — Mar 2026</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Near-Term Growth Pain — Q3 FY26 Margin Compression Explained</div>
+    <div class="flag-box amber">
+      <div class="flag-title">EBITDA Margin: 24% → 14% in One Quarter — Why?</div>
+      <div class="flag-body">
+        <strong>1. One-Time Acquisition Costs:</strong> Professional fees, advisory costs, and transaction expenses related to the Molycop deal are hitting the P&amp;L in FY26. These are non-recurring.<br/><br/>
+        <strong>2. Labour Code Provisions:</strong> Indian Labour Code implementation (effective Nov 21, 2025) required recognition of past service costs — ₹63.23 Cr (consolidated) charged to Q3. Entirely one-time.<br/><br/>
+        <strong>3. Employee Cost Surge:</strong> Employee expenses grew 15% YoY vs revenue decline of 0.7% — partly structural expansion ahead of Molycop integration.<br/><br/>
+        <strong>Management's clarification:</strong> Adjusted for the Labour Code charge and acquisition costs, underlying EBITDA margins are &gt;20% — consistent with the FY25 level. Gross margin improved to 60% from 59% YoY — the core operating model is intact.
+      </div>
+    </div>
+    <div class="flag-box green">
+      <div class="flag-title">Organic Growth Drivers Remain Strong</div>
+      <div class="flag-body">
+        • Global copper, gold, and lithium capex cycles are at decade-highs — driving demand for mill liners in Latin America, Africa, and Australia<br/>
+        • >70–80% of mill liner market is replacement-driven — highly predictable<br/>
+        • Order book of ₹1,140 Cr (Dec 2025) with ₹810 Cr executable within 1 year<br/>
+        • Market share gains in polymer mill liners vs. steel alternatives (polymer is more efficient, lower maintenance)<br/>
+        • New product launches in ceramics and composite liners for harder ore types
+      </div>
+    </div>
+    <div class="flag-box purple">
+      <div class="flag-title">Post-Molycop: Revenue Could Jump 5–6× by FY27–28</div>
+      <div class="flag-body">Molycop's standalone revenue is estimated at $800M–1B USD (~₹6,700–8,400 Cr). Adding Tega's organic ₹1,700–1,900 Cr, the consolidated revenue could reach ₹8,500–10,000 Cr by FY28 at 77% consolidation. This would make Tega-Molycop one of India's largest mid-cap industrial exporters by revenue.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Global Mining Cycle Context — Tailwind</div>
+    <div class="flag-box green">
+      <div class="flag-title">Copper, Gold, Lithium Supercycle = Sustained Mill Liner Demand</div>
+      <div class="flag-body">The global energy transition (EVs, solar, wind) requires massive copper and lithium mining. Gold mining continues driven by institutional demand and de-dollarisation. Both sectors are in multi-year capex expansion cycles. Mill liners are a direct play on <em>ore processed</em>, not commodity prices — making Tega a relatively defensive way to play the mining supercycle.</div>
+    </div>
+    <div class="flag-box blue">
+      <div class="flag-title">Mill Liner Market Growing at 5.4% CAGR to $6.65B by 2033</div>
+      <div class="flag-body">Global mill liner market projected at $4.31B in 2025, reaching $6.65B by 2033 (CAGR 5.36%). Tega's organic growth has consistently outpaced this at 8–15% due to market share gains. Post-Molycop, the combined entity would represent ~$1B+ of this market.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 4 — FINANCIAL HEALTH
+══════════════════════════════════════ -->
+<div class="panel" id="p4">
+
+  <div class="section">
+    <div class="section-title">Balance Sheet — FY25 (Pre-Molycop)</div>
+    <div class="kpi-grid">
+      <div class="kpi"><div class="kpi-label">Long-Term Debt</div><div class="kpi-value green">₹6.6 Cr</div><div class="kpi-sub">Down 94% from FY24</div></div>
+      <div class="kpi"><div class="kpi-label">D/E Ratio</div><div class="kpi-value green">0.08×</div><div class="kpi-sub">Near debt-free</div></div>
+      <div class="kpi"><div class="kpi-label">Current Ratio</div><div class="kpi-value green">2.4×</div><div class="kpi-sub">Strong liquidity</div></div>
+      <div class="kpi"><div class="kpi-label">Interest Coverage</div><div class="kpi-value green">27.6×</div><div class="kpi-sub">Very safe</div></div>
+      <div class="kpi"><div class="kpi-label">Current Assets</div><div class="kpi-value">₹1,000 Cr</div><div class="kpi-sub">₹10B / 10 = Cr</div></div>
+      <div class="kpi"><div class="kpi-label">Fixed Assets</div><div class="kpi-value">₹800 Cr</div><div class="kpi-sub">+29% YoY (capex)</div></div>
+      <div class="kpi"><div class="kpi-label">OCRPS Committed</div><div class="kpi-value red">₹3,517 Cr</div><div class="kpi-sub">For Molycop HoldCo</div></div>
+      <div class="kpi"><div class="kpi-label">New Borrowing</div><div class="kpi-value amber">₹1,500 Cr</div><div class="kpi-sub">For Molycop funding</div></div>
+    </div>
+    <div class="src">Source: Equitymaster FY25 Annual Analysis, Trendlyne Balance Sheet, StockAnalysis — FY25 (March 31, 2025)</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Post-Molycop: Balance Sheet Transformation</div>
+    <div class="flag-box red">
+      <div class="flag-title">🔴 Leverage Will Jump Significantly Post-Acquisition</div>
+      <div class="flag-body">Tega will draw ₹1,500 Cr in borrowings and subscribe to ₹3,517 Cr in OCRPS of the acquisition HoldCo (Tega HoldCo). This investment is structured off-balance-sheet at the parent level initially, but will flow through on consolidation. Total deal-related outflow is ~₹5,000+ Cr. D/E could move from 0.08× to potentially 0.5–0.8× consolidated, depending on Molycop's own debt level (est. $300–400M USD). Covenants and refinancing risk become real post-close.</div>
+    </div>
+    <div class="flag-box amber">
+      <div class="flag-title">⚠️ OCRPS Structure Adds Complexity</div>
+      <div class="flag-body">The use of Optionally Convertible Redeemable Preference Shares (OCRPS) in the HoldCo structure introduces complexity. Depending on conversion/redemption terms, these could create future dilution or cash drain. OCRPS terms are not fully public. This is an uncertainty for long-term modelling.</div>
+    </div>
+    <div class="flag-box green">
+      <div class="flag-title">✅ Molycop Has Strong Cash Flows to Service Acquisition Debt</div>
+      <div class="flag-body">Molycop, as the world's largest grinding media manufacturer (~$800M+ revenue), generates substantial EBITDA (~$100–150M USD est.). The combined entity's EBITDA should comfortably service the $1.48B acquisition debt over 5–7 years, assuming no major commodity cycle downturn. Management has guided for deal accretion from FY27.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Financial Risk Matrix</div>
+    <table>
+      <tr><th>Risk</th><th>Pre-Molycop</th><th>Post-Molycop (Est.)</th><th>Comment</th></tr>
+      <tr><td>Leverage (D/E)</td><td><span class="pill green">0.08×</span></td><td><span class="pill amber">0.5–0.8×</span></td><td>Major increase; manageable if Molycop cash flows strong</td></tr>
+      <tr><td>Interest Coverage</td><td><span class="pill green">27.6×</span></td><td><span class="pill amber">~5–8×</span></td><td>Compression expected; still adequate</td></tr>
+      <tr><td>Liquidity</td><td><span class="pill green">Strong (2.4×)</span></td><td><span class="pill amber">Unknown</span></td><td>Molycop balance sheet not fully disclosed</td></tr>
+      <tr><td>Integration Risk</td><td><span class="pill green">N/A</span></td><td><span class="pill red">HIGH</span></td><td>Cross-border, multi-geography $1.48B deal</td></tr>
+      <tr><td>FX Risk</td><td><span class="pill amber">Medium (80% exports)</span></td><td><span class="pill amber">Higher</span></td><td>Molycop USD revenues add FX complexity</td></tr>
+      <tr><td>Goodwill Risk</td><td><span class="pill green">Low</span></td><td><span class="pill amber">Medium</span></td><td>Acquisition premium will create goodwill on books</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 5 — RETURNS & EFFICIENCY
+══════════════════════════════════════ -->
+<div class="panel" id="p5">
+
+  <div class="section">
+    <div class="section-title">Return Metrics — FY25</div>
+    <div class="kpi-grid">
+      <div class="kpi"><div class="kpi-label">ROE (FY25)</div><div class="kpi-value green">13.4%</div><div class="kpi-sub">Down from 16.3% FY24</div></div>
+      <div class="kpi"><div class="kpi-label">ROE (FY24)</div><div class="kpi-value green">16.3%</div><div class="kpi-sub">Peak year</div></div>
+      <div class="kpi"><div class="kpi-label">ROCE</div><div class="kpi-value green">~18–20%</div><div class="kpi-sub">Est. on operating capital</div></div>
+      <div class="kpi"><div class="kpi-label">Gross Margin</div><div class="kpi-value green">~60%</div><div class="kpi-sub">Q3 FY26 improved to 60%</div></div>
+      <div class="kpi"><div class="kpi-label">EBITDA Margin</div><div class="kpi-value green">23.2%</div><div class="kpi-sub">FY25 (24% Q3 FY25)</div></div>
+      <div class="kpi"><div class="kpi-label">PAT Margin</div><div class="kpi-value green">~11.9%</div><div class="kpi-sub">FY25 (₹202/₹1,701 Cr)</div></div>
+      <div class="kpi"><div class="kpi-label">Asset Turnover</div><div class="kpi-value amber">~0.94×</div><div class="kpi-sub">Good for industrial</div></div>
+      <div class="kpi"><div class="kpi-label">Dividend Payout</div><div class="kpi-value green">Nominal</div><div class="kpi-sub">Capital allocation to M&amp;A</div></div>
+    </div>
+    <div class="src">Source: Equitymaster FY25 Annual, Screener.in, InvestyWise — FY25</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Why Tega's Returns Are Genuinely Good</div>
+    <div class="flag-box green">
+      <div class="flag-title">60% Gross Margin in a Capital-Intensive Sector is Exceptional</div>
+      <div class="flag-body">Most industrial manufacturers operate at 25–40% gross margins. Tega's ~60% gross margin reflects: (a) the proprietary rubber/polymer formulations it has developed over decades; (b) the high switching costs embedded in field service contracts; (c) the mission-critical, non-commodity nature of its products. This gross margin moat is hard to replicate and is the core value driver.</div>
+    </div>
+    <div class="flag-box green">
+      <div class="flag-title">Interest Coverage of 27.6× — Best-in-Class for an Industrial</div>
+      <div class="flag-body">With debt-free balance sheet in FY25, every rupee of operating profit flows to equity holders. This is why PAT margins of ~12% are achievable alongside 23% EBITDA margins — minimal interest cost leakage.</div>
+    </div>
+    <div class="flag-box amber">
+      <div class="flag-title">ROE Declining: 16.3% → 13.4% — The Molycop Effect</div>
+      <div class="flag-body">ROE decline from FY24 to FY25 is partly due to increasing equity base (retained earnings accumulation) and slightly lower PAT. Post-Molycop, new debt will change the capital structure significantly, and ROE trajectory will depend on Molycop's ROCE contribution. If accretive, ROE can improve. If integration struggles, ROE falls further.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Margin Trend</div>
+    <div style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>Gross Margin (Q3 FY26)</span><span>60%</span></div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:60%"></div></div>
+    </div>
+    <div style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>EBITDA Margin (FY25)</span><span>23.2%</span></div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:46.4%"></div></div>
+    </div>
+    <div style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>EBITDA Margin (Q3 FY26 — impacted)</span><span>14%</span></div>
+      <div class="bar-wrap"><div class="bar-fill amber" style="width:28%"></div></div>
+    </div>
+    <div style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>EBITDA Margin (Adjusted, per mgmt)</span><span>&gt;20%</span></div>
+      <div class="bar-wrap"><div class="bar-fill blue" style="width:40%"></div></div>
+    </div>
+    <div style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px"><span>PAT Margin (FY25)</span><span>~11.9%</span></div>
+      <div class="bar-wrap"><div class="bar-fill" style="width:23.8%"></div></div>
+    </div>
+    <div class="src">The 14% Q3 FY26 EBITDA margin is significantly below the structural 20%+ underlying margin. One-time charges are the primary explanation.</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 6 — PROJECTIONS
+══════════════════════════════════════ -->
+<div class="panel" id="p6">
+
+  <div class="section">
+    <div class="section-title">5-Year Projection Model — FY25 to FY30</div>
+    <div class="flag-box amber">
+      <div class="flag-title">⚠️ All projections are estimates. Post-Molycop scenario is highly uncertain — Molycop's financials are not publicly available in full. These are analytical estimates based on management guidance, deal disclosures, and analyst notes. NOT financial advice.</div>
+      <div class="flag-body"></div>
+    </div>
+
+    <div style="font-weight:700;font-size:13px;margin-bottom:10px;color:var(--sub)">STANDALONE (Organic, without Molycop consolidation)</div>
+    <table>
+      <tr><th>Year</th><th class="right">Revenue (₹ Cr)</th><th class="right">EBITDA (₹ Cr)</th><th class="right">EBITDA %</th><th class="right">PAT (₹ Cr)</th><th class="right">EPS (₹)</th></tr>
+      <tr><td>FY25 (Actual)</td><td class="right">1,701</td><td class="right">393</td><td class="right">23.2%</td><td class="right">202</td><td class="right">28.2</td></tr>
+      <tr><td>FY26E (transitional)</td><td class="right">~1,730</td><td class="right">~320</td><td class="right">~18.5%</td><td class="right">~155</td><td class="right">~21.7</td></tr>
+      <tr><td>FY27E</td><td class="right">~1,950</td><td class="right">~410</td><td class="right">~21.0%</td><td class="right">~225</td><td class="right">~31.4</td></tr>
+      <tr><td>FY28E</td><td class="right">~2,200</td><td class="right">~480</td><td class="right">~21.8%</td><td class="right">~265</td><td class="right">~37.0</td></tr>
+      <tr><td>FY30E</td><td class="right">~2,750</td><td class="right">~620</td><td class="right">~22.5%</td><td class="right">~340</td><td class="right">~47.5</td></tr>
+    </table>
+
+    <div style="font-weight:700;font-size:13px;margin:16px 0 10px;color:var(--sub)">CONSOLIDATED (with Molycop, at 77% stake, from FY27E)</div>
+    <table>
+      <tr><th>Year</th><th class="right">Combined Revenue</th><th class="right">EBITDA Est.</th><th class="right">EPS Est. (Consolidated)</th><th>Key Assumption</th></tr>
+      <tr><td>FY27E</td><td class="right">~₹8,000–9,000 Cr</td><td class="right">~₹900–1,100 Cr</td><td class="right"><span class="pill blue">~₹45–65</span></td><td>Full year Molycop consolidation</td></tr>
+      <tr><td>FY28E</td><td class="right">~₹9,000–10,000 Cr</td><td class="right">~₹1,100–1,300 Cr</td><td class="right"><span class="pill blue">~₹60–85</span></td><td>Synergies beginning</td></tr>
+      <tr><td>FY30E</td><td class="right">~₹11,000–13,000 Cr</td><td class="right">~₹1,400–1,700 Cr</td><td class="right"><span class="pill blue">~₹85–120</span></td><td>Full synergy capture</td></tr>
+    </table>
+    <div class="src">Molycop revenue estimate: ~$800–1,000M USD (~₹6,700–8,400 Cr). Tega's consolidation at 77%. Interest costs on ~₹4,000–5,000 Cr gross debt will reduce PAT attribution. EPS range reflects integration execution uncertainty. Source: Company disclosures, International Mining magazine, Latham & Watkins deal release, analyst estimates.</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">5-Year Return Scenario (Entry ₹1,663)</div>
+    <table>
+      <tr><th>Scenario</th><th>Description</th><th class="right">FY30E EPS</th><th class="right">Exit P/E</th><th class="right">Target</th><th class="right">5Y Return</th></tr>
+      <tr><td><span class="pill red">Bear</span></td><td>Integration fails; standalone only; margins compressed</td><td class="right">₹45</td><td class="right">20×</td><td class="right">~₹900</td><td class="right"><span class="pill red">−46%</span></td></tr>
+      <tr><td><span class="pill amber">Base</span></td><td>Molycop integrates; moderate synergies; FY30 EPS ₹85</td><td class="right">₹85</td><td class="right">25×</td><td class="right">~₹2,125</td><td class="right"><span class="pill green">+28%</span></td></tr>
+      <tr><td><span class="pill green">Bull</span></td><td>Full synergy capture; mining supercycle; EPS ₹120</td><td class="right">₹120</td><td class="right">30×</td><td class="right">~₹3,600</td><td class="right"><span class="pill green">+117%</span></td></tr>
+    </table>
+    <div class="src">Bear case: standalone 5Y return is deeply negative given 59× entry P/E re-rates to 20×. Base case: ~5% CAGR (sub-index). Bull case: ~16% CAGR. The asymmetry is negative at entry — the bear case is painful, bull case is good but not exceptional for the risk taken. Source: Analytical estimates only.</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 7 — FUNDAMENTAL VIEW (DEFAULT)
+══════════════════════════════════════ -->
+<div class="panel on" id="p7">
+
+  <div class="view-card amber">
+    <div class="verdict amber">⚖️ MODERATE — High-Quality Business, High-Stakes Bet</div>
+    <div class="horizon-note">5-Year Investment Horizon &nbsp;·&nbsp; Analysis Date: 31 Mar 2026</div>
+    <div class="rationale">
+      Tega Industries is one of India's most genuinely unique industrial businesses — a niche global leader in mining wear solutions with 60% gross margins, recurring replacement revenue, and presence in 92 countries. The business quality is unambiguously high: sticky customer relationships, technical moat in polymer formulations, and direct exposure to the secular copper/gold/lithium mining supercycle. Pre-Molycop, Tega was a high-quality compounder trading at a premium but justifiable valuation.
+      <br/><br/>
+      <strong>But the Molycop acquisition changes everything — for better or worse.</strong> At $1.48 billion EV (~100% of Tega's current market cap), acquiring the world's largest grinding media manufacturer is either Tega's defining moment or its biggest risk. The strategic logic is compelling: mill liners + grinding media = complete mill optimization, the only global provider of both. But the deal requires ₹1,500 Cr in new debt and ₹3,517 Cr in OCRPS, and integrating a multi-billion-dollar global business with operations across Latin America, North America, and Australia is operationally daunting for a ₹1,700 Cr revenue Indian company.
+      <br/><br/>
+      <strong>The near-term picture is messy:</strong> Q3 FY26 PAT collapsed 63.7% due to acquisition costs and Labour Code provisions. EPS is declining. The stock is down 21.7% from its 52-week high. At 59.5× TTM P/E on compressed earnings, the valuation is high and the margin of safety is thin.
+      <br/><br/>
+      <strong>For a 5-year investor:</strong> The investment thesis pivots entirely on Molycop integration. If it succeeds — revenue 5× by FY28, EBITDA doubles, synergies flow — this is a multi-bagger. If integration struggles or mining capex cycles turn down, the leveraged balance sheet and rich valuation create a painful bear case. This is a MODERATE — not because the business is average, but because the risk-reward at current valuations is balanced, not one-sided. Best suited for investors who have conviction in the Molycop thesis and can tolerate 2–3 years of earnings noise.
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Bull vs Bear</div>
+    <div class="flag-box green">
+      <div class="flag-title">BULL CASE — The Molycop Bet Pays Off (5Y)</div>
+      <div class="flag-body">
+        • World's only combined mill liner + grinding media supplier = massive competitive moat<br/>
+        • Combined revenue ₹9,000–10,000 Cr by FY28; EBITDA ₹1,100–1,300 Cr<br/>
+        • Copper/gold/lithium supercycle sustains for 5–7 years — Tega is a pure proxy play<br/>
+        • 60% gross margin business model preserved in polymer liners division<br/>
+        • EPS can reach ₹85–120 by FY30 vs ₹26 today — re-rating likely<br/>
+        • Global PE (Apollo 23% partner) adds credibility and deal governance<br/>
+        • Pre-deal: clean balance sheet, D/E 0.08×, interest coverage 27.6×
+      </div>
+    </div>
+    <div class="flag-box red">
+      <div class="flag-title">BEAR CASE — Integration Fails or Mining Cycle Turns (5Y)</div>
+      <div class="flag-body">
+        • $1.48B deal = ~100% of MCap; any integration problem = immediate re-rating<br/>
+        • New debt (₹1,500 Cr + Molycop's own debt) creates leverage risk<br/>
+        • Standalone value at 59.5× P/E is overvalued if Molycop doesn't consolidate well<br/>
+        • Promoter stake fell 7.53% in one quarter — possible further dilution<br/>
+        • Mining capex can turn cyclically — copper price-driven demand swings<br/>
+        • Q3 FY26 PAT −63.7% — market has started pricing in risk (stock −21.7% from peak)<br/>
+        • Bear case target: ~₹900 (20× FY30E standalone EPS ₹45) = −46% from CMP
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Scorecard</div>
+    <table>
+      <tr><th>Dimension</th><th>Rating</th><th>Comment</th></tr>
+      <tr><td>Business Quality</td><td><span class="pill green">HIGH</span></td><td>Global niche moat; 60% gross margin; sticky replacement revenue</td></tr>
+      <tr><td>Growth Momentum</td><td><span class="pill amber">MIXED (FY26 transitional)</span></td><td>Near-term earnings compressed; 5Y picture bright if Molycop works</td></tr>
+      <tr><td>Financial Health (Pre-deal)</td><td><span class="pill green">STRONG</span></td><td>D/E 0.08×, ICR 27.6×, Current Ratio 2.4×</td></tr>
+      <tr><td>Financial Health (Post-deal)</td><td><span class="pill amber">UNCERTAIN</span></td><td>Leverage will increase; Molycop debt structure TBD</td></tr>
+      <tr><td>Valuation</td><td><span class="pill red">OVERVALUED</span></td><td>59.5× TTM P/E; pricing Molycop optionality</td></tr>
+      <tr><td>Management Quality</td><td><span class="pill green">HIGH</span></td><td>Strong track record; Apollo partnership adds credibility</td></tr>
+      <tr><td>ROE</td><td><span class="pill green">13.4% (FY25)</span></td><td>Declining slightly; will change post-Molycop</td></tr>
+      <tr><td>Acquisition Risk</td><td><span class="pill red">HIGH</span></td><td>$1.48B deal on ₹1,700 Cr revenue base; transformative but risky</td></tr>
+      <tr><td>5Y Risk-Reward</td><td><span class="pill amber">MODERATE</span></td><td>Base case ~5% CAGR; bull case ~16% CAGR; bear case −46%</td></tr>
+      <tr><td>Overall Verdict</td><td><span class="pill amber">MODERATE</span></td><td>Quality co. at high valuation making a high-stakes acquisition</td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Data Confidence</div>
+    <div class="conf-bar">
+      <div class="conf-fill" style="width:72%;background:var(--amber)">72% — MODERATE-HIGH</div>
+    </div>
+    <div style="margin-top:10px;font-size:12.5px;color:var(--sub)">
+      Standalone Tega financials are well-documented from NSE filings, InvestyWise, Equitymaster, and MarketsMojo. Molycop financials are NOT fully public — revenue, EBITDA, and debt levels are estimates from mining industry sources and deal disclosures. Post-acquisition projections carry high uncertainty. EPS estimates for FY27–30 are analytical constructs, not analyst consensus.
+    </div>
+    <div class="src">Primary sources: NSE India, Screener.in, InvestyWise Q3 FY26, MarketsMojo, Equitymaster FY25 Annual, International Mining magazine (Nov 2025), Latham & Watkins deal release (Feb 2026), Whalesbook, Prysm.fi — March 2026</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 8 — PEERS
+══════════════════════════════════════ -->
+<div class="panel" id="p8">
+
+  <div class="section">
+    <div class="section-title">Peer Comparison — Mining Wear Solutions &amp; Industrial Consumables</div>
+    <div class="flag-box blue">
+      <div class="flag-title">Note on Peer Selection</div>
+      <div class="flag-body">Tega has no listed Indian peer in the mill liner or mining wear space. Global peers (Metso, Weir Minerals, FLSmidth) are much larger, diversified, and listed on European exchanges. Listed Indian comparisons are drawn from industrial/capital goods companies with similar characteristics — global exports, B2B consumables, niche markets.</div>
+    </div>
+    <table>
+      <tr>
+        <th>Company</th>
+        <th class="right">MCap (Cr)</th>
+        <th class="right">Rev (Cr)</th>
+        <th class="right">P/E</th>
+        <th class="right">ROE %</th>
+        <th class="right">EBITDA %</th>
+        <th>Nature</th>
+      </tr>
+      <tr>
+        <td><strong>Tega Industries (TEGA)</strong></td>
+        <td class="right">11,912</td>
+        <td class="right">1,701</td>
+        <td class="right"><span class="pill red">59.5×</span></td>
+        <td class="right"><span class="pill green">13.4%</span></td>
+        <td class="right">23.2%</td>
+        <td>Mill liners (mining)</td>
+      </tr>
+      <tr>
+        <td>Carborundum Universal (CUMI)</td>
+        <td class="right">~11,500</td>
+        <td class="right">~4,100</td>
+        <td class="right">35×</td>
+        <td class="right">~14%</td>
+        <td class="right">~15%</td>
+        <td>Abrasives (industrial)</td>
+      </tr>
+      <tr>
+        <td>Thermax India</td>
+        <td class="right">~26,000</td>
+        <td class="right">~9,000</td>
+        <td class="right">55×</td>
+        <td class="right">~15%</td>
+        <td class="right">~8%</td>
+        <td>Industrial energy/chemicals</td>
+      </tr>
+      <tr>
+        <td>Grindwell Norton</td>
+        <td class="right">~8,500</td>
+        <td class="right">~2,200</td>
+        <td class="right">45×</td>
+        <td class="right">~20%</td>
+        <td class="right">~18%</td>
+        <td>Abrasives / grinding</td>
+      </tr>
+      <tr>
+        <td>Metso (Global, FIN)</td>
+        <td class="right">~EUR 5B</td>
+        <td class="right">EUR 4.5B</td>
+        <td class="right">~25×</td>
+        <td class="right">~18%</td>
+        <td class="right">~16%</td>
+        <td>Full mining process solutions</td>
+      </tr>
+      <tr>
+        <td>Weir Group (Global, UK)</td>
+        <td class="right">~GBP 4B</td>
+        <td class="right">GBP 3B</td>
+        <td class="right">~22×</td>
+        <td class="right">~15%</td>
+        <td class="right">~20%</td>
+        <td>Mining wear solutions</td>
+      </tr>
+    </table>
+    <div class="src">Global peers trade at 22–25× P/E vs Tega's 59.5× — reflecting India's mid-cap premium + Molycop optionality. Source: NSE, BSE, Bloomberg estimates, analyst reports — Mar 2026</div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Global Market Context</div>
+    <div class="flag-box green">
+      <div class="flag-title">Tega Holds ~10–12% Global Market Share in Polymer Mill Liners</div>
+      <div class="flag-body">In the ~$4.3B global mill liner market, Tega is the #2 polymer mill liner manufacturer by revenue, behind Metso. Global market share ~10–12% in its specific segment. Key competitive differentiation: Tega's liners are lighter (polymer vs. steel), last longer in softer ore conditions, and reduce energy consumption. The polymer shift from steel liners is a multi-year structural tailwind.</div>
+    </div>
+    <div class="flag-box blue">
+      <div class="flag-title">Post-Molycop: Tega Becomes #1 or #2 in Global Grinding Media</div>
+      <div class="flag-body">Molycop is the world's largest grinding media (forged steel balls) manufacturer with operations in Latin America, North America, and Australia. Post-acquisition, Tega-Molycop becomes the world's only integrated mill liner + grinding media company — a unique moat that neither Metso, Weir, nor FLSmidth currently possesses.</div>
+    </div>
+    <div class="flag-box amber">
+      <div class="flag-title">India Premium vs Global Peers Is Extreme at Current Levels</div>
+      <div class="flag-body">Metso and Weir trade at 22–25× P/E despite having much larger scale, lower execution risk, and similar (or better) EBITDA margins. Tega at 59.5× P/E is pricing in Molycop synergies, India growth premium, and promoter execution quality — all forward-looking assumptions that carry significant uncertainty.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ SCRIPT ══════════════ -->
+<script>
+function show(n){
+  for(let i=1;i<=8;i++){
+    document.getElementById('p'+i).className='panel'+(i===n?' on':'');
+    document.getElementById('t'+i).className='tab'+(i===n?' active':'');
+  }
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.getElementById('t7').className='tab active';
+</script>
+</body>
+</html>
